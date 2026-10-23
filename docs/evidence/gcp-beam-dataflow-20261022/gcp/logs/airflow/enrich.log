@@ -1,0 +1,31 @@
+2026-10-22T13:58:49.295897430Z  ::group::Pre task execution logs
+2026-10-22T13:58:49.342446077Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T13:58:49.361687952Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T13:58:49.361754119Z  Starting attempt 1 of 3
+2026-10-22T13:58:49.391587025Z  Executing <Task(KubernetesPodOperator): enrich> on 2026-10-22 13:51:40+00:00
+2026-10-22T13:58:49.439895951Z  Started process 663 to run task
+2026-10-22T13:58:49.443817729Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'enrich', 'manual__2026-10-22T13:51:40+00:00', '--job-id', '7', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmpnr8ka6_t']
+2026-10-22T13:58:49.444000435Z  Job 7: Subtask enrich
+2026-10-22T13:58:49.556865279Z  Running <TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T13:51:40+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T13:58:49.879606932Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='enrich' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T13:51:40+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T13:51:40+00:00'
+2026-10-22T13:58:49.880868640Z  ::endgroup::
+2026-10-22T13:58:49.939468331Z  Building pod enrich-s8bh1wo7 with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'enrich', 'run_id': 'manual__2026-10-22T1351400000-48db336dc', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T13:58:50.307458417Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T13:58:50.588750599Z  Found matching pod enrich-s8bh1wo7 with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1351400000-48db336dc', 'task_id': 'enrich', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T13:58:50.589338364Z  `try_number` of task_instance: 1
+2026-10-22T13:58:50.589484343Z  `try_number` of pod: 1
+2026-10-22T13:58:50.613129723Z  Pod not yet started: enrich-s8bh1wo7
+2026-10-22T14:03:05.384956272Z  [base] WARNING:apache_beam.options.pipeline_options:Bucket gs://<project>-dataflow-temp/tmp used as temp_location has soft-delete policy enabled. To avoid being billed for unnecessary storage costs, turn off the soft delete feature on buckets that your Dataflow jobs use for temporary and staging storage. For more information, see https://cloud.google.com/storage/docs/use-soft-delete#remove-soft-delete-policy.
+2026-10-22T14:03:06.387749152Z  [base] enrich: {"enriched": 52, "read": 52, "reference_unmatched": 52}
+
+2026-10-22T14:03:06.413110227Z  Pod enrich-s8bh1wo7 log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T14:03:07.460446108Z  [base] enrich: {"enriched": 52, "read": 52, "reference_unmatched": 52}
+
+2026-10-22T14:03:07.544985988Z  Pod enrich-s8bh1wo7 has phase Running
+2026-10-22T14:03:09.634711138Z  Deleting pod: enrich-s8bh1wo7
+2026-10-22T14:03:09.694085402Z  ::group::Post task execution logs
+2026-10-22T14:03:09.724406526Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=enrich, run_id=manual__2026-10-22T13:51:40+00:00, execution_date=20261022T135140, start_date=20261022T135849, end_date=20261022T140309
+2026-10-22T14:03:09.792818889Z  Task exited with return code 0
+2026-10-22T14:03:09.876231525Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T14:03:09.879994680Z  ::endgroup::

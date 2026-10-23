@@ -1,0 +1,18 @@
+# C04 java build (extract/load/recon/mock jars), 2026-10-22T12:57:05Z
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:<workdir>
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+37306 apps/common/target/common-0.1.0.jar
+10931 apps/extract/target/extract-0.1.0.jar
+4968468 apps/extract/target/extract.jar
+4968473 apps/extract/target/original-extract.jar
+26261 apps/load/target/load-0.1.0.jar
+25710552 apps/load/target/load.jar
+25709645 apps/load/target/original-load.jar
+25705521 apps/recon/target/original-recon.jar
+21304 apps/recon/target/recon-0.1.0.jar
+25705485 apps/recon/target/recon.jar
+11323 apps/target-system-mock/target/target-system-mock-0.1.0.jar
+25695443 apps/target-system-mock/target/target-system-mock.jar

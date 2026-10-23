@@ -1,0 +1,67 @@
+-- 10-intake-jdbc.sql — intake from the typed Source System table (spec/PIPELINE.md, "Source System as a
+-- database"). A TEMPLATE: ${RUN_ID}, ${SOURCE_FILE}, ${INGESTED_AT_EPOCH} are substituted by JdbcIntakeJob.
+--
+-- PARSE_BAD_DATE, PARSE_BAD_NUMERIC, PARSE_BAD_COLUMN_COUNT and PARSE_SHORT_RECORD cannot occur here: the
+-- database's DATE / NUMERIC types and fixed columns refuse those values before the lane reads them (they stay
+-- proven by common's MappingEngineTest and the file lanes' conformance). The only parse reject is
+-- PARSE_MISSING_FIELD: a required field NULL, or blank after TRIM; detail = the field name, first in TDS order.
+--
+-- canonical_line is the spec's canonical line (strings untrimmed, DATE as yyyy-MM-dd, DECIMAL(18,2) as text,
+-- NULL as ''). It is the parse reject's raw_record and the input of the content digest that source_read
+-- records — over the SAME scan as the other inserts (JdbcIntakeJobIT asserts one scan in the plan).
+
+CREATE TEMPORARY VIEW src_rows AS
+SELECT
+  acct_id, cust_id, client_type, product_code, currency, open_date, status, balance,
+  CONCAT_WS('|',
+    COALESCE(acct_id, ''), COALESCE(cust_id, ''), COALESCE(client_type, ''), COALESCE(product_code, ''),
+    COALESCE(currency, ''), COALESCE(CAST(open_date AS STRING), ''), COALESCE(status, ''),
+    COALESCE(CAST(balance AS STRING), '')) AS canonical_line
+FROM source_account;
+
+CREATE TEMPORARY VIEW intake_routed AS
+SELECT
+  acct_id, cust_id, client_type, product_code, currency, open_date, status, balance, canonical_line,
+  CASE
+    WHEN acct_id IS NULL OR TRIM(acct_id) = '' THEN 'ACCT_ID'
+    WHEN cust_id IS NULL OR TRIM(cust_id) = '' THEN 'CUST_ID'
+    WHEN client_type IS NULL OR TRIM(client_type) = '' THEN 'CLIENT_TYPE'
+    WHEN product_code IS NULL OR TRIM(product_code) = '' THEN 'PRODUCT_CODE'
+    WHEN currency IS NULL OR TRIM(currency) = '' THEN 'CURRENCY'
+    WHEN open_date IS NULL THEN 'OPEN_DATE'
+    WHEN status IS NULL OR TRIM(status) = '' THEN 'STATUS'
+    WHEN balance IS NULL THEN 'BALANCE'
+  END AS missing_field
+FROM src_rows;
+
+EXECUTE STATEMENT SET
+BEGIN
+
+INSERT INTO account_src
+SELECT
+  TRIM(acct_id), TRIM(cust_id), TRIM(client_type), TRIM(product_code), TRIM(currency),
+  open_date, TRIM(status), CAST(balance AS STRING),
+  '${RUN_ID}', 0, '${SOURCE_FILE}', TRIM(acct_id),
+  SUBSTRING(SHA256(TRIM(acct_id)), 1, 32), CAST(${INGESTED_AT_EPOCH} AS STRING)
+FROM intake_routed
+WHERE missing_field IS NULL;
+
+INSERT INTO reject_log
+SELECT '${RUN_ID}', 0, CAST('' AS STRING), 'parse', 'PARSE_MISSING_FIELD', missing_field, canonical_line
+FROM intake_routed
+WHERE missing_field IS NOT NULL;
+
+INSERT INTO record_lineage
+SELECT
+  '${RUN_ID}', CONCAT('raw:', SUBSTRING(SHA256(canonical_line), 1, 16)), CAST(NULL AS STRING),
+  'rejected', 'parse', 'PARSE_MISSING_FIELD', missing_field, '${SOURCE_FILE}'
+FROM intake_routed
+WHERE missing_field IS NOT NULL;
+
+INSERT INTO source_read
+SELECT
+  '${RUN_ID}', COUNT(*),
+  CAST(COALESCE(SUM(CAST(CONTENT_DIGEST_PART(canonical_line) AS DECIMAL(38, 0))), 0) AS DECIMAL(38, 0))
+FROM src_rows;
+
+END;

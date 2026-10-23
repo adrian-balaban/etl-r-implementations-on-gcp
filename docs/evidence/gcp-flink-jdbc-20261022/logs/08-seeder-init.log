@@ -1,0 +1,8 @@
+# seeder: init (source + lane schemas), 2026-10-22T12:06:54Z
+$ gcloud run jobs execute mig-flink-jdbc-source-seeder --region=europe-west1 --wait --args=init
+Execution [mig-flink-jdbc-source-seeder-2gj49] has successfully completed.
+
+View details about this execution by running:
+gcloud run jobs executions describe mig-flink-jdbc-source-seeder-2gj49
+
+Or visit https://console.cloud.google.com/run/jobs/executions/details/europe-west1/mig-flink-jdbc-source-seeder-2gj49?project=<project-number>

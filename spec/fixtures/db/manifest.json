@@ -1,0 +1,49 @@
+{
+ "_comment": "Typed-source oracle, derived by spec/fixtures/db/derive.py from spec/fixtures/expected/ (the BigQuery oracle of gcp-deepdive-20260907). NOT independent evidence: every value is inherited except the facts the typed load changes (spec/PIPELINE.md, 'Source System as a database').",
+ "source_table": "etlr_source.account",
+ "account_sql_sha256": "173120f5910a7a719efa0d673291fd3cb960febf72d1c98f90afeb3122157687",
+ "src_read": 53,
+ "expected_written": 50,
+ "expected_rejected": 3,
+ "expected_by_stage_reason": [
+  {
+   "stage": "map",
+   "reason": "MAP_UNMAPPED_ENUM_VALUE",
+   "detail": "status: 'X' not in ['A', 'C', 'D']"
+  },
+  {
+   "stage": "parse",
+   "reason": "PARSE_MISSING_FIELD",
+   "detail": "CURRENCY"
+  },
+  {
+   "stage": "schema",
+   "reason": "SCHEMA_INVALID",
+   "detail": "accountId: 'acc-bad!0001' does not match '^[A-Z0-9]+$'"
+  }
+ ],
+ "intake_only": {
+  "src_read": 53,
+  "extraction_written": 52,
+  "rejected": 1
+ },
+ "refused_by_database": [
+  {
+   "acct_id": "ACC000900001",
+   "reason": "numeric"
+  },
+  {
+   "acct_id": "ACC000900002",
+   "reason": "date"
+  }
+ ],
+ "content": {
+  "row_count": 53,
+  "content_digest": "31503124396361923406"
+ },
+ "known_keys": {
+  "canonical_line_of_truncated_row": "ACC000900000|CUS0000000|RETL|CUR001||||",
+  "content_name_of_truncated_row": "raw:bf47701944c6abec",
+  "part_of_truncated_row": 861444277401316030
+ }
+}

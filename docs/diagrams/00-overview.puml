@@ -1,0 +1,44 @@
+@startuml 00-overview
+!pragma layout smetana
+title Two doors, one equation, three implementations
+skinparam defaultTextAlignment center
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor #eef4fa
+  BorderColor #4a7ebb
+}
+skinparam note {
+  BackgroundColor #fffbe6
+  BorderColor #d6c36b
+}
+
+rectangle "**Source System**\nfull snapshot, once per run" as SRC
+rectangle "**intake**\nparse door" as INT
+rectangle "**curate + enrich**\nadds columns, rejects nothing" as CUR
+rectangle "**produce**\nmap door · schema door" as PROD
+rectangle "**Target System**\nload on Kafka, idempotent" as TGT
+
+SRC -right-> INT
+INT -right-> CUR
+CUR -right-> PROD
+PROD -right-> TGT
+
+note bottom of PROD
+  **written** → becomes a target document
+  **rejected** → named, with an enumerated reason
+  `src_read = written + rejected`
+  a run that does not balance **fails**
+end note
+
+rectangle "**spec/PIPELINE.md**\nthe one definition" as SPEC
+rectangle "**implementations/**\nBeam/Dataflow · Flink · Flink-JDBC" as IMPL
+rectangle "**oracle + comparator**\nrow for row, never counts alone" as ORACLE
+
+SPEC -right-> IMPL
+IMPL -right-> ORACLE
+
+note bottom of ORACLE
+  same spec, several implementations:
+  conformance means the same everywhere
+end note
+@enduml

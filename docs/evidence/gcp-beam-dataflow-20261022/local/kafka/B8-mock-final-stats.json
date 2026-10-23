@@ -1,0 +1,11 @@
+{
+    "received": 100,
+    "accepted": 50,
+    "duplicatesIgnored": 50,
+    "injectedFailures": 0,
+    "confirmationsPublished": 100,
+    "confirmationsFailed": 0,
+    "rejectionsPublished": 0,
+    "consumedFromTopic": 100,
+    "distinctAccounts": 50
+}

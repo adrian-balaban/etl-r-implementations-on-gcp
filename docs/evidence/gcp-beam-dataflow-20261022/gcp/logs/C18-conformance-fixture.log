@@ -1,0 +1,81 @@
+# C18 conformance of the GCP fixture run against the oracle, 2026-10-22T14:29:16Z
+$ python3 spec/conformance/compare.py <dump-dir> --profile staged
+profile: staged
+reject_log  (stage, reason, detail, source_key, raw_record)
+  PASS  5 rows in each
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: stage
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: reason
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: detail
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: source_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: raw_record
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: stage
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: reason
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: detail
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: source_key
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: raw_record
+  PASS  parse/PARSE_BAD_DATE: stage
+  PASS  parse/PARSE_BAD_DATE: reason
+  PASS  parse/PARSE_BAD_DATE: detail
+  PASS  parse/PARSE_BAD_DATE: source_key
+  PASS  parse/PARSE_BAD_DATE: raw_record
+  PASS  parse/PARSE_BAD_NUMERIC: stage
+  PASS  parse/PARSE_BAD_NUMERIC: reason
+  PASS  parse/PARSE_BAD_NUMERIC: detail
+  PASS  parse/PARSE_BAD_NUMERIC: source_key
+  PASS  parse/PARSE_BAD_NUMERIC: raw_record
+  PASS  schema/SCHEMA_INVALID: stage
+  PASS  schema/SCHEMA_INVALID: reason
+  PASS  schema/SCHEMA_INVALID: detail
+  PASS  schema/SCHEMA_INVALID: source_key
+  PASS  schema/SCHEMA_INVALID: raw_record
+record_lineage  (source_key, account_key, door, stage, reason, detail; source_file excluded)
+  PASS  5 rows in each
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: source_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: account_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: door
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: stage
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: reason
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: detail
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: source_key
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: account_key
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: door
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: stage
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: reason
+  PASS  parse/PARSE_BAD_COLUMN_COUNT: detail
+  PASS  parse/PARSE_BAD_DATE: source_key
+  PASS  parse/PARSE_BAD_DATE: account_key
+  PASS  parse/PARSE_BAD_DATE: door
+  PASS  parse/PARSE_BAD_DATE: stage
+  PASS  parse/PARSE_BAD_DATE: reason
+  PASS  parse/PARSE_BAD_DATE: detail
+  PASS  parse/PARSE_BAD_NUMERIC: source_key
+  PASS  parse/PARSE_BAD_NUMERIC: account_key
+  PASS  parse/PARSE_BAD_NUMERIC: door
+  PASS  parse/PARSE_BAD_NUMERIC: stage
+  PASS  parse/PARSE_BAD_NUMERIC: reason
+  PASS  parse/PARSE_BAD_NUMERIC: detail
+  PASS  schema/SCHEMA_INVALID: source_key
+  PASS  schema/SCHEMA_INVALID: account_key
+  PASS  schema/SCHEMA_INVALID: door
+  PASS  schema/SCHEMA_INVALID: stage
+  PASS  schema/SCHEMA_INVALID: reason
+  PASS  schema/SCHEMA_INVALID: detail
+account_target  (each TARGET document as a JSON tree; run identity excluded)
+  PASS  50 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_curated  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_enriched  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_src  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same acct_ids
+  PASS  all shared columns identical
+run_ledger
+  PASS  exactly one ledger row for the run
+  PASS  tally matches the manifest (intake ('55', '52', '3') or whole lane ('55', '50', '5'))
+        ledger shape: intake door tally ('55', '52', '3')
+  PASS  balanced, and src_read == written + rejected
+
+ALL CONFORMANCE CHECKS PASSED  (68 checks, profile staged)

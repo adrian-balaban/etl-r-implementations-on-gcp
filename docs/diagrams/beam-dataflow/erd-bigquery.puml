@@ -1,0 +1,94 @@
+@startuml erd-bigquery
+!pragma layout smetana
+title Beam: ledger counts, lineage names
+
+hide circle
+skinparam linetype ortho
+
+package "etlr_extraction" {
+    entity "account_src" as src {
+        * run_id : STRING
+        --
+        One row per record that
+        survived parse.
+    }
+}
+
+package "etlr_transformation" {
+    entity "account_curated" as curated {
+        * run_id : STRING
+        --
+        account_id : STRING
+        customer_id : STRING
+        product_code : STRING
+        currency : STRING <<ISO-4217>>
+        opened_on : DATE
+        status_code : STRING
+        balance_minor : INT64
+        balance_amount : STRING <<2dp>>
+        segment : STRING <<NULL>>
+        branch : STRING <<NULL>>
+        risk_rating : INT64 <<NULL>>
+        balance_band : STRING
+        account_age_years : INT64
+    }
+    entity "account_enriched" as enriched {
+        * run_id : STRING
+        --
+        Adds columns only.
+        Never drops a row.
+    }
+}
+
+package "etlr_recon" {
+    entity "run_ledger" as ledger {
+        * run_id : STRING <<REQUIRED>>
+        --
+        src_read : INT64
+        extraction_written : INT64
+        rejected : INT64
+        balanced : BOOL
+        created_at : TIMESTAMP <<partition>>
+        --
+        Clustered by run_id
+    }
+    entity "record_lineage" as lineage {
+        * run_id : STRING <<REQUIRED>>
+        --
+        source_key : STRING
+        account_key : STRING
+        door : STRING
+        stage : STRING
+        reason : STRING
+        detail : STRING
+        source_file : STRING
+        created_at : TIMESTAMP <<partition>>
+        --
+        Clustered by run_id, door, reason
+    }
+    entity "reject_log" as rejects {
+        * run_id : STRING <<REQUIRED>>
+        --
+        batch_id : INT64
+        source_key : STRING
+        stage : STRING
+        reason : STRING
+        detail : STRING
+        raw_record : STRING
+        --
+        Clustered by run_id, reason
+    }
+}
+
+src ||--|| curated : "Dataform SQL transform"
+curated ||--|| enriched : "enrich"
+src ||--o{ lineage : "records that did not migrate"
+ledger ||--o{ lineage : "how many vs. which"
+ledger ||--o{ rejects : "per-reason breakdown"
+
+note bottom of ledger
+  The correctness contract:
+  src_read = extraction_written + rejected
+  A run that does not balance is a failed run.
+end note
+@enduml

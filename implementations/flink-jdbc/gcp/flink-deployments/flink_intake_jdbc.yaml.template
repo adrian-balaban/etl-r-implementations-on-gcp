@@ -1,0 +1,60 @@
+# FlinkDeployment for JdbcIntakeJob, the flink-jdbc lane's intake. Rendered per run by gcp/orchestrator/run.sh.
+# Curate and produce use ../../../flink/gcp/flink-deployments/ templates unchanged; run.sh points them at this
+# lane's image and jar.
+#
+# One job per program: every INSERT of 10-intake-jdbc.sql.template runs in ONE statement set, which is what
+# application mode allows
+# (JdbcIntakeJobIT.intakeSubmitsExactlyOneJobUnderTheApplicationModeGuard).
+# Both passwords arrive as Kubernetes Secrets created by run.sh, never as literal arguments.
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-intake-jdbc-${RUN_ID}
+  namespace: flink-operator
+spec:
+  image: REGION-docker.pkg.dev/PROJECT_ID/mig-flink/flink-jdbc-job:${IMAGE_TAG}
+  flinkVersion: v2_2
+  imagePullPolicy: Always
+  flinkConfiguration:
+    execution.runtime-mode: BATCH
+    taskmanager.numberOfTaskSlots: "4"
+  serviceAccount: flink
+  podTemplate:
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mig-db
+                  key: password
+            - name: SOURCE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: etlr-source-db
+                  key: password
+  jobManager:
+    resource:
+      memory: "1024m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  job:
+    jarURI: local:///opt/flink/usrlib/flink-jdbc-job.jar
+    entryClass: mig.sql.JdbcIntakeJob
+    args:
+      - "${RUN_ID}"
+      - "${SOURCE_JDBC_URL}"
+      - "${SOURCE_USER}"
+      - "env:SOURCE_JDBC_PASSWORD"
+      - "${JDBC_URL}"
+      - "${JDBC_USER}"
+      - "${JDBC_PASSWORD}"
+      - "/opt/flink" # repoRoot: contracts/ is baked into the image
+    parallelism: 1 # one query, one snapshot (spec Revisions 2026-10-21)
+    upgradeMode: stateless

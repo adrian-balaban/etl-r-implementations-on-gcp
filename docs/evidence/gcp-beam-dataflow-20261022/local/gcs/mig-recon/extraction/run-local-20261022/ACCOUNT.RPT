@@ -1,0 +1,14 @@
+{
+  "lane" : "extraction",
+  "record" : "ACCOUNT",
+  "runId" : "run-local-20261022",
+  "generatedAt" : "2026-10-22T12:51:29.958277217Z",
+  "sourceRecordsRead" : 55,
+  "recordsWritten" : 55,
+  "extractionErrors" : 0,
+  "datFiles" : [ {
+    "name" : "ACCOUNT.001.DAT",
+    "records" : 55,
+    "sha256" : "2e2d145bf91a2f1e15d19dcc0f6f95e8bf6485ebe0fdcaa77a37b36ab39f493b"
+  } ]
+}

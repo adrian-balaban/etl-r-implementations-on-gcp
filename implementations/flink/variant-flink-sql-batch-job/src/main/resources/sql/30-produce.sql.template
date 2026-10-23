@@ -1,0 +1,145 @@
+-- 30-produce.sql — Job 3 (produce): the map and schema doors.
+--
+-- Predicates are hand-written in SQL, not delegated to TargetSchemaValidator via a UDF:
+-- keeping the two variants independent is what lets the
+-- SQL-vs-DataStream parity test mean something instead of comparing code with itself.
+--
+-- ${RUN_ID} is substituted by ProduceJob.java.
+
+-- ── map stage: status_code -> status, or MAP_UNMAPPED_ENUM_VALUE (stage='map') ──
+CREATE TEMPORARY VIEW mapped AS
+SELECT
+  e.*,
+  CASE e.status_code WHEN 'A' THEN 'ACTIVE' WHEN 'C' THEN 'CLOSED' WHEN 'D' THEN 'DORMANT' ELSE NULL END AS mapped_status
+FROM account_enriched e
+WHERE e.run_id = '${RUN_ID}';
+
+CREATE TEMPORARY VIEW map_routed AS
+SELECT
+  *,
+  CASE WHEN mapped_status IS NULL THEN 'MAP_UNMAPPED_ENUM_VALUE' ELSE NULL END AS map_reject_reason,
+  CASE WHEN mapped_status IS NULL
+       THEN CONCAT('status: ''', status_code, ''' not in [''A'', ''C'', ''D'']')
+       ELSE NULL END AS map_reject_detail
+FROM mapped;
+
+-- ── schema stage: target-account.schema.json predicates, in the schema's own `required`
+-- order (accountId first) so the *first* violation matches TargetSchemaValidator's choice
+-- on a record that could fail two ways at once (none do, on this fixture, but the order
+-- is the contract, same reasoning as the parse door). ──
+CREATE TEMPORARY VIEW schema_routed AS
+SELECT
+  *,
+  CASE
+    WHEN map_reject_reason IS NOT NULL THEN NULL  -- already rejected at map; schema doesn't run
+    WHEN account_id NOT SIMILAR TO '[A-Z0-9]+' OR CHAR_LENGTH(account_id) > 12 THEN 'SCHEMA_INVALID'
+    WHEN CHAR_LENGTH(customer_id) > 10 THEN 'SCHEMA_INVALID'
+    WHEN CHAR_LENGTH(product_code) > 6 THEN 'SCHEMA_INVALID'
+    WHEN currency NOT SIMILAR TO '[A-Z]{3}' THEN 'SCHEMA_INVALID'
+    ELSE NULL
+  END AS schema_reject_reason,
+  CASE
+    WHEN map_reject_reason IS NOT NULL THEN NULL
+    WHEN account_id NOT SIMILAR TO '[A-Z0-9]+' OR CHAR_LENGTH(account_id) > 12
+      THEN CONCAT('accountId: ''', account_id, ''' does not match ''^[A-Z0-9]+$''')
+    WHEN CHAR_LENGTH(customer_id) > 10
+      THEN CONCAT('customerId: ''', customer_id, ''' is too long')
+    WHEN CHAR_LENGTH(product_code) > 6
+      THEN CONCAT('productCode: ''', product_code, ''' is too long')
+    WHEN currency NOT SIMILAR TO '[A-Z]{3}'
+      THEN CONCAT('currency: ''', currency, ''' does not match ''^[A-Z]{3}$''')
+    ELSE NULL
+  END AS schema_reject_detail
+FROM map_routed;
+
+-- raw_record for a map/schema reject is a JSON snapshot of the enriched row as
+-- it stood going into this job — not the original .DAT line, which is long gone by here.
+-- Keys alphabetical (json.dumps(row, sort_keys=True) in the vendored Python original).
+CREATE TEMPORARY VIEW enriched_snapshot AS
+SELECT
+  *,
+  JSON_OBJECT(
+    KEY 'account_age_years' VALUE account_age_years,
+    KEY 'account_id' VALUE account_id,
+    KEY 'account_key' VALUE account_key,
+    KEY 'balance_amount' VALUE balance_amount,
+    KEY 'balance_band' VALUE balance_band,
+    KEY 'balance_minor' VALUE balance_minor,
+    KEY 'branch' VALUE branch,
+    KEY 'branch_city' VALUE branch_city,
+    KEY 'branch_name' VALUE branch_name,
+    KEY 'branch_region' VALUE branch_region,
+    KEY 'currency' VALUE currency,
+    KEY 'customer_id' VALUE customer_id,
+    KEY 'opened_on' VALUE CAST(opened_on AS STRING),
+    KEY 'product_code' VALUE product_code,
+    KEY 'risk_rating' VALUE risk_rating,
+    KEY 'run_id' VALUE run_id,
+    KEY 'segment' VALUE segment,
+    KEY 'status_code' VALUE status_code
+  ) AS row_snapshot_json
+FROM schema_routed;
+
+-- The TARGET document is built ONCE, here, and read by every sink below (Postgres
+-- account_target, and the Kafka sink in 35-produce-kafka.sql.template when the lane is
+-- wired to a broker). Not duplicated per sink: two copies of this JSON_OBJECT would be two
+-- descriptions of the same contract, free to drift apart silently — exactly the failure
+-- mode to avoid for the schema predicates.
+--
+-- `migration.dedupKey` (= account_key) is what makes the Kafka path safe without
+-- transactional exactly-once: batch does no checkpointing, so the sink is at-least-once
+-- and Target System's idempotency is load-bearing.
+CREATE TEMPORARY VIEW target_documents AS
+SELECT
+  account_id,
+  account_key,
+  JSON_OBJECT(
+    KEY 'accountId' VALUE account_id,
+    KEY 'customerId' VALUE customer_id,
+    KEY 'productCode' VALUE product_code,
+    KEY 'currency' VALUE currency,
+    KEY 'openedOn' VALUE CAST(opened_on AS STRING),
+    KEY 'status' VALUE mapped_status,
+    KEY 'balance' VALUE JSON_OBJECT(KEY 'amount' VALUE balance_amount, KEY 'currency' VALUE currency),
+    KEY 'migration' VALUE JSON_OBJECT(
+      KEY 'runId' VALUE '${RUN_ID}', KEY 'sourceKey' VALUE account_id, KEY 'dedupKey' VALUE account_key)
+  ) AS doc_json
+FROM enriched_snapshot
+WHERE map_reject_reason IS NULL AND schema_reject_reason IS NULL;
+
+EXECUTE STATEMENT SET
+BEGIN
+
+INSERT INTO account_target
+SELECT '${RUN_ID}', account_id, account_key, doc_json
+FROM target_documents;
+
+INSERT INTO reject_log
+SELECT
+  '${RUN_ID}', 0, account_id, 'map', map_reject_reason, map_reject_detail,
+  row_snapshot_json
+FROM enriched_snapshot
+WHERE map_reject_reason IS NOT NULL;
+
+INSERT INTO reject_log
+SELECT
+  '${RUN_ID}', 0, account_id, 'schema', schema_reject_reason, schema_reject_detail,
+  row_snapshot_json
+FROM enriched_snapshot
+WHERE schema_reject_reason IS NOT NULL;
+
+INSERT INTO record_lineage
+SELECT
+  '${RUN_ID}', account_id, account_key, 'rejected', 'map', map_reject_reason, map_reject_detail,
+  'etlr_transformation'
+FROM enriched_snapshot
+WHERE map_reject_reason IS NOT NULL;
+
+INSERT INTO record_lineage
+SELECT
+  '${RUN_ID}', account_id, account_key, 'rejected', 'schema', schema_reject_reason, schema_reject_detail,
+  'etlr_transformation'
+FROM enriched_snapshot
+WHERE schema_reject_reason IS NOT NULL;
+
+END;

@@ -1,0 +1,47 @@
+{
+  "runId" : "run-200k-20261022",
+  "ok" : true,
+  "balance" : {
+    "written" : 200000,
+    "balanced" : true,
+    "srcRead" : 200005,
+    "rejected" : 5
+  },
+  "batches" : {
+    "count" : 1000,
+    "size" : 200,
+    "consistent" : true,
+    "lastBatchSize" : 200
+  },
+  "stages" : [ {
+    "holds" : true,
+    "stage" : "intake",
+    "rhs" : 200005,
+    "equation" : "account_src + parse rejects = src_read",
+    "lhs" : 200005
+  }, {
+    "holds" : true,
+    "stage" : "curate",
+    "rhs" : 200002,
+    "equation" : "account_curated = account_src",
+    "lhs" : 200002
+  }, {
+    "holds" : true,
+    "stage" : "enrich",
+    "rhs" : 200002,
+    "equation" : "account_enriched = account_curated",
+    "lhs" : 200002
+  }, {
+    "holds" : true,
+    "stage" : "produce",
+    "rhs" : 200002,
+    "equation" : "account_target + map/schema rejects = account_enriched",
+    "lhs" : 200002
+  } ],
+  "settle" : {
+    "checked" : true,
+    "confirmed" : 200000,
+    "targetRows" : 200000,
+    "unconfirmed" : [ ]
+  }
+}

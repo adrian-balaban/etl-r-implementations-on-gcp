@@ -1,0 +1,91 @@
+@startuml deployment-gcp
+!pragma layout smetana
+title Flink on GCP: off by default
+
+skinparam componentStyle rectangle
+
+cloud "GCP project <project_id>" {
+
+    node "Cloud Scheduler\nfires every minute" as scheduler {
+        artifact "OIDC as the flink-job account" as cron
+    }
+
+    node "Cloud Run Job, not a service" as run {
+        component "orchestrator image" as orch
+        artifact "run.sh" as runsh
+        artifact "gate.jar" as egjar
+        artifact "recon-service.jar" as reconjar
+        artifact "GCS mounted at /mnt/gcs\n(native mount: gVisor blocks /dev/fuse)" as mount
+    }
+    note right of run
+      Cloud Run Jobs have no concurrency policy,
+      so run.sh locks itself:
+      * done-marker present: exit 0
+      * atomic lock: the loser gets 412
+      * stale lock broken after 45 min
+    end note
+
+    node "GKE Standard cluster mig-flink-gke" as gke {
+        node "node pool: Workload Identity, no public IP" as pool {
+            component "Flink Kubernetes Operator\n(Helm, ns flink-operator)" as operator
+            component "FlinkDeployment: intake" as fd1
+            component "FlinkDeployment: curate-enrich" as fd2
+            component "FlinkDeployment: produce" as fd3
+            component "JobManager + TaskManager\nFlink 2.2.1, BATCH mode" as tm
+        }
+    }
+
+    database "Cloud SQL\nPostgres 16, private IP only" as pg
+
+    queue "Managed Kafka" as kafka {
+        artifact "target-system-target" as t1
+        artifact "target-system-confirmations" as t2
+        artifact "target-system-rejections" as t3
+    }
+
+    storage "GCS landing bucket" as gcs {
+        artifact "extraction/ · work/ · locks/\ndone/ · recon-reports/" as bucket
+    }
+
+    node "Cloud Run Service: target-system-mock" as mock {
+        component "Kafka consumer loop + /__admin/*" as mockc
+    }
+
+    node "Artifact Registry" as ar {
+        artifact "flink-job · orchestrator\ntarget-system-mock" as images
+    }
+
+    node "VPC connector" as vpcc
+    node "Secret Manager" as sm
+    node "IAM accounts" as iam
+    node "Cloud Composer: dropped\n$300-400/month idle" as composer #line.dashed
+}
+
+cron --> orch : one execution per minute
+orch --> bucket : lock, done-marker, .FLG
+egjar --> bucket : unpack, verify .CHS, write work/
+orch --> operator : kubectl apply, wait, delete
+operator --> fd1
+operator --> fd2
+operator --> fd3
+fd1 --> tm
+fd2 --> tm
+fd3 --> tm
+tm --> bucket : intake reads work/
+tm --> pg : JDBC, private IP
+tm --> t1 : upsert-kafka, SASL_SSL / OAUTHBEARER
+
+mockc --> t1 : consumes documents
+mockc --> t2 : confirmations
+mockc --> t3 : rejections
+
+reconjar --> pg : counts; writes run_ledger
+reconjar --> t2 : reads confirmations
+reconjar --> bucket : recon-reports/
+
+mock --> vpcc : egress to private Kafka
+images --> tm
+images --> orch
+images --> mockc
+
+@enduml

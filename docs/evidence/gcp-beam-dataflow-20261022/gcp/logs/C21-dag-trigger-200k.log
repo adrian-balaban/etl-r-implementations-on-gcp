@@ -1,0 +1,6 @@
+# C21 trigger the DAG for the 200k run, 2026-10-22T14:26:44Z
+$ airflow dags trigger etlr_beam_migration --conf {"run_id":"run-gcp-200k-20261022"}
+Executing the command: [ airflow dags trigger etlr_beam_migration --conf {"run_id":"run-gcp-200k-20261022"} ]...
+{'run_id':         | etlr_beam_migrati | manual__2026-10-2 | 2026-10-22        | 2026-10-22        | None     | True             | None              | 2026-10-22       | manual   | None       | queued
+'run-gcp-200k-2026 | on                | 2T14:27:22+00:00  | 14:27:22+00:00    | 14:27:22+00:00    |          |                  |                   | 14:27:22+00:00   |          |            |
+triggered-at: 2026-10-22T14:27:38Z

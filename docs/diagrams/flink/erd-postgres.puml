@@ -1,0 +1,140 @@
+@startuml erd-postgres
+!pragma layout smetana
+title Flink: seven tables in Postgres
+
+' Verified column-by-column against sql/postgres-init.sql. The relationships are LOGICAL
+' ONLY: postgres-init.sql declares no primary key, foreign key or index — each join below
+' is a convention the jobs honour, not a constraint the DB enforces.
+
+hide circle
+skinparam linetype ortho
+
+package etlr_extraction {
+  entity "account_src" as src {
+    acct_id : TEXT NOT NULL
+    cust_id : TEXT NOT NULL
+    client_type : TEXT NOT NULL
+    product_code : TEXT NOT NULL
+    currency : TEXT NOT NULL
+    open_date : DATE NOT NULL
+    status : TEXT NOT NULL
+    balance : TEXT NOT NULL  <<decimal carried as string>>
+    --
+    _run_id : TEXT NOT NULL
+    _batch_id : BIGINT
+    _source_file : TEXT
+    _source_key : TEXT  <<raw:sha256[:16]>>
+    _account_key : TEXT  <<sha256[:32]>>
+    _ingested_at : TEXT
+  }
+  note bottom of src
+    Underscore marks metadata: _run_id only here.
+    Written by IntakeJob; DataStream never builds it.
+  end note
+}
+
+package etlr_transformation {
+  entity "account_curated" as cur {
+    account_id : TEXT NOT NULL
+    customer_id : TEXT NOT NULL
+    product_code : TEXT NOT NULL
+    currency : TEXT NOT NULL
+    opened_on : DATE NOT NULL
+    status_code : TEXT NOT NULL
+    balance_minor : BIGINT NOT NULL
+    balance_amount : TEXT NOT NULL
+    segment : TEXT
+    branch : TEXT
+    risk_rating : TEXT
+    balance_band : TEXT NOT NULL
+    account_age_years : INTEGER NOT NULL
+    --
+    run_id : TEXT NOT NULL
+    account_key : TEXT NOT NULL
+  }
+
+  entity "account_enriched" as enr {
+    ..same 13 columns as account_curated..
+    --
+    branch_name : TEXT
+    branch_city : TEXT
+    branch_region : TEXT
+    --
+    run_id : TEXT NOT NULL
+    account_key : TEXT NOT NULL
+  }
+  note right of enr
+    Column order is load-bearing:
+    Flink binds INSERT … SELECT by position.
+    risk_rating: TEXT here, INT in the Flink DDL.
+    Postgres casts; the declarations disagree.
+  end note
+
+  entity "account_target" as tgt {
+    run_id : TEXT NOT NULL
+    account_id : TEXT NOT NULL
+    account_key : TEXT NOT NULL
+    doc_json : TEXT NOT NULL  <<the target document>>
+  }
+  note right of tgt
+    No batch_id: recon computes batches of 200
+    with ROW_NUMBER().
+  end note
+}
+
+package etlr_recon {
+  entity "reject_log" as rej {
+    run_id : TEXT NOT NULL
+    batch_id : BIGINT NOT NULL
+    source_key : TEXT NOT NULL DEFAULT ''
+    stage : TEXT NOT NULL  <<parse | map | schema>>
+    reason : TEXT NOT NULL  <<Doors.Reason>>
+    detail : TEXT NOT NULL
+    raw_record : TEXT NOT NULL
+  }
+  note bottom of rej
+    source_key: empty at parse, account_id after.
+    raw_record: the .DAT line at parse;
+    the enriched row's JSON after.
+  end note
+
+  entity "record_lineage" as lin {
+    run_id : TEXT NOT NULL
+    source_key : TEXT NOT NULL
+    account_key : TEXT
+    door : TEXT NOT NULL  <<written | rejected>>
+    stage : TEXT NOT NULL
+    reason : TEXT NOT NULL
+    detail : TEXT NOT NULL
+    source_file : TEXT
+  }
+  note bottom of lin
+    source_key differs from reject_log:
+    raw:<hash> at parse, account_id after.
+  end note
+
+  entity "run_ledger" as led {
+    run_id : TEXT NOT NULL
+    src_read : BIGINT NOT NULL  <<from ACCOUNT.CHS>>
+    extraction_written : BIGINT NOT NULL
+    rejected : BIGINT NOT NULL
+    balanced : BOOLEAN NOT NULL
+    created_at : DOUBLE PRECISION NOT NULL  <<epoch seconds>>
+  }
+  note bottom of led
+    One row per run_id: recon replaces it,
+    so retries add no rows.
+  end note
+}
+
+src ||..o| cur : "_account_key = account_key\n(per run_id) — CurateEnrichJob"
+cur ||..|| enr : "account_key (per run_id)\nLEFT JOIN branches.json"
+enr ||..o| tgt : "account_key (per run_id)\nProduceJob survivors"
+enr ||..o{ rej : "account_id -> source_key\nmap / schema rejects"
+src ||..o{ rej : "parse rejects\n(source_key = '')"
+tgt ||..|{ lin : "door='written'"
+rej ||..|| lin : "one lineage row per reject"
+tgt }|..|| led : "COUNT(*) -> extraction_written"
+rej }|..|| led : "COUNT(*) -> rejected"
+
+@enduml

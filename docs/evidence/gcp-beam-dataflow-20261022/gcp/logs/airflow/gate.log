@@ -1,0 +1,24 @@
+2026-10-22T13:52:40.309388526Z  ::group::Pre task execution logs
+2026-10-22T13:52:40.355958016Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.gate manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T13:52:40.378611038Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.gate manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T13:52:40.378696995Z  Starting attempt 1 of 3
+2026-10-22T13:52:40.441363691Z  Executing <Task(GCSObjectExistenceSensor): gate> on 2026-10-22 13:51:40+00:00
+2026-10-22T13:52:40.455911605Z  Started process 499 to run task
+2026-10-22T13:52:40.458700942Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'gate', 'manual__2026-10-22T13:51:40+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmpd23a3_pd']
+2026-10-22T13:52:40.459078827Z  Job 3: Subtask gate
+2026-10-22T13:52:40.601022302Z  Running <TaskInstance: etlr_beam_migration.gate manual__2026-10-22T13:51:40+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T13:52:40.923022597Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='gate' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T13:51:40+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T13:51:40+00:00'
+2026-10-22T13:52:40.933898400Z  ::endgroup::
+2026-10-22T13:52:40.979297173Z  GCSObjectExistenceSensor.execute cannot be called outside TaskInstance!
+2026-10-22T13:52:41.009480600Z  Sensor checks existence of : <project>-landing, extraction/run-gcp-fixture-20261022/ACCOUNT.FLG
+2026-10-22T13:52:42.012722051Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-google_cloud_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T13:52:42.053945293Z  Connection schemes (type: google_cloud_platform) shall not contain '_' according to RFC3986.
+2026-10-22T13:52:42.072104290Z  Using connection ID 'google_cloud_default' for task execution.
+2026-10-22T13:52:42.073647178Z  Getting connection using `google.auth.default()` since no explicit credentials are provided.
+2026-10-22T13:52:42.200673362Z  Success criteria met. Exiting.
+2026-10-22T13:52:42.200769075Z  ::group::Post task execution logs
+2026-10-22T13:52:42.278274300Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=gate, run_id=manual__2026-10-22T13:51:40+00:00, execution_date=20261022T135140, start_date=20261022T135240, end_date=20261022T135242
+2026-10-22T13:52:42.349435764Z  Task exited with return code 0
+2026-10-22T13:52:42.468732920Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T13:52:42.474122571Z  ::endgroup::

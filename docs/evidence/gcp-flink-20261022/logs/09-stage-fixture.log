@@ -1,0 +1,13 @@
+# stage the 55-record fixture, 2026-10-22T11:07:16Z
+$ python3 harness/bundle.py --src fixtures/ACCOUNT.src --run-id run-fixture-20261022 --out <tmp>
+bundled fixtures/ACCOUNT.src -> <workdir> (run_id=run-fixture-20261022)
+input sha256: 86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c  (56 lines incl. header)
+run-fixture-20261022/incoming/ACCOUNT.FLG
+run-fixture-20261022/incoming/ACCOUNT.tar.gz
+$ gsutil cp -r <tmp>/run-fixture-20261022 gs://<project>-landing/extraction/
+gs://<project>-landing/extraction/run-fixture-20261022/:
+
+gs://<project>-landing/extraction/run-fixture-20261022/incoming/:
+gs://<project>-landing/extraction/run-fixture-20261022/incoming/ACCOUNT.FLG
+gs://<project>-landing/extraction/run-fixture-20261022/incoming/ACCOUNT.tar.gz
+uploaded-at: 2026-10-22T11:07:19Z

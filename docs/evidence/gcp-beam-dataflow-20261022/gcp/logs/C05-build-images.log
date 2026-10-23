@@ -1,0 +1,69 @@
+# C05 build + push the Java images and the three Flex Template images on tag 136a32f (what 'make build-images' runs), 2026-10-22T13:22:54Z
+$ bash local/scripts/gcp/build_java_images.sh
+image version: 136a32f
+▶ building load → europe-west1-docker.pkg.dev/<project>/mig-dataflow/load:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/load:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/load:136a32f
+416c65812be728502fc190de3a7349b1c9509b83485983c524eeec2b2ea7ff8f
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/load:136a32f (and :latest)
+▶ building recon → europe-west1-docker.pkg.dev/<project>/mig-dataflow/recon:136a32f
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T16:23:01+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T16:23:22+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/recon:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/recon:136a32f
+49e90d9824b328391324c7fb32f499264691a268e4f794277c77cb50adb4bcc1
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/recon:136a32f (and :latest)
+▶ building dataform-runner → europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:136a32f
+COMMIT europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:136a32f
+252a07329a642c36da019f64108aad6608b6afd2809fb6dabd52c02522b16356
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:136a32f (and :latest)
+▶ building target-system-mock → europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:136a32f
+Successfully tagged localhost/etlr-beam/target-system-mock:local
+7fa0b00b63fc4b5409a24ad4b749df359b0bb961c367cc7ea2307113fb0582ca
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:136a32f (and :latest)
+
+published:
+  europe-west1-docker.pkg.dev/<project>/mig-dataflow/load:136a32f
+  europe-west1-docker.pkg.dev/<project>/mig-dataflow/recon:136a32f
+  europe-west1-docker.pkg.dev/<project>/mig-dataflow/dataform-runner:136a32f
+  europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:136a32f
+
+Set MIG_JAVA_IMAGE_TAG=136a32f on the Composer environment so the DAG launches
+these exact images rather than whatever :latest happens to be.
+exit(java)=0
+$ bash local/scripts/gcp/build_templates.sh
+image version: 136a32f
+▶ building intake (module=intake) → europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+COMMIT europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+d8bda2ac05f252751982abfc1e2e72b50541fde1b7342de97e35031f3f3456ff
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f (and :latest)
+▶ uploading spec → gs://<project>-dataflow-templates/intake.json
+ERROR: (gcloud.storage.cp) HTTPError 403: The billing account for the owning project is disabled in state absent. This command is authenticated as <operator> which is the active account specified by the [core/account] property
+exit(templates)=1
+done 2026-10-22T13:24:33Z

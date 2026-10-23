@@ -1,0 +1,40 @@
+@startuml c3-pipelines
+!pragma layout smetana
+!include <C4/C4_Component>
+
+title Beam: three pipelines, one engine
+
+Container_Boundary(beam, "Beam Pipelines (Python, Dataflow)") {
+    Component(fp, "intake", "Beam", "Verifies .CHS; settles the parse door")
+    Component(de, "enrich", "Beam", "Joins reference data; adds no doors")
+    Component(jp, "produce", "Beam", "Settles map and schema doors; batches of 200")
+    Component(engine, "common.engine", "route_intake", "One parse implementation, so nothing drifts")
+    Component(tds, "common.tds", "SRC-TDS", "Source record layout")
+    Component(mapping, "common.mapping", "YAML rules", "Re-keying and mapping")
+    Component(schema, "common.schema", "JSON Schema", "Validates the target document")
+    Component(sinks, "common.sinks", "target_writer", "Kafka writer; absent without a bootstrap")
+    Component(doors, "common.doors", "Accounting", "Named exit reasons into record_lineage")
+}
+
+ContainerDb(bq, "BigQuery", "Data Warehouse")
+Container(gcs, "GCS", "Blob Storage")
+System_Ext(kafka, "Kafka", "target topic")
+
+Rel(gcs, fp, "Reads encrypted bundle")
+Rel(fp, engine, "Delegates parse to")
+Rel(engine, tds, "Uses")
+Rel(fp, bq, "Writes account_src + run_ledger")
+Rel(fp, doors, "Rejects via")
+
+Rel(bq, de, "Reads account_curated")
+Rel(de, bq, "Writes account_enriched")
+
+Rel(bq, jp, "Reads account_enriched")
+Rel(jp, mapping, "Re-keys and maps via")
+Rel(jp, schema, "Validates against")
+Rel(jp, doors, "Rejects via")
+Rel(jp, gcs, "Writes JSON batches of 200")
+Rel(jp, sinks, "Publishes via")
+Rel(sinks, kafka, "Writes target documents")
+Rel(doors, bq, "Names every non-migrated record in record_lineage")
+@enduml

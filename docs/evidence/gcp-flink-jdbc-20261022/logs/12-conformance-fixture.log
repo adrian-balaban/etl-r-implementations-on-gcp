@@ -1,0 +1,59 @@
+# conformance of the GCP fixture run against the typed-source oracle, 2026-10-22T12:22:01Z
+$ python3 spec/conformance/compare.py <dump-dir> --profile staged --expected spec/fixtures/db/expected --manifest spec/fixtures/db/manifest.json
+profile: staged
+reject_log  (stage, reason, detail, source_key, raw_record)
+  PASS  3 rows in each
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: stage
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: reason
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: detail
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: source_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: raw_record
+  PASS  parse/PARSE_MISSING_FIELD: stage
+  PASS  parse/PARSE_MISSING_FIELD: reason
+  PASS  parse/PARSE_MISSING_FIELD: detail
+  PASS  parse/PARSE_MISSING_FIELD: source_key
+  PASS  parse/PARSE_MISSING_FIELD: raw_record
+  PASS  schema/SCHEMA_INVALID: stage
+  PASS  schema/SCHEMA_INVALID: reason
+  PASS  schema/SCHEMA_INVALID: detail
+  PASS  schema/SCHEMA_INVALID: source_key
+  PASS  schema/SCHEMA_INVALID: raw_record
+record_lineage  (source_key, account_key, door, stage, reason, detail; source_file excluded)
+  PASS  3 rows in each
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: source_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: account_key
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: door
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: stage
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: reason
+  PASS  map/MAP_UNMAPPED_ENUM_VALUE: detail
+  PASS  parse/PARSE_MISSING_FIELD: source_key
+  PASS  parse/PARSE_MISSING_FIELD: account_key
+  PASS  parse/PARSE_MISSING_FIELD: door
+  PASS  parse/PARSE_MISSING_FIELD: stage
+  PASS  parse/PARSE_MISSING_FIELD: reason
+  PASS  parse/PARSE_MISSING_FIELD: detail
+  PASS  schema/SCHEMA_INVALID: source_key
+  PASS  schema/SCHEMA_INVALID: account_key
+  PASS  schema/SCHEMA_INVALID: door
+  PASS  schema/SCHEMA_INVALID: stage
+  PASS  schema/SCHEMA_INVALID: reason
+  PASS  schema/SCHEMA_INVALID: detail
+account_target  (each TARGET document as a JSON tree; run identity excluded)
+  PASS  50 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_curated  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_enriched  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same account_ids
+  PASS  all shared columns identical
+account_src  (every column except run/ingest metadata)
+  PASS  52 rows in the oracle, same acct_ids
+  PASS  all shared columns identical
+run_ledger
+  PASS  exactly one ledger row for the run
+  PASS  tally matches the manifest (intake ('53', '52', '1') or whole lane ('53', '50', '3'))
+        ledger shape: whole lane tally ('53', '50', '3')
+  PASS  balanced, and src_read == written + rejected
+
+ALL CONFORMANCE CHECKS PASSED  (46 checks, profile staged)

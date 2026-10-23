@@ -1,0 +1,50 @@
+@startuml 09-data-model
+!pragma layout smetana
+title Seven tables, three layers
+hide circle
+note as N
+  Logical model: no constraints.
+end note
+package extraction {
+  entity account_src {
+    ACCT_ID · CUST_ID · … · BALANCE
+    --
+    _run_id · _account_key
+  }
+}
+package transformation {
+  entity account_curated {
+    account_id · … · balance_band
+    --
+    run_id · account_key
+  }
+  entity account_enriched {
+    curated columns
+    --
+    branch_name · branch_city · branch_region
+  }
+  entity account_target {
+    account_id
+    --
+    doc_json
+  }
+}
+package recon {
+  entity reject_log {
+    source_key · stage · reason · detail · raw_record
+  }
+  entity record_lineage {
+    source_key · account_key · door · stage · reason
+  }
+  entity run_ledger {
+    src_read · extraction_written · rejected · balanced
+  }
+}
+account_src ||--o| account_curated
+account_curated ||--|| account_enriched
+account_enriched ||--o| account_target
+account_src ..> reject_log : parse rejects
+account_enriched ..> reject_log : map · schema rejects
+reject_log ||--|| record_lineage
+account_target ..> run_ledger
+@enduml

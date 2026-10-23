@@ -1,0 +1,4 @@
+# seeder: load the fixture + control row, 2026-10-22T12:07:25Z
+$ gcloud run jobs execute mig-flink-jdbc-source-seeder --region=europe-west1 --wait --args=fixture,run-fixture-20261022
+Execution [mig-flink-jdbc-source-seeder-2h8fw] has successfully completed.
+seeded-at: 2026-10-22T12:07:46Z

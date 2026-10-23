@@ -1,0 +1,27 @@
+# flink-jdbc job image: JobManager/TaskManager for the three FlinkDeployments, one jar (flink-jdbc-job.jar:
+# JdbcIntakeJob, CurateEnrichJob, ProduceJob). Context: implementations/; see Dockerfile.orchestrator for the command.
+# No gs:// plugin: nothing in this lane's jobs reads GCS.
+FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /build
+COPY flink/pom.xml flink/pom.xml
+COPY flink/common/pom.xml flink/common/pom.xml
+COPY flink/variant-flink-sql-batch-job/pom.xml flink/variant-flink-sql-batch-job/pom.xml
+COPY flink/recon/pom.xml flink/recon/pom.xml
+COPY flink/target-system-mock/pom.xml flink/target-system-mock/pom.xml
+COPY flink-jdbc/pom.xml flink-jdbc/pom.xml
+COPY flink-jdbc/gate-jdbc/pom.xml flink-jdbc/gate-jdbc/pom.xml
+COPY flink-jdbc/intake-jdbc/pom.xml flink-jdbc/intake-jdbc/pom.xml
+COPY flink-jdbc/component-tests-jdbc/pom.xml flink-jdbc/component-tests-jdbc/pom.xml
+RUN mvn -B -q -f flink-jdbc/pom.xml -pl :intake-jdbc -am dependency:go-offline -DskipTests
+COPY flink/common/src flink/common/src
+COPY flink/variant-flink-sql-batch-job/src flink/variant-flink-sql-batch-job/src
+COPY flink-jdbc/intake-jdbc/src flink-jdbc/intake-jdbc/src
+RUN mvn -B -q -f flink-jdbc/pom.xml -pl :intake-jdbc -am package -DskipTests \
+ && cp flink-jdbc/intake-jdbc/target/flink-jdbc-job.jar /build/flink-jdbc-job.jar
+
+FROM docker.io/library/flink:2.2.1-java17
+USER root
+RUN mkdir -p /opt/flink/usrlib
+COPY --from=build /build/flink-jdbc-job.jar /opt/flink/usrlib/flink-jdbc-job.jar
+COPY --from=spec contracts /opt/flink/contracts
+USER flink

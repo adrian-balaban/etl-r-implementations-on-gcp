@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ro.mig.flink</groupId>
+    <artifactId>test-gcp-flink</artifactId>
+    <version>0.1.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>component-tests</artifactId>
+  <name>component-tests</name>
+  <dependencies>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>gate</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>recon</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>variant-flink-sql-batch-job</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>variant-flink-datastream-batch-job</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ro.mig.flink</groupId>
+      <artifactId>target-system-mock</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--
+        Whole-repo LINE coverage. Bound here, not the root pom, because
+        report-aggregate needs a module with a <dependency> on every module to aggregate —
+        component-tests already depends on all six (common, gate, recon,
+        variant-flink-sql-batch-job, variant-flink-datastream-batch-job, target-system-mock).
+        Merges every dependency module's own jacoco.exec (recorded by their own `mvn test`
+        run) with this module's — which is where recon/target-system-mock/DataStreamJob
+        coverage actually comes from: SettleLoopIT/ThreeWayParityIT/IdempotentReRunIT call
+        DataStreamJob.main() in-process (instrumented, in THIS module's JVM), while
+        ReconService and TargetSystemMock run as real subprocesses of their own (a
+        deliberate choice — SettleLoopIT's javadoc — for a real end-to-end settle loop) and
+        so are NOT captured here; their line coverage instead comes from the dedicated unit
+        tests each of those modules carries directly.
+      -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <!--
+              report-aggregate is a report producer, not a gate — JaCoCo's `check` goal
+              has no clean way to enforce a threshold against a multi-module aggregate
+              (it checks one module's own jacoco.exec + classes, not a merge). The 65%
+              floor is verified against this report's CSV by a `grep`/`awk` step in CI
+              instead (Makefile target `coverage-check`) — deliberate,
+              not an oversight: an accurate multi-module check would need its own
+              aggregator pom module for marginal benefit at this repo's size.
+            -->
+            <id>jacoco-report-aggregate</id>
+            <phase>verify</phase>
+            <goals><goal>report-aggregate</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

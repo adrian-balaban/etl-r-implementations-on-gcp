@@ -1,0 +1,4 @@
+# seeder: generate + load 200,000 accounts, 2026-10-22T12:22:10Z
+$ gcloud run jobs execute mig-flink-jdbc-source-seeder --region=europe-west1 --wait --args=generate,run-200k-20261022,200000
+Execution [mig-flink-jdbc-source-seeder-ldf7q] has successfully completed.
+seeded-at: 2026-10-22T12:26:30Z

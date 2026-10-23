@@ -1,0 +1,4 @@
+# seeder: dump the run's tables, 2026-10-22T12:20:38Z
+$ gcloud run jobs execute mig-flink-jdbc-source-seeder --region=europe-west1 --wait --args=dump,run-fixture-20261022
+Execution [mig-flink-jdbc-source-seeder-dt9sw] has successfully completed.
+gs://<project>-landing/evidence/run-fixture-20261022/

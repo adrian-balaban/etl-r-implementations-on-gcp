@@ -1,0 +1,46 @@
+2026-10-22T14:33:06.658341801Z  ::group::Pre task execution logs
+2026-10-22T14:33:06.832721341Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:33:06.933072433Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:33:06.933205086Z  Starting attempt 1 of 3
+2026-10-22T14:33:06.967035188Z  Executing <Task(KubernetesPodOperator): enrich> on 2026-10-22 14:27:22+00:00
+2026-10-22T14:33:07.048570662Z  Started process 1513 to run task
+2026-10-22T14:33:07.054339220Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'enrich', 'manual__2026-10-22T14:27:22+00:00', '--job-id', '21', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmp7oibbyqi']
+2026-10-22T14:33:07.132660035Z  Job 21: Subtask enrich
+2026-10-22T14:33:07.438513782Z  Running <TaskInstance: etlr_beam_migration.enrich manual__2026-10-22T14:27:22+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T14:33:08.346567601Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='enrich' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T14:27:22+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T14:27:22+00:00'
+2026-10-22T14:33:08.348658903Z  ::endgroup::
+2026-10-22T14:33:08.634801113Z  Building pod enrich-j5hitpue with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'enrich', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T14:33:09.337602881Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T14:33:10.154162575Z  Found matching pod enrich-j5hitpue with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'task_id': 'enrich', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T14:33:10.154985268Z  `try_number` of task_instance: 1
+2026-10-22T14:33:10.155137415Z  `try_number` of pod: 1
+2026-10-22T14:33:10.354427279Z  Pod not yet started: enrich-j5hitpue
+2026-10-22T14:38:42.346425353Z  [base] WARNING:apache_beam.options.pipeline_options:Bucket gs://<project>-dataflow-temp/tmp used as temp_location has soft-delete policy enabled. To avoid being billed for unnecessary storage costs, turn off the soft delete feature on buckets that your Dataflow jobs use for temporary and staging storage. For more information, see https://cloud.google.com/storage/docs/use-soft-delete#remove-soft-delete-policy.
+2026-10-22T14:38:42.356185923Z  Reading of logs interrupted for container 'base'; will retry.
+Traceback (most recent call last):
+  File "/opt/python3.11/lib/python3.11/site-packages/airflow/providers/cncf/kubernetes/utils/pod_manager.py", line 455, in consume_logs
+    for raw_line in logs:
+  File "/opt/python3.11/lib/python3.11/site-packages/airflow/providers/cncf/kubernetes/utils/pod_manager.py", line 245, in __iter__
+    for data_chunk in self.response.stream(amt=None, decode_content=True):
+  File "/opt/python3.11/lib/python3.11/site-packages/urllib3/response.py", line 1057, in stream
+    yield from self.read_chunked(amt, decode_content=decode_content)
+  File "/opt/python3.11/lib/python3.11/site-packages/urllib3/response.py", line 1206, in read_chunked
+    self._update_chunk_length()
+  File "/opt/python3.11/lib/python3.11/site-packages/urllib3/response.py", line 1136, in _update_chunk_length
+    raise ProtocolError("Response ended prematurely") from None
+urllib3.exceptions.ProtocolError: Response ended prematurely
+2026-10-22T14:38:42.395956288Z  Pod enrich-j5hitpue log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T14:41:07.851915484Z  [base] WARNING:apache_beam.options.pipeline_options:Bucket gs://<project>-dataflow-temp/tmp used as temp_location has soft-delete policy enabled. To avoid being billed for unnecessary storage costs, turn off the soft delete feature on buckets that your Dataflow jobs use for temporary and staging storage. For more information, see https://cloud.google.com/storage/docs/use-soft-delete#remove-soft-delete-policy.
+2026-10-22T14:41:09.856869137Z  [base] enrich: {"enriched": 200002, "read": 200002, "reference_unmatched": 200002}
+
+2026-10-22T14:41:09.882701474Z  Pod enrich-j5hitpue log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T14:41:10.926358211Z  [base] enrich: {"enriched": 200002, "read": 200002, "reference_unmatched": 200002}
+
+2026-10-22T14:41:11.538301883Z  Pod enrich-j5hitpue has phase Running
+2026-10-22T14:41:13.590992203Z  Deleting pod: enrich-j5hitpue
+2026-10-22T14:41:13.663676191Z  ::group::Post task execution logs
+2026-10-22T14:41:13.706757751Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=enrich, run_id=manual__2026-10-22T14:27:22+00:00, execution_date=20261022T142722, start_date=20261022T143306, end_date=20261022T144113
+2026-10-22T14:41:13.798250316Z  Task exited with return code 0
+2026-10-22T14:41:13.867179209Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T14:41:13.871950951Z  ::endgroup::

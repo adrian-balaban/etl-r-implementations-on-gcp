@@ -1,0 +1,13 @@
+# C11 deploy-dags, 2026-10-22T13:46:37Z
+▶ syncing composer/dags/ → gs://europe-west1-mig-composer-<hash>-bucket/dags
+At file://composer/dags/**, worker process 3744182 thread 127262701352768 listed 2...
+At gs://europe-west1-mig-composer-<hash>-bucket/dags/**, worker process 3744182 thread 127262701352768 listed 1...
+Copying file://composer/dags/.gitkeep to gs://europe-west1-mig-composer-<hash>-bucket/dags/.gitkeep
+  
+Copying file://composer/dags/etlr_beam.py to gs://europe-west1-mig-composer-<hash>-bucket/dags/etlr_beam.py
+Removing gs://europe-west1-mig-composer-<hash>-bucket/dags/airflow_monitoring.py#1792676638186859...
+
+
+Average throughput: 649.6kiB/s
+✓ DAGs deployed. Composer will pick up changes within its poll interval.
+exit=0

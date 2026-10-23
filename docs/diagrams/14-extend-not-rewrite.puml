@@ -1,0 +1,25 @@
+@startuml 14-extend-not-rewrite
+' Shared. From the original README slide 9.
+!pragma layout smetana
+title Extend, not rewrite
+left to right direction
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+rectangle "spec/contracts/ — the only thing a project edits" as contracts #eef4fa {
+    rectangle "mapping-project1.yaml" as Y1
+    rectangle "mapping-project2.yaml" as Y2
+    rectangle "tds/*.def"            as T1
+    rectangle "schemas/*.json"          as S1
+}
+
+rectangle "implementations/* — zero code diff" as engine #f5fbf5 {
+    rectangle "beam-dataflow · flink · flink-jdbc" as PIPE #dff0d8
+}
+
+Y1 --> PIPE
+Y2 --> PIPE
+T1 --> PIPE
+S1 --> PIPE
+note bottom of PIPE : project2: zero implementation diff (proven, beam).\nflink, flink-jdbc: same contracts, run pending.
+@enduml

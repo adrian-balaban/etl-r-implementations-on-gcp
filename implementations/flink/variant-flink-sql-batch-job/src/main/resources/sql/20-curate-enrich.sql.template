@@ -1,0 +1,69 @@
+-- 20-curate-enrich.sql — Job 2 (curate + enrich).
+--
+-- Replaces Dataform's account_curated.sqlx AND pipelines/data_enrichment/pipeline.py.
+-- No doors here: enrichment adds columns, it never rejects a row — the
+-- COUNT(account_curated) = COUNT(account_enriched) assert lives in recon, not here.
+--
+-- ${RUN_ID}, ${AS_OF_DATE} (yyyy-MM-dd) are substituted by CurateEnrichJob.java.
+-- The branches reference table is registered programmatically by CurateEnrichJob.java (from
+-- contracts/reference/branches.json — a {"branches": {code: {...}}} map, not row-shaped
+-- JSON-lines, so it is loaded via Jackson and exposed as a VALUES table rather than
+-- through the filesystem connector's `format='json'`).
+
+-- account_curated: normalise + derive, one row per account_src row scoped to this run.
+-- account_age_years mirrors BigQuery's DATE_DIFF(CURRENT_DATE(), OPEN_DATE, YEAR),
+-- which counts calendar-year boundaries, not full elapsed years — YEAR(as_of) - YEAR(opened_on)
+-- reproduces that (Flink's TIMESTAMPDIFF(YEAR, ...) does NOT: it counts elapsed years).
+-- balance_band thresholds apply to the major unit (the balance itself), not
+-- balance_minor — computed straight from `balance`, never re-derived from the minor-unit column.
+CREATE TEMPORARY VIEW account_curated_view AS
+SELECT
+  TRIM(acct_id)                                         AS account_id,
+  TRIM(cust_id)                                         AS customer_id,
+  TRIM(product_code)                                    AS product_code,
+  UPPER(TRIM(currency))                                 AS currency,
+  open_date                                             AS opened_on,
+  TRIM(status)                                          AS status_code,
+  CAST(ROUND(CAST(balance AS DOUBLE) * 100) AS BIGINT)  AS balance_minor,
+  balance                                                AS balance_amount,
+  CAST(NULL AS STRING)                                  AS segment,
+  CAST(NULL AS STRING)                                  AS branch,
+  CAST(NULL AS INT)                                     AS risk_rating,
+  CASE
+    WHEN CAST(balance AS DOUBLE) < 0      THEN 'OVERDRAWN'
+    WHEN CAST(balance AS DOUBLE) < 1000   THEN 'LOW'
+    WHEN CAST(balance AS DOUBLE) < 100000 THEN 'MEDIUM'
+    ELSE 'HIGH'
+  END                                                    AS balance_band,
+  CAST(YEAR(TO_DATE('${AS_OF_DATE}')) - YEAR(open_date) AS INT) AS account_age_years,
+  _run_id                                               AS run_id,
+  _account_key                                          AS account_key
+FROM account_src
+WHERE _run_id = '${RUN_ID}';
+
+-- account_enriched: account_curated + the branches.json join. `branch` is always NULL on
+-- this contract (the homogeneous .DAT source carries no branch field), so the
+-- join deliberately never matches on the current fixture; the columns exist and are NULL,
+-- exactly like the evidence set, and that is what this job's parity checks — not that the
+-- join logic works on data that doesn't exercise it.
+CREATE TEMPORARY VIEW account_enriched_view AS
+SELECT
+  c.account_id, c.customer_id, c.product_code, c.currency, c.opened_on, c.status_code,
+  c.balance_minor, c.balance_amount, c.segment, c.branch, c.risk_rating, c.balance_band,
+  c.account_age_years, b.branch_name, b.branch_city, b.branch_region, c.run_id, c.account_key
+FROM account_curated_view c
+LEFT JOIN branches_ref b ON c.branch = b.branch_code;
+
+-- Both INSERTs must run as ONE job, not two. Without EXECUTE
+-- STATEMENT SET, executeTemplate() (SqlJobSupport.java) issues one executeSql() per
+-- INSERT, i.e. two job submissions — which Flink's application-mode entrypoint
+-- (KubernetesApplicationClusterEntrypoint, used by the Flink Kubernetes Operator)
+-- rejects outright: "Cannot have more than one execute() or executeAsync() call in a
+-- single environment". Safe to batch: account_enriched_view selects from
+-- account_curated_view (a TEMPORARY VIEW, inlined into the plan, not the JDBC sink
+-- table), so neither INSERT depends on what the other writes.
+EXECUTE STATEMENT SET
+BEGIN
+  INSERT INTO account_curated SELECT * FROM account_curated_view;
+  INSERT INTO account_enriched SELECT * FROM account_enriched_view;
+END;

@@ -1,0 +1,237 @@
+# flink images, commit 136a32f, 2026-10-22T10:38:15Z
+[1/2] STEP 1/15: FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+[1/2] STEP 2/15: WORKDIR /build
+--> Using cache 24627ddce8f24f05a84779d5be15d4ab7aba3722869ccf792c20b0bd06ec89ed
+--> 24627ddce8f2
+[1/2] STEP 3/15: COPY pom.xml ./
+--> edb954b38af6
+[1/2] STEP 4/15: COPY common/pom.xml ./common/pom.xml
+--> 024f72e90f6f
+[1/2] STEP 5/15: COPY gate/pom.xml ./gate/pom.xml
+--> e32be1906a96
+[1/2] STEP 6/15: COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+--> bdc454368a11
+[1/2] STEP 7/15: COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+--> af713d38a7d3
+[1/2] STEP 8/15: COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+--> 11d8b098201d
+[1/2] STEP 9/15: COPY recon/pom.xml ./recon/pom.xml
+--> d5da3d989bba
+[1/2] STEP 10/15: COPY component-tests/pom.xml ./component-tests/pom.xml
+--> fa103a049008
+[1/2] STEP 11/15: RUN mvn -B -q -pl gate,recon -am dependency:go-offline -DskipTests
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:38:18+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+--> 355841da5403
+[1/2] STEP 12/15: COPY common/src ./common/src
+--> f6ae8f95b411
+[1/2] STEP 13/15: COPY gate/src ./gate/src
+--> fa2d047baf2e
+[1/2] STEP 14/15: COPY recon/src ./recon/src
+--> 655a3d754222
+[1/2] STEP 15/15: RUN mvn -B -q -pl gate,recon -am package -DskipTests  && cp gate/target/gate.jar /build/gate.jar  && cp recon/target/recon-service.jar /build/recon-service.jar
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:38:40+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+--> c192531b5e44
+[2/2] STEP 1/11: FROM docker.io/google/cloud-sdk:slim
+[2/2] STEP 2/11: RUN apt-get update  && apt-get install -y --no-install-recommends openjdk-21-jre-headless kubectl     google-cloud-cli-gke-gcloud-auth-plugin  && apt-get clean && rm -rf /var/lib/apt/lists/*
+--> Using cache 93f9f1283855d9f97caa3ca33016066be7e49317142b40f6998aa940a486e523
+--> 93f9f1283855
+[2/2] STEP 3/11: COPY --from=build /build/gate.jar /app/gate.jar
+--> 3b9bd84b9dee
+[2/2] STEP 4/11: COPY --from=build /build/recon-service.jar /app/recon-service.jar
+--> 9a9062d56302
+[2/2] STEP 5/11: COPY gcp/flink-deployments/*.yaml.template /manifests/
+--> 1216e57371c2
+[2/2] STEP 6/11: COPY --from=spec contracts /opt/mig/contracts
+--> c7e3e7ffae74
+[2/2] STEP 7/11: COPY gcp/orchestrator/run.sh /app/run.sh
+--> 5526dc0e0771
+[2/2] STEP 8/11: COPY gcp/ttl/sweep.sh /app/sweep.sh
+--> a66634f1ea31
+[2/2] STEP 9/11: RUN chmod +x /app/run.sh /app/sweep.sh
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:38:54+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+--> b526eac3c1af
+[2/2] STEP 10/11: ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
+--> b71f65fd4b9f
+[2/2] STEP 11/11: ENTRYPOINT ["/app/run.sh"]
+[2/2] COMMIT europe-west1-docker.pkg.dev/<project>/mig-flink/orchestrator:136a32f
+--> 7b433fad6c5c
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-flink/orchestrator:136a32f
+7b433fad6c5cf0ddc8f027f848d99b6e93c129baa84f4129f4d117213fa20313
+[1/2] STEP 1/16: FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+[1/2] STEP 2/16: ARG MIG_MODULE=variant-flink-sql-batch-job
+--> Using cache af0e8145de39a4c58beeb1328f60eaf5732e6e47fe1baa71582ee8c4cf8e9942
+--> af0e8145de39
+[1/2] STEP 3/16: WORKDIR /build
+--> Using cache ffe2ec3fc7c7d8f3870fdf5c9d3721b44351615fbb19f0f54d36770cb31a652f
+--> ffe2ec3fc7c7
+[1/2] STEP 4/16: COPY pom.xml ./
+--> dc218408c674
+[1/2] STEP 5/16: COPY common/pom.xml ./common/pom.xml
+--> c69dab5cd230
+[1/2] STEP 6/16: COPY gate/pom.xml ./gate/pom.xml
+--> 63337cb5d6b0
+[1/2] STEP 7/16: COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+--> f26b47491b79
+[1/2] STEP 8/16: COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+--> 2c3004c359e1
+[1/2] STEP 9/16: COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+--> 9fc3495d0581
+[1/2] STEP 10/16: COPY recon/pom.xml ./recon/pom.xml
+--> 8bc02aecaf3b
+[1/2] STEP 11/16: COPY component-tests/pom.xml ./component-tests/pom.xml
+--> afeb334492cb
+[1/2] STEP 12/16: RUN mvn -B -q -pl "${MIG_MODULE}" -am dependency:go-offline -DskipTests
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:38:57+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+--> 1e6cbbddc3b6
+[1/2] STEP 13/16: COPY --from=spec contracts ./contracts
+--> d8109f5d84e1
+[1/2] STEP 14/16: COPY common/src ./common/src
+--> 3189697541f3
+[1/2] STEP 15/16: COPY "${MIG_MODULE}/src" "./${MIG_MODULE}/src"
+--> c256a8b0f668
+[1/2] STEP 16/16: RUN mvn -B -q -pl "${MIG_MODULE}" -am package -DskipTests  && ls -la "${MIG_MODULE}"/target/*.jar  && cp "$(ls -S ${MIG_MODULE}/target/*.jar | grep -v original- | head -1)" /build/job.jar
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:39:25+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+-rw-r--r-- 1 root root     25257 Oct 22 10:39 variant-flink-sql-batch-job/target/variant-flink-sql-batch-job-0.1.0.jar
+-rw-r--r-- 1 root root 165401301 Oct 22 10:39 variant-flink-sql-batch-job/target/variant-flink-sql-batch-job.jar
+--> f07156b081ac
+[2/2] STEP 1/7: FROM docker.io/library/flink:2.2.1-java17
+[2/2] STEP 2/7: USER root
+--> Using cache 853513fafc59d3283ec1373f4c3fce623f3f0f0422516395dce239fe98337e48
+--> 853513fafc59
+[2/2] STEP 3/7: RUN set -eux;     GS_URL="https://repo1.maven.org/maven2/org/apache/flink/flink-gs-fs-hadoop/2.2.1/flink-gs-fs-hadoop-2.2.1.jar";     GS_JAR=/opt/flink/plugins/gs-fs-hadoop/flink-gs-fs-hadoop-2.2.1.jar;     mkdir -p /opt/flink/plugins/gs-fs-hadoop;     curl -fSL --retry 3 --retry-delay 2 --max-time 120 "$GS_URL" -o "$GS_JAR"
+--> Using cache fb5efe162b0ba23e1bd255aaf5bd2784ed336aa6afe0b74bf49012768859f33e
+--> fb5efe162b0b
+[2/2] STEP 4/7: RUN mkdir -p /opt/flink/usrlib
+--> Using cache ab809b4be18f73b1e3991e94f658ab91081e850b3427c51b755fb62fb19127fa
+--> ab809b4be18f
+[2/2] STEP 5/7: COPY --from=build /build/job.jar /opt/flink/usrlib/job.jar
+--> 6e96ae7b056f
+[2/2] STEP 6/7: COPY --from=spec contracts /opt/flink/contracts
+--> c216891f2024
+[2/2] STEP 7/7: USER flink
+[2/2] COMMIT europe-west1-docker.pkg.dev/<project>/mig-flink/flink-job:136a32f
+--> 0d939c2980fc
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-flink/flink-job:136a32f
+0d939c2980fcd5c659049d010c0d0907fa51bb904d111ea02df9b72b345d977e
+[1/2] STEP 1/15: FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+[1/2] STEP 2/15: ARG MIG_MODULE
+--> Using cache af0e8145de39a4c58beeb1328f60eaf5732e6e47fe1baa71582ee8c4cf8e9942
+--> af0e8145de39
+[1/2] STEP 3/15: WORKDIR /build
+--> Using cache ffe2ec3fc7c7d8f3870fdf5c9d3721b44351615fbb19f0f54d36770cb31a652f
+--> ffe2ec3fc7c7
+[1/2] STEP 4/15: COPY pom.xml ./
+--> Using cache dc218408c6740419838b23975dfa93320645c0b9f13da7bc1ecd92bab223a42c
+--> dc218408c674
+[1/2] STEP 5/15: COPY common/pom.xml ./common/pom.xml
+--> Using cache c69dab5cd230b85752b597bcbfeabfb53fb38b8836b86871bc57860806743d37
+--> c69dab5cd230
+[1/2] STEP 6/15: COPY gate/pom.xml ./gate/pom.xml
+--> Using cache 63337cb5d6b0ee7645e458557721e40fb2661723818725e89973c6fe0e58140b
+--> 63337cb5d6b0
+[1/2] STEP 7/15: COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+--> Using cache f26b47491b79a45c511d7c000edfa8b43d86fc3ddb0da46279c5dd7257a2c88e
+--> f26b47491b79
+[1/2] STEP 8/15: COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+--> Using cache 2c3004c359e1b148a77c3bfb21efabe9b831dfd1a0ad6536b3e4efa47cc54b47
+--> 2c3004c359e1
+[1/2] STEP 9/15: COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+--> Using cache 9fc3495d05810f4538fd28442bd50eeba206c54adcc6f595c8da313921b8b62c
+--> 9fc3495d0581
+[1/2] STEP 10/15: COPY recon/pom.xml ./recon/pom.xml
+--> Using cache 8bc02aecaf3bd3fef47fc9387e53f179fae34a1aef2f97d263659cb2c456ec39
+--> 8bc02aecaf3b
+[1/2] STEP 11/15: COPY component-tests/pom.xml ./component-tests/pom.xml
+--> Using cache afeb334492cb778fc673b25fe9a6436deb6889348f2e6aa122c65217a75968d3
+--> afeb334492cb
+[1/2] STEP 12/15: RUN mvn -B -q -pl "${MIG_MODULE}" -am dependency:go-offline -DskipTests
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:39:48+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+--> 08aae0431ddf
+[1/2] STEP 13/15: COPY common/src ./common/src
+--> f81c47d6a792
+[1/2] STEP 14/15: COPY "${MIG_MODULE}/src" "./${MIG_MODULE}/src"
+--> 26df1365f040
+[1/2] STEP 15/15: RUN mvn -B -q -pl "${MIG_MODULE}" -am package -DskipTests  && ls -la "${MIG_MODULE}"/target/*.jar  && cp "$(ls -S ${MIG_MODULE}/target/*.jar | grep -v original- | head -1)" /build/app.jar
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_CHOWN: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_DAC_OVERRIDE: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_FOWNER: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_FSETID: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_KILL: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_NET_BIND_SERVICE: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_SETFCAP: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_SETGID: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_SETPCAP: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_SETUID: operation not permitted"
+time="2026-10-22T13:40:08+03:00" level=warning msg="can't raise ambient capability CAP_SYS_CHROOT: operation not permitted"
+-rw-r--r-- 1 root root    10120 Oct 22 10:40 target-system-mock/target/target-system-mock-0.1.0.jar
+-rw-r--r-- 1 root root 20907096 Oct 22 10:40 target-system-mock/target/target-system-mock.jar
+--> ccbe211a6e7e
+[2/2] STEP 1/3: FROM docker.io/library/eclipse-temurin:17-jre
+[2/2] STEP 2/3: COPY --from=build /build/app.jar /app/app.jar
+--> 5c4555c5a224
+[2/2] STEP 3/3: ENTRYPOINT ["java", "-XX:MaxRAMPercentage=70", "-jar", "/app/app.jar"]
+[2/2] COMMIT europe-west1-docker.pkg.dev/<project>/mig-flink/target-system-mock:136a32f
+--> 63299ee9be76
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-flink/target-system-mock:136a32f
+63299ee9be76a6d5cc51f9b5ec88e9305e465af88938abb977823e61a3d59d66
+gcp/docker/build.sh $REG $TAG  194.60s user 26.39s system 183% cpu 2:00.63 total

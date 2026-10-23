@@ -1,0 +1,61 @@
+# FlinkDeployment CR for ProduceJob — see flink_intake.yaml.template for the shared notes.
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-produce-${RUN_ID}
+  namespace: flink-operator
+spec:
+  image: REGION-docker.pkg.dev/PROJECT_ID/mig-flink/flink-job:${IMAGE_TAG}
+  flinkVersion: v2_2
+  imagePullPolicy: Always
+  flinkConfiguration:
+    execution.runtime-mode: BATCH
+    taskmanager.numberOfTaskSlots: "4"
+    # Managed Kafka speaks SASL_SSL/OAUTHBEARER, and the token it wants is NOT the raw
+    # access token — mig.common.GcpTokenOauthCallbackHandler builds the
+    # JWT-shaped value it validates. KafkaClients.applySecurity and
+    # SqlJobSupport.kafkaSecurityOptions both switch on KAFKA_SECURITY_PROTOCOL, so setting
+    # it here is what turns the SQL variant's upsert-kafka sink into an authenticated one.
+    # Unset (every local test, and a deploy with enable_kafka=false) means PLAINTEXT.
+    containerized.taskmanager.env.KAFKA_SECURITY_PROTOCOL: "${KAFKA_SECURITY_PROTOCOL}"
+    containerized.master.env.KAFKA_SECURITY_PROTOCOL: "${KAFKA_SECURITY_PROTOCOL}"
+  serviceAccount: flink
+  # The database password arrives as the Secret `mig-db` (created by the orchestrator), exposed as
+  # the environment variable the job's "env:JDBC_PASSWORD" argument names. `optional: true` so the
+  # older DB_PASSWORD_MODE=arg path — where no Secret exists — still starts. See
+  # mig.common.ConnectionArgs.
+  podTemplate:
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mig-db
+                  key: password
+                  optional: true
+  jobManager:
+    resource:
+      memory: "1024m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  job:
+    jarURI: local:///opt/flink/usrlib/job.jar
+    entryClass: mig.sql.ProduceJob
+    args:
+      - "${RUN_ID}"
+      - "${JDBC_URL}"
+      - "${JDBC_USER}"
+      - "${JDBC_PASSWORD}"
+      # The lane's OUTPUT. Empty
+      # bootstrap = Postgres only, which is how a deploy with enable_kafka=false still runs.
+      - "${KAFKA_BOOTSTRAP}"
+      - "${KAFKA_TARGET_TOPIC}"
+    parallelism: 1
+    upgradeMode: stateless

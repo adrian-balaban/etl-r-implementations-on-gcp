@@ -1,0 +1,113 @@
+-- 10-intake.sql — Job 1 (intake), the parse door.
+--
+-- This is a TEMPLATE: ${WORK_DIR}, ${RUN_ID}, ${JDBC_URL}, ${JDBC_USER}, ${JDBC_PASSWORD}
+-- are substituted by IntakeJob.java before submission — Flink SQL has no first-class
+-- parameterisation for connector options, so this stays a template rather than a static
+-- resource (mirrors how JobConfig.fromEnv() worked in the vendored Python/Java apps).
+--
+-- The SQL-only 'format' = 'raw' on the filesystem connector was
+-- verified NOT to give one row per line reliably across engines the way the original
+-- sketch assumed. IntakeJob.java uses `FileSource` + `TextLineInputFormat` in the
+-- DataStream layer instead and exposes it to Table API via `fromDataStream`, exactly the
+-- documented fallback. This file only carries the SQL half: the `parsed` view's CASE
+-- logic and the STATEMENT SET.
+
+-- The header row is recognised by content, not position (RecordParser.isHeader in
+-- Tds.java / tds.py): the file source has no notion of "the first line" once it is a
+-- distributed dataset, so the header text itself is the only thing to filter on.
+-- ${HEADER_LINE} is rendered from the TDS contract (Tds.RecordParser.headerLine())
+-- by IntakeJob.java, not duplicated here as a literal.
+CREATE TEMPORARY VIEW raw_lines AS
+SELECT line FROM lines_source
+WHERE line <> '${HEADER_LINE}';
+
+-- SPLIT_INDEX walks pipe-delimited columns by position; TRY_CAST never throws, so a bad
+-- date/numeric surfaces as NULL for the CASE below to catch, not as a job failure.
+CREATE TEMPORARY VIEW parsed AS
+SELECT
+  line AS raw_record,
+  -- TRIM on the six string fields: the oracle's parser strips every field value
+  -- (Tds.java's `raw = s.strip()`, tds.py before it), and the source really is padded —
+  -- CLIENT_TYPE is fixed at 4 characters, so 26 of the 52 surviving records carry 'SME ' where
+  -- the oracle's account_src holds 'SME'. Invisible downstream (curate TRIMs, so every TARGET
+  -- document matched), which is why it survived until the first row-by-row comparison of the
+  -- extraction layer itself. Trimmed HERE, where
+  -- the fields are split, so reject `detail` strings and the SHA-256 keys derived from acct_id
+  -- see the same value the oracle does. open_date_raw / balance_raw are left as-is: they are
+  -- fixed-format and validated below, and a stray space in one SHOULD reject the record.
+  TRIM(SPLIT_INDEX(line, '|', 0)) AS acct_id,
+  TRIM(SPLIT_INDEX(line, '|', 1)) AS cust_id,
+  TRIM(SPLIT_INDEX(line, '|', 2)) AS client_type,
+  TRIM(SPLIT_INDEX(line, '|', 3)) AS product_code,
+  TRIM(SPLIT_INDEX(line, '|', 4)) AS currency,
+  SPLIT_INDEX(line, '|', 5) AS open_date_raw,
+  TRIM(SPLIT_INDEX(line, '|', 6)) AS status,
+  SPLIT_INDEX(line, '|', 7) AS balance_raw,
+  -- how many pipe-delimited columns this line actually has, for PARSE_BAD_COLUMN_COUNT
+  (CHAR_LENGTH(line) - CHAR_LENGTH(REPLACE(line, '|', '')) + 1) AS col_count,
+  -- yyyyMMdd -> DATE via TRY_CAST of the dashed form: TRY_CAST alone never throws, and
+  -- rejects a syntactically-8-digit but calendrically invalid date (e.g. month 13) the
+  -- same way date(int(y),int(m),int(d)) does in tds.py.
+  CHAR_LENGTH(SPLIT_INDEX(line, '|', 5)) = 8
+      AND SPLIT_INDEX(line, '|', 5) SIMILAR TO '[0-9]{8}'
+      AND TRY_CAST(
+            CONCAT(
+              SUBSTR(SPLIT_INDEX(line, '|', 5), 1, 4), '-',
+              SUBSTR(SPLIT_INDEX(line, '|', 5), 5, 2), '-',
+              SUBSTR(SPLIT_INDEX(line, '|', 5), 7, 2))
+            AS DATE) IS NOT NULL AS open_date_parses,
+  TRY_CAST(SPLIT_INDEX(line, '|', 7) AS DECIMAL(18,2)) AS balance_parsed
+FROM raw_lines;
+
+-- The CASE walks fields in TDS declaration order: ACCT_ID, CUST_ID,
+-- CLIENT_TYPE, PRODUCT_CODE, CURRENCY (col=4 — the field that trips on the 4-column
+-- truncated row, giving "CURRENCY needs column 4, row has 4"), OPEN_DATE, STATUS,
+-- BALANCE. A global "col_count <> 8" check would give the same *code* but attribute it
+-- to the wrong field and a different *detail* string, so it is rejected.
+CREATE TEMPORARY VIEW intake_routed AS
+SELECT
+  raw_record, acct_id, cust_id, client_type, product_code, currency,
+  open_date_raw, status, balance_raw, balance_parsed,
+  CASE
+    WHEN col_count < 5 THEN 'PARSE_BAD_COLUMN_COUNT'
+    WHEN NOT open_date_parses THEN 'PARSE_BAD_DATE'
+    WHEN balance_parsed IS NULL THEN 'PARSE_BAD_NUMERIC'
+    ELSE NULL
+  END AS reject_reason,
+  CASE
+    WHEN col_count < 5 THEN CONCAT('CURRENCY needs column 4, row has ', CAST(col_count AS STRING))
+    WHEN NOT open_date_parses THEN CONCAT('OPEN_DATE=''', open_date_raw, '''')
+    WHEN balance_parsed IS NULL THEN CONCAT('BALANCE=''', balance_raw, '''')
+    ELSE NULL
+  END AS reject_detail
+FROM parsed;
+
+-- Three inserts over one scan: account_src (survivors), reject_log and
+-- record_lineage (parse-stage rejects only — map/schema doors are not open yet at
+-- intake, see engine's route_intake rationale ported into RecordRouter.java).
+EXECUTE STATEMENT SET
+BEGIN
+
+INSERT INTO account_src
+SELECT
+  acct_id, cust_id, client_type, product_code, currency,
+  TO_DATE(open_date_raw, 'yyyyMMdd'), status, CAST(balance_parsed AS STRING),
+  '${RUN_ID}', 0, 'ACCOUNT.001.DAT', acct_id,
+  SUBSTRING(SHA256(acct_id), 1, 32), CAST(${INGESTED_AT_EPOCH} AS STRING)
+FROM intake_routed
+WHERE reject_reason IS NULL;
+
+INSERT INTO reject_log
+SELECT
+  '${RUN_ID}', 0, CAST('' AS STRING), 'parse', reject_reason, reject_detail, raw_record
+FROM intake_routed
+WHERE reject_reason IS NOT NULL;
+
+INSERT INTO record_lineage
+SELECT
+  '${RUN_ID}', CONCAT('raw:', SUBSTRING(SHA256(raw_record), 1, 16)), CAST(NULL AS STRING),
+  'rejected', 'parse', reject_reason, reject_detail, CAST(NULL AS STRING)
+FROM intake_routed
+WHERE reject_reason IS NOT NULL;
+
+END;

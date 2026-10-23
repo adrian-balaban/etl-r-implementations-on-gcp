@@ -1,0 +1,36 @@
+-- Job 3's Kafka sink — the lane's OUTPUT. Loaded by ProduceJob ONLY when a broker is
+-- configured, and executed inside the SAME StatementSet as 30-produce's INSERTs, so the
+-- whole produce stage stays one Flink job (application mode allows exactly one).
+--
+-- SPIKE ANSWERED: `upsert-kafka` IS usable from a BATCH job on
+-- Flink 2.2.1 — verified against a real broker by UpsertKafkaSpikeIT, not assumed. The
+-- documented fallback (`kafka` + sink.delivery-guarantee = at-least-once) was NOT needed.
+--
+-- BUT the original sketch of this table does not run as written. It declares
+-- key.format='raw' + value.format='raw' over two physical columns, which Flink rejects:
+--
+--   ValidationException: The 'raw' format only supports single physical column. However
+--   the defined schema contains multiple physical columns:
+--   [`account_key` STRING NOT NULL, `doc_json` STRING]
+--
+-- Because upsert-kafka's value includes ALL physical columns by default — the key column
+-- among them. 'value.fields-include' = 'EXCEPT_KEY' is what makes the value the single
+-- doc_json column the raw format needs. Without it the job fails at planning time, which
+-- is at least loud; the quiet failure would have been shipping the key inside the value.
+CREATE TABLE target_kafka (
+  account_key STRING,
+  doc_json    STRING,
+  PRIMARY KEY (account_key) NOT ENFORCED
+) WITH (
+  'connector' = 'upsert-kafka',
+  'topic' = '${KAFKA_TARGET_TOPIC}',
+  'properties.bootstrap.servers' = '${KAFKA_BOOTSTRAP}',
+  'key.format' = 'raw',
+  'value.format' = 'raw',
+  'value.fields-include' = 'EXCEPT_KEY'${KAFKA_SECURITY_OPTIONS}
+);
+
+-- Reads the same target_documents view account_target is written from (30-produce), so the
+-- document on the topic and the document in Postgres are the same expression, not two.
+INSERT INTO target_kafka
+SELECT account_key, doc_json FROM target_documents;

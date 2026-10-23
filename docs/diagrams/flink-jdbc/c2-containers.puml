@@ -1,0 +1,29 @@
+@startuml c2-containers
+!pragma layout smetana
+!include <C4/C4_Container>
+title Flink-JDBC: reads the source database
+System_Ext(src, "Source System", "Postgres: etlr_source.account (typed) + extract_control")
+System_Ext(tgt, "Target System", "mock locally")
+System_Boundary(b, "flink-jdbc lane") {
+  Container(gate, "gate-jdbc", "Java", "control row, count, content digest, trimmed duplicates")
+  Container(intake, "JdbcIntakeJob", "Flink SQL · JDBC source", "parse door; source_read")
+  Container(cur, "CurateEnrichJob", "Flink SQL", "reused from ../flink")
+  Container(prod, "ProduceJob", "Flink SQL", "map + schema doors; Kafka sink; reused")
+  Container(rj, "recon-jdbc", "Java", "source_read vs control row")
+  Container(rec, "recon", "Java", "balance + settle; reused")
+  ContainerDb(pg, "lane Postgres", "etlr_*", "seven tables + source_read")
+  ContainerQueue(k, "Kafka", "Redpanda locally")
+}
+Rel(gate, src, "REPEATABLE READ", "JDBC, read-only")
+Rel(intake, src, "one scan", "JDBC, read-only")
+Rel(intake, pg, "account_src · rejects · lineage · source_read")
+Rel(cur, pg, "curated · enriched")
+Rel(prod, pg, "account_target")
+Rel(prod, k, "documents")
+Rel(k, tgt, "")
+Rel(tgt, k, "confirmations")
+Rel(rj, src, "control row")
+Rel(rj, pg, "source_read")
+Rel(rec, pg, "run_ledger")
+Rel(rec, k, "settle")
+@enduml

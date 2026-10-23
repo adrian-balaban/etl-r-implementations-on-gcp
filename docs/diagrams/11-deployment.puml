@@ -1,0 +1,27 @@
+@startuml 11-deployment
+!pragma layout smetana
+!include <C4/C4_Deployment>
+title Same lane, local or GCP
+Deployment_Node(local, "Local (podman)") {
+  Deployment_Node(lb, "beam-dataflow") {
+    Container(l1, "fake-gcs · BigQuery emulator · Redpanda · mock")
+  }
+  Deployment_Node(lf, "flink") {
+    Container(l2, "Postgres · Redpanda · Flink (in-process)")
+  }
+  Deployment_Node(lj, "flink-jdbc") {
+    Container(l3, "source + lane Postgres · Redpanda · Flink · mock")
+  }
+}
+Deployment_Node(gcp, "GCP") {
+  Deployment_Node(gb, "beam-dataflow") {
+    Container(g1, "Composer · Dataflow · Dataform · BigQuery · Managed Kafka")
+  }
+  Deployment_Node(gf, "flink") {
+    Container(g2, "Cloud Run Job · GKE Flink · Cloud SQL · Managed Kafka")
+  }
+  Deployment_Node(gj, "flink-jdbc") {
+    Container(g3, "Cloud Run Job · GKE Flink · Cloud SQL ×2 · Managed Kafka")
+  }
+}
+@enduml

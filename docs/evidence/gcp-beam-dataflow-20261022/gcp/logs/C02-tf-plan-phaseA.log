@@ -1,0 +1,1495 @@
+# C02 terraform plan, phase A (everything except Composer and the mock), 2026-10-22T12:56:28Z
+data.google_client_config.this: Reading...
+module.dataform.data.google_project.this: Reading...
+module.bootstrap.google_project_service.this["composer.googleapis.com"]: Refreshing state... [id=<project>/composer.googleapis.com]
+module.bootstrap.google_project_service.this["dataform.googleapis.com"]: Refreshing state... [id=<project>/dataform.googleapis.com]
+module.bootstrap.google_project_service.this["managedkafka.googleapis.com"]: Refreshing state... [id=<project>/managedkafka.googleapis.com]
+module.bootstrap.google_project_service.this["run.googleapis.com"]: Refreshing state... [id=<project>/run.googleapis.com]
+module.bootstrap.google_project_service.this["vpcaccess.googleapis.com"]: Refreshing state... [id=<project>/vpcaccess.googleapis.com]
+module.bootstrap.google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=<project>/logging.googleapis.com]
+module.bootstrap.google_project_service.this["storage.googleapis.com"]: Refreshing state... [id=<project>/storage.googleapis.com]
+module.bootstrap.google_project_service.this["cloudbuild.googleapis.com"]: Refreshing state... [id=<project>/cloudbuild.googleapis.com]
+data.google_client_config.this: Read complete after 0s [id=projects/<project>/regions/europe-west1/zones/]
+module.bootstrap.google_project_service.this["dataflow.googleapis.com"]: Refreshing state... [id=<project>/dataflow.googleapis.com]
+module.dataform.data.google_project.this: Read complete after 1s [id=projects/<project>]
+module.bootstrap.google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=<project>/monitoring.googleapis.com]
+module.bootstrap.google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=<project>/secretmanager.googleapis.com]
+module.bootstrap.google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=<project>/iam.googleapis.com]
+module.bootstrap.google_project_service.this["bigquery.googleapis.com"]: Refreshing state... [id=<project>/bigquery.googleapis.com]
+module.bootstrap.google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=<project>/cloudresourcemanager.googleapis.com]
+module.bootstrap.google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=<project>/artifactregistry.googleapis.com]
+module.bootstrap.google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=<project>/compute.googleapis.com]
+module.bootstrap.google_storage_bucket.tfstate: Refreshing state... [id=<project>-tfstate]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.bigquery.google_bigquery_dataset.this["etlr_extraction"] will be created
+  + resource "google_bigquery_dataset" "this" {
+      + creation_time              = (known after apply)
+      + dataset_id                 = "etlr_extraction"
+      + default_collation          = (known after apply)
+      + delete_contents_on_destroy = true
+      + description                = "SRC records as loaded by the Dataflow File Processor"
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                       = (known after apply)
+      + friendly_name              = "etlr_extraction"
+      + id                         = (known after apply)
+      + is_case_insensitive        = (known after apply)
+      + last_modified_time         = (known after apply)
+      + location                   = "europe-west1"
+      + max_time_travel_hours      = (known after apply)
+      + project                    = "<project>"
+      + self_link                  = (known after apply)
+      + storage_billing_model      = (known after apply)
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + access (known after apply)
+    }
+
+  # module.bigquery.google_bigquery_dataset.this["etlr_recon"] will be created
+  + resource "google_bigquery_dataset" "this" {
+      + creation_time              = (known after apply)
+      + dataset_id                 = "etlr_recon"
+      + default_collation          = (known after apply)
+      + delete_contents_on_destroy = true
+      + description                = "Run ledger, reject log and reconciliation output"
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                       = (known after apply)
+      + friendly_name              = "etlr_recon"
+      + id                         = (known after apply)
+      + is_case_insensitive        = (known after apply)
+      + last_modified_time         = (known after apply)
+      + location                   = "europe-west1"
+      + max_time_travel_hours      = (known after apply)
+      + project                    = "<project>"
+      + self_link                  = (known after apply)
+      + storage_billing_model      = (known after apply)
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + access (known after apply)
+    }
+
+  # module.bigquery.google_bigquery_dataset.this["etlr_transformation"] will be created
+  + resource "google_bigquery_dataset" "this" {
+      + creation_time              = (known after apply)
+      + dataset_id                 = "etlr_transformation"
+      + default_collation          = (known after apply)
+      + delete_contents_on_destroy = true
+      + description                = "Curated, enriched and TARGET-shaped records"
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                       = (known after apply)
+      + friendly_name              = "etlr_transformation"
+      + id                         = (known after apply)
+      + is_case_insensitive        = (known after apply)
+      + last_modified_time         = (known after apply)
+      + location                   = "europe-west1"
+      + max_time_travel_hours      = (known after apply)
+      + project                    = "<project>"
+      + self_link                  = (known after apply)
+      + storage_billing_model      = (known after apply)
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + access (known after apply)
+    }
+
+  # module.bigquery.google_bigquery_table.record_lineage will be created
+  + resource "google_bigquery_table" "record_lineage" {
+      + clustering                   = [
+          + "run_id",
+          + "door",
+          + "reason",
+        ]
+      + creation_time                = (known after apply)
+      + dataset_id                   = "etlr_recon"
+      + deletion_protection          = false
+      + description                  = "One row per record that did not migrate, with its door, stage and enumerated reason. run_ledger says how many; this says which."
+      + effective_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                         = (known after apply)
+      + expiration_time              = (known after apply)
+      + generated_schema_columns     = (known after apply)
+      + id                           = (known after apply)
+      + ignore_auto_generated_schema = false
+      + last_modified_time           = (known after apply)
+      + location                     = (known after apply)
+      + max_staleness                = (known after apply)
+      + num_bytes                    = (known after apply)
+      + num_long_term_bytes          = (known after apply)
+      + num_rows                     = (known after apply)
+      + project                      = "<project>"
+      + schema                       = jsonencode(
+            [
+              + {
+                  + mode = "REQUIRED"
+                  + name = "run_id"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "source_key"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "account_key"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "door"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "stage"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "reason"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "detail"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "source_file"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "created_at"
+                  + type = "TIMESTAMP"
+                },
+            ]
+        )
+      + self_link                    = (known after apply)
+      + table_id                     = "record_lineage"
+      + terraform_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + type                         = (known after apply)
+
+      + time_partitioning {
+          + expiration_ms = (known after apply)
+          + field         = "created_at"
+          + type          = "DAY"
+        }
+    }
+
+  # module.bigquery.google_bigquery_table.reject_log will be created
+  + resource "google_bigquery_table" "reject_log" {
+      + clustering                   = [
+          + "run_id",
+          + "reason",
+        ]
+      + creation_time                = (known after apply)
+      + dataset_id                   = "etlr_recon"
+      + deletion_protection          = false
+      + description                  = "Every rejected record with its stage, enumerated reason code and raw payload."
+      + effective_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                         = (known after apply)
+      + expiration_time              = (known after apply)
+      + generated_schema_columns     = (known after apply)
+      + id                           = (known after apply)
+      + ignore_auto_generated_schema = false
+      + last_modified_time           = (known after apply)
+      + location                     = (known after apply)
+      + max_staleness                = (known after apply)
+      + num_bytes                    = (known after apply)
+      + num_long_term_bytes          = (known after apply)
+      + num_rows                     = (known after apply)
+      + project                      = "<project>"
+      + schema                       = jsonencode(
+            [
+              + {
+                  + mode = "REQUIRED"
+                  + name = "run_id"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "batch_id"
+                  + type = "INT64"
+                },
+              + {
+                  + name = "source_key"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "stage"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "reason"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "detail"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "raw_record"
+                  + type = "STRING"
+                },
+            ]
+        )
+      + self_link                    = (known after apply)
+      + table_id                     = "reject_log"
+      + terraform_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + type                         = (known after apply)
+    }
+
+  # module.bigquery.google_bigquery_table.run_ledger will be created
+  + resource "google_bigquery_table" "run_ledger" {
+      + clustering                   = [
+          + "run_id",
+        ]
+      + creation_time                = (known after apply)
+      + dataset_id                   = "etlr_recon"
+      + deletion_protection          = false
+      + description                  = "One row per run: SRC_read, written, rejected, and whether the balancing equation closed."
+      + effective_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                         = (known after apply)
+      + expiration_time              = (known after apply)
+      + generated_schema_columns     = (known after apply)
+      + id                           = (known after apply)
+      + ignore_auto_generated_schema = false
+      + last_modified_time           = (known after apply)
+      + location                     = (known after apply)
+      + max_staleness                = (known after apply)
+      + num_bytes                    = (known after apply)
+      + num_long_term_bytes          = (known after apply)
+      + num_rows                     = (known after apply)
+      + project                      = "<project>"
+      + schema                       = jsonencode(
+            [
+              + {
+                  + mode = "REQUIRED"
+                  + name = "run_id"
+                  + type = "STRING"
+                },
+              + {
+                  + name = "src_read"
+                  + type = "INT64"
+                },
+              + {
+                  + name = "extraction_written"
+                  + type = "INT64"
+                },
+              + {
+                  + name = "rejected"
+                  + type = "INT64"
+                },
+              + {
+                  + name = "balanced"
+                  + type = "BOOL"
+                },
+              + {
+                  + name = "created_at"
+                  + type = "TIMESTAMP"
+                },
+            ]
+        )
+      + self_link                    = (known after apply)
+      + table_id                     = "run_ledger"
+      + terraform_labels             = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + type                         = (known after apply)
+
+      + time_partitioning {
+          + expiration_ms = (known after apply)
+          + field         = "created_at"
+          + type          = "DAY"
+        }
+    }
+
+  # module.dataflow.google_artifact_registry_repository.templates will be created
+  + resource "google_artifact_registry_repository" "templates" {
+      + create_time      = (known after apply)
+      + description      = "Dataflow Flex Template images for the three pipelines"
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + format           = "DOCKER"
+      + id               = (known after apply)
+      + location         = "europe-west1"
+      + mode             = "STANDARD_REPOSITORY"
+      + name             = (known after apply)
+      + project          = "<project>"
+      + repository_id    = "mig-dataflow"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + update_time      = (known after apply)
+
+      + cleanup_policies {
+          + action = "KEEP"
+          + id     = "keep-recent"
+
+          + most_recent_versions {
+              + keep_count            = 10
+              + package_name_prefixes = []
+            }
+        }
+
+      + vulnerability_scanning_config (known after apply)
+    }
+
+  # module.dataform.google_dataform_repository.this will be created
+  + resource "google_dataform_repository" "this" {
+      + deletion_policy  = "DELETE"
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id               = (known after apply)
+      + name             = "etlr-beam"
+      + project          = "<project>"
+      + region           = "europe-west1"
+      + service_account  = "dataform-runner@<project>.iam.gserviceaccount.com"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + workspace_compilation_overrides {
+          + default_database = "<project>"
+        }
+    }
+
+  # module.dataform.google_project_service_identity.dataform will be created
+  + resource "google_project_service_identity" "dataform" {
+      + email   = (known after apply)
+      + id      = (known after apply)
+      + member  = (known after apply)
+      + project = "<project>"
+      + service = "dataform.googleapis.com"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/artifactregistry.reader"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/artifactregistry.reader"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.dataEditor"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.dataEditor"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.dataViewer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:recon-service@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.dataViewer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.jobUser"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.jobUser"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.jobUser"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:recon-service@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/bigquery.jobUser"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/composer.worker"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/dataflow.developer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/dataflow.developer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/dataflow.worker"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/dataform.editor"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:recon-service@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:target-system-mock@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/secretmanager.secretAccessor"
+    }
+
+  # module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/secretmanager.secretAccessor"
+    }
+
+  # module.iam.google_service_account.this["composer-runner"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "composer-runner"
+      + disabled     = false
+      + display_name = "Cloud Composer environment service account"
+      + email        = "composer-runner@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["dataflow-worker"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "dataflow-worker"
+      + disabled     = false
+      + display_name = "Dataflow workers running the three pipelines"
+      + email        = "dataflow-worker@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["dataform-runner"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "dataform-runner"
+      + disabled     = false
+      + display_name = "Dataform service account for the SQL transformation"
+      + email        = "dataform-runner@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["loader-app"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "loader-app"
+      + disabled     = false
+      + display_name = "Loader App pushing to Target System"
+      + email        = "loader-app@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["recon-service"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "recon-service"
+      + disabled     = false
+      + display_name = "Reconciliation service (read-mostly)"
+      + email        = "recon-service@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:recon-service@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["target-system-mock"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "target-system-mock"
+      + disabled     = false
+      + display_name = "Target System mock on Cloud Run (publishes confirmations)"
+      + email        = "target-system-mock@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:target-system-mock@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountTokenCreator"] will be created
+  + resource "google_service_account_iam_member" "composer_runner_impersonates_dataflow_worker" {
+      + etag               = (known after apply)
+      + id                 = (known after apply)
+      + member             = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + role               = "roles/iam.serviceAccountTokenCreator"
+      + service_account_id = (known after apply)
+    }
+
+  # module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountUser"] will be created
+  + resource "google_service_account_iam_member" "composer_runner_impersonates_dataflow_worker" {
+      + etag               = (known after apply)
+      + id                 = (known after apply)
+      + member             = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + role               = "roles/iam.serviceAccountUser"
+      + service_account_id = (known after apply)
+    }
+
+  # module.iam.google_service_account_iam_member.composer_runner_impersonates_dataform_runner will be created
+  + resource "google_service_account_iam_member" "composer_runner_impersonates_dataform_runner" {
+      + etag               = (known after apply)
+      + id                 = (known after apply)
+      + member             = "serviceAccount:composer-runner@<project>.iam.gserviceaccount.com"
+      + role               = "roles/iam.serviceAccountTokenCreator"
+      + service_account_id = (known after apply)
+    }
+
+  # module.iam.google_service_account_iam_member.dataflow_worker_acts_as_itself will be created
+  + resource "google_service_account_iam_member" "dataflow_worker_acts_as_itself" {
+      + etag               = (known after apply)
+      + id                 = (known after apply)
+      + member             = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + role               = "roles/iam.serviceAccountUser"
+      + service_account_id = (known after apply)
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["dataflow-temp/dataflow-worker"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-dataflow-temp"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["json-out/dataflow-worker"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-json-out"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["json-out/loader-app"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-json-out"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectViewer"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["landing/dataflow-worker"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-landing"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectViewer"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["recon/dataflow-worker"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-recon"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["recon/loader-app"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-recon"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["recon/recon-service"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-recon"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:recon-service@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.kafka.google_managed_kafka_cluster.this[0] will be created
+  + resource "google_managed_kafka_cluster" "this" {
+      + cluster_id       = "mig-kafka"
+      + create_time      = (known after apply)
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id               = (known after apply)
+      + location         = "europe-west1"
+      + name             = (known after apply)
+      + project          = "<project>"
+      + state            = (known after apply)
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + update_time      = (known after apply)
+
+      + capacity_config {
+          + memory_bytes = "3221225472"
+          + vcpu_count   = "3"
+        }
+
+      + gcp_config {
+          + access_config {
+              + network_configs {
+                  + subnet = (known after apply)
+                }
+            }
+        }
+
+      + tls_config (known after apply)
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["confirmations"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 1
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-confirmations"
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["rejections"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 1
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-rejections"
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["target"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 12
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-target"
+    }
+
+  # module.network.google_compute_firewall.dataflow_internal will be created
+  + resource "google_compute_firewall" "dataflow_internal" {
+      + creation_timestamp = (known after apply)
+      + description        = "Inter-worker communication for Dataflow (required)."
+      + destination_ranges = (known after apply)
+      + direction          = (known after apply)
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "mig-allow-dataflow-internal"
+      + network            = "mig-vpc"
+      + priority           = 1000
+      + project            = "<project>"
+      + self_link          = (known after apply)
+      + source_tags        = [
+          + "dataflow",
+        ]
+      + target_tags        = [
+          + "dataflow",
+        ]
+
+      + allow {
+          + ports    = [
+              + "12345-12346",
+            ]
+          + protocol = "tcp"
+        }
+    }
+
+  # module.network.google_compute_network.this will be created
+  + resource "google_compute_network" "this" {
+      + auto_create_subnetworks                   = false
+      + bgp_always_compare_med                    = (known after apply)
+      + bgp_best_path_selection_mode              = (known after apply)
+      + bgp_inter_region_cost                     = (known after apply)
+      + delete_default_routes_on_create           = false
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "mig-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + network_id                                = (known after apply)
+      + numeric_id                                = (known after apply)
+      + project                                   = "<project>"
+      + routing_mode                              = (known after apply)
+      + self_link                                 = (known after apply)
+    }
+
+  # module.network.google_compute_router.this will be created
+  + resource "google_compute_router" "this" {
+      + creation_timestamp = (known after apply)
+      + id                 = (known after apply)
+      + name               = "mig-router"
+      + network            = (known after apply)
+      + project            = "<project>"
+      + region             = "europe-west1"
+      + self_link          = (known after apply)
+    }
+
+  # module.network.google_compute_router_nat.this will be created
+  + resource "google_compute_router_nat" "this" {
+      + auto_network_tier                   = (known after apply)
+      + drain_nat_ips                       = (known after apply)
+      + enable_dynamic_port_allocation      = (known after apply)
+      + enable_endpoint_independent_mapping = (known after apply)
+      + endpoint_types                      = (known after apply)
+      + icmp_idle_timeout_sec               = 30
+      + id                                  = (known after apply)
+      + min_ports_per_vm                    = (known after apply)
+      + name                                = "mig-nat"
+      + nat_ip_allocate_option              = "AUTO_ONLY"
+      + nat_ips                             = (known after apply)
+      + project                             = "<project>"
+      + region                              = "europe-west1"
+      + router                              = "mig-router"
+      + source_subnetwork_ip_ranges_to_nat  = "LIST_OF_SUBNETWORKS"
+      + tcp_established_idle_timeout_sec    = 1200
+      + tcp_time_wait_timeout_sec           = 120
+      + tcp_transitory_idle_timeout_sec     = 30
+      + type                                = "PUBLIC"
+      + udp_idle_timeout_sec                = 30
+
+      + log_config {
+          + enable = true
+          + filter = "ERRORS_ONLY"
+        }
+
+      + subnetwork {
+          + name                     = (known after apply)
+          + secondary_ip_range_names = []
+          + source_ip_ranges_to_nat  = [
+              + "ALL_IP_RANGES",
+            ]
+        }
+    }
+
+  # module.network.google_compute_subnetwork.this will be created
+  + resource "google_compute_subnetwork" "this" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "10.20.0.0/20"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "mig-subnet"
+      + network                    = (known after apply)
+      + private_ip_google_access   = true
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "<project>"
+      + purpose                    = (known after apply)
+      + region                     = "europe-west1"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + log_config {
+          + aggregation_interval = "INTERVAL_10_MIN"
+          + filter_expr          = "true"
+          + flow_sampling        = 0.5
+          + metadata             = "INCLUDE_ALL_METADATA"
+        }
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # module.secrets.google_secret_manager_secret.this["dataform-git-token"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + labels                = {
+          + "system" = "etlr-beam"
+        }
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "dataform-git-token"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["pgp-passphrase"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + labels                = {
+          + "system" = "etlr-beam"
+        }
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "pgp-passphrase"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["pgp-private-key"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + labels                = {
+          + "system" = "etlr-beam"
+        }
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "pgp-private-key"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["target-system-credentials"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + labels                = {
+          + "system" = "etlr-beam"
+        }
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "target-system-credentials"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+          + "system"                     = "etlr-beam"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessors["dataform-git-token"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessors" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "dataform-git-token"
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-passphrase"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessors" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "pgp-passphrase"
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-private-key"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessors" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "pgp-private-key"
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessors["target-system-credentials"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessors" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:loader-app@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "target-system-credentials"
+    }
+
+  # module.storage.google_storage_bucket.this["dataflow-temp"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-dataflow-temp"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = false
+        }
+
+      + website (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["dataflow-templates"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-dataflow-templates"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["json-out"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-json-out"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 30
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = false
+        }
+
+      + website (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["landing"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-landing"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 90
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["recon"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-recon"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 365
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+  # module.vpc_connector.google_vpc_access_connector.this[0] will be created
+  + resource "google_vpc_access_connector" "this" {
+      + connected_projects = (known after apply)
+      + id                 = (known after apply)
+      + ip_cidr_range      = "10.20.128.0/28"
+      + machine_type       = "e2-micro"
+      + max_instances      = (known after apply)
+      + max_throughput     = 300
+      + min_instances      = (known after apply)
+      + min_throughput     = 200
+      + name               = "mig-vpc-connector"
+      + network            = (known after apply)
+      + project            = "<project>"
+      + region             = "europe-west1"
+      + self_link          = (known after apply)
+      + state              = (known after apply)
+    }
+
+Plan: 70 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + buckets              = {
+      + dataflow-temp      = "<project>-dataflow-temp"
+      + dataflow-templates = "<project>-dataflow-templates"
+      + json-out           = "<project>-json-out"
+      + landing            = "<project>-landing"
+      + recon              = "<project>-recon"
+    }
+  + composer_airflow_uri = ""
+  + composer_dag_bucket  = ""
+  + dataflow_registry    = "europe-west1-docker.pkg.dev/<project>/mig-dataflow"
+  + dataform_repository  = "etlr-beam"
+  + datasets             = {
+      + etlr_extraction     = "etlr_extraction"
+      + etlr_recon          = "etlr_recon"
+      + etlr_transformation = "etlr_transformation"
+    }
+  + env_file             = (known after apply)
+  + kafka_bootstrap      = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+  + service_accounts     = {
+      + composer-runner    = "composer-runner@<project>.iam.gserviceaccount.com"
+      + dataflow-worker    = "dataflow-worker@<project>.iam.gserviceaccount.com"
+      + dataform-runner    = "dataform-runner@<project>.iam.gserviceaccount.com"
+      + loader-app         = "loader-app@<project>.iam.gserviceaccount.com"
+      + recon-service      = "recon-service@<project>.iam.gserviceaccount.com"
+      + target-system-mock = "target-system-mock@<project>.iam.gserviceaccount.com"
+    }
+  + target_system_url    = ""
+  + templates_bucket     = "<project>-dataflow-templates"
+
+Warning: Check block assertion failed
+
+  on main.tf line 155, in check "kafka_bootstrap_override_is_set":
+ 155:     condition     = !var.enable_kafka || var.kafka_bootstrap_override != ""
+    ├────────────────
+    │ var.enable_kafka is true
+    │ var.kafka_bootstrap_override is ""
+
+enable_kafka=true but kafka_bootstrap_override is empty. Read the real
+address once the cluster exists and pass it:
+-var="kafka_bootstrap_override=$(gcloud managed-kafka clusters describe
+mig-kafka --location=<region> --format='value(bootstrapAddress)')" (see
+docs/runbook-gcp.md, B8).
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: pa.plan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "pa.plan"

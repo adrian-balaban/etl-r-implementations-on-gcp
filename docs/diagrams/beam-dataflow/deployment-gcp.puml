@@ -1,0 +1,42 @@
+@startuml deployment-gcp
+!pragma layout smetana
+!include <C4/C4_Deployment>
+
+title Beam on GCP: private by default
+
+Deployment_Node(gcp, "Google Cloud Platform", "project <project>") {
+
+    Deployment_Node(vpc, "mig-vpc", "network module — no public worker IPs, Private Google Access, Cloud NAT") {
+
+        Deployment_Node(subnet, "mig-subnet", "10.20.0.0/20") {
+            Deployment_Node(gke, "Composer GKE cluster", "composer module (Autopilot)") {
+                Container(airflow, "Airflow scheduler + workers", "Cloud Composer", "Runs the migration DAG")
+                Container(pods, "Task pods", "KubernetesPodOperator", "One pod per stage; Workload Identity")
+            }
+            Container(kafka, "Managed Kafka", "kafka module", "VPC-internal, no public endpoint. SASL_SSL / OAUTHBEARER")
+        }
+
+        Container(connector, "mig-vpc-connector", "vpc_connector module — 10.20.128.0/28", "Bridges the serverless mock into the VPC")
+    }
+
+    Deployment_Node(serverless, "Serverless", "scales to zero") {
+        Container(mock, "target-system-mock", "Cloud Run", "Stands in for Target System")
+    }
+
+    Deployment_Node(managed, "Managed data services", "reached over Private Google Access") {
+        ContainerDb(bq, "BigQuery datasets", "bigquery module", "etlr_extraction, etlr_transformation, etlr_recon")
+        Container(gcs, "GCS buckets", "storage module", "landing, json-out, recon")
+        Container(dataflow_svc, "Dataflow", "dataflow module", "Runs the jobs the Beam pods submit")
+        Container(ar, "Artifact Registry", "mig-dataflow", "Images tagged with the git SHA")
+    }
+}
+
+Rel(airflow, pods, "Launches into its own namespace")
+Rel(pods, dataflow_svc, "Submit jobs and block until done")
+Rel(pods, bq, "Read / write")
+Rel(pods, gcs, "Read / write")
+Rel(pods, ar, "Pulls images")
+Rel(pods, kafka, "Loader produces, recon consumes")
+Rel(mock, connector, "Egress through")
+Rel(connector, kafka, "Reaches the broker")
+@enduml

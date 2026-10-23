@@ -1,0 +1,65 @@
+# Shared contracts/harness come from the monorepo's spec/ via a NAMED BUILD CONTEXT, not from this
+# directory (there they are symlinks, which a build context does not follow). Build with:
+#   podman build --build-context spec=../../spec -f gcp/docker/Dockerfile.orchestrator ... .   (from implementations/flink)
+# Without --build-context, `COPY --from=spec` is read as an image called "spec" and fails confusingly.
+
+# Orchestrator image for module.scheduler's Cloud Run Job — runs
+# gcp/orchestrator/run.sh: wait_for_extract_flg -> gate -> the three Flink jobs
+# (submitted as FlinkDeployment CRs via kubectl) -> recon, all in one execution.
+#
+# Needs: java (gate.jar, recon-service.jar), kubectl + gcloud (submit to the
+# separate flink_gke cluster), gsutil (check .FLG, sum .CHS), gcsfuse (mount the landing
+# bucket locally so gate's existing filesystem code runs unchanged ,
+# the chosen workaround instead of a new GCS Java client).
+
+FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+
+WORKDIR /build
+COPY pom.xml ./
+COPY common/pom.xml ./common/pom.xml
+COPY gate/pom.xml ./gate/pom.xml
+COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+COPY recon/pom.xml ./recon/pom.xml
+COPY component-tests/pom.xml ./component-tests/pom.xml
+RUN mvn -B -q -pl gate,recon -am dependency:go-offline -DskipTests
+
+COPY common/src ./common/src
+COPY gate/src ./gate/src
+COPY recon/src ./recon/src
+RUN mvn -B -q -pl gate,recon -am package -DskipTests \
+ && cp gate/target/gate.jar /build/gate.jar \
+ && cp recon/target/recon-service.jar /build/recon-service.jar
+
+# ── runtime ───────────────────────────────────────────────────────────────────
+FROM docker.io/google/cloud-sdk:slim
+
+# google-cloud-cli-gke-gcloud-auth-plugin is not optional: since Kubernetes 1.26 kubectl no
+# longer carries the GCP auth provider in-tree, so without this plugin `kubectl apply` against
+# a GKE cluster fails with "gke-gcloud-auth-plugin: not found" — the orchestrator would take
+# its lock, extract the bundle, and die on the first Flink submission. Found reading this
+# file before its first execution.
+#
+# No gcsfuse binary needed — the landing bucket is mounted via Cloud Run's native GCS
+# volume mount (module.scheduler), which the gVisor sandbox Cloud Run Jobs run in
+# actually supports; a manually shelled-out gcsfuse process would not (needs /dev/fuse).
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openjdk-21-jre-headless kubectl \
+    google-cloud-cli-gke-gcloud-auth-plugin \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /build/gate.jar /app/gate.jar
+COPY --from=build /build/recon-service.jar /app/recon-service.jar
+COPY gcp/flink-deployments/*.yaml.template /manifests/
+# gate reads the mapping/TDS contract to know whether the extract has a header row
+# (Gate.dataRecords) — the same files IntakeJob's image carries under /opt/flink.
+COPY --from=spec contracts /opt/mig/contracts
+COPY gcp/orchestrator/run.sh /app/run.sh
+# The TTL sweeper runs from this same image — it already has gcloud and
+# gsutil — as a Cloud Run Job with a command override, so there is no second image to build.
+COPY gcp/ttl/sweep.sh /app/sweep.sh
+RUN chmod +x /app/run.sh /app/sweep.sh
+
+ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
+ENTRYPOINT ["/app/run.sh"]

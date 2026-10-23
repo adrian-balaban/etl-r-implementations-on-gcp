@@ -1,0 +1,1136 @@
+# terraform plan, stage (b) infrastructure, 2026-10-22T10:43:22Z
+module.bootstrap.google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=<project>/artifactregistry.googleapis.com]
+module.bootstrap.google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=<project>/iam.googleapis.com]
+module.bootstrap.google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=<project>/logging.googleapis.com]
+module.bootstrap.google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=<project>/monitoring.googleapis.com]
+module.bootstrap.google_project_service.this["servicenetworking.googleapis.com"]: Refreshing state... [id=<project>/servicenetworking.googleapis.com]
+module.bootstrap.google_project_service.this["storage.googleapis.com"]: Refreshing state... [id=<project>/storage.googleapis.com]
+module.bootstrap.google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=<project>/secretmanager.googleapis.com]
+module.bootstrap.google_project_service.this["sqladmin.googleapis.com"]: Refreshing state... [id=<project>/sqladmin.googleapis.com]
+module.bootstrap.google_project_service.this["container.googleapis.com"]: Refreshing state... [id=<project>/container.googleapis.com]
+module.bootstrap.google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=<project>/compute.googleapis.com]
+module.bootstrap.google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=<project>/cloudresourcemanager.googleapis.com]
+module.bootstrap.google_project_service.this["managedkafka.googleapis.com"]: Refreshing state... [id=<project>/managedkafka.googleapis.com]
+module.bootstrap.google_project_service.this["cloudbuild.googleapis.com"]: Refreshing state... [id=<project>/cloudbuild.googleapis.com]
+module.bootstrap.google_project_service.this["cloudscheduler.googleapis.com"]: Refreshing state... [id=<project>/cloudscheduler.googleapis.com]
+module.bootstrap.google_project_service.this["vpcaccess.googleapis.com"]: Refreshing state... [id=<project>/vpcaccess.googleapis.com]
+module.bootstrap.google_project_service.this["run.googleapis.com"]: Refreshing state... [id=<project>/run.googleapis.com]
+module.bootstrap.google_storage_bucket.tfstate: Refreshing state... [id=<project>-tfstate]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.artifact_registry.google_artifact_registry_repository.this will be created
+  + resource "google_artifact_registry_repository" "this" {
+      + create_time      = (known after apply)
+      + description      = "Flink job image (Dockerfile.flinkjob) and target-system-mock image"
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + format           = "DOCKER"
+      + id               = (known after apply)
+      + location         = "europe-west1"
+      + mode             = "STANDARD_REPOSITORY"
+      + name             = (known after apply)
+      + project          = "<project>"
+      + repository_id    = "mig-flink"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + update_time      = (known after apply)
+
+      + cleanup_policies {
+          + action = "KEEP"
+          + id     = "keep-recent"
+
+          + most_recent_versions {
+              + keep_count            = 10
+              + package_name_prefixes = []
+            }
+        }
+
+      + vulnerability_scanning_config (known after apply)
+    }
+
+  # module.cloudsql.google_compute_global_address.private_ip_range[0] will be created
+  + resource "google_compute_global_address" "private_ip_range" {
+      + address            = (known after apply)
+      + address_type       = "INTERNAL"
+      + creation_timestamp = (known after apply)
+      + effective_labels   = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                 = (known after apply)
+      + label_fingerprint  = (known after apply)
+      + name               = "mig-flink-cloudsql-range"
+      + network            = (known after apply)
+      + prefix_length      = 16
+      + project            = "<project>"
+      + purpose            = "VPC_PEERING"
+      + self_link          = (known after apply)
+      + terraform_labels   = {
+          + "goog-terraform-provisioned" = "true"
+        }
+    }
+
+  # module.cloudsql.google_service_networking_connection.this[0] will be created
+  + resource "google_service_networking_connection" "this" {
+      + id                      = (known after apply)
+      + network                 = (known after apply)
+      + peering                 = (known after apply)
+      + reserved_peering_ranges = [
+          + "mig-flink-cloudsql-range",
+        ]
+      + service                 = "servicenetworking.googleapis.com"
+    }
+
+  # module.cloudsql.google_sql_database.mig[0] will be created
+  + resource "google_sql_database" "mig" {
+      + charset         = (known after apply)
+      + collation       = (known after apply)
+      + deletion_policy = "DELETE"
+      + id              = (known after apply)
+      + instance        = "mig-flink-pg"
+      + name            = "mig"
+      + project         = "<project>"
+      + self_link       = (known after apply)
+    }
+
+  # module.cloudsql.google_sql_database_instance.this[0] will be created
+  + resource "google_sql_database_instance" "this" {
+      + available_maintenance_versions = (known after apply)
+      + connection_name                = (known after apply)
+      + database_version               = "POSTGRES_16"
+      + deletion_protection            = false
+      + dns_name                       = (known after apply)
+      + dns_names                      = (known after apply)
+      + encryption_key_name            = (known after apply)
+      + first_ip_address               = (known after apply)
+      + id                             = (known after apply)
+      + instance_type                  = (known after apply)
+      + ip_address                     = (known after apply)
+      + maintenance_version            = (known after apply)
+      + master_instance_name           = (known after apply)
+      + name                           = "mig-flink-pg"
+      + node_count                     = (known after apply)
+      + private_ip_address             = (known after apply)
+      + project                        = "<project>"
+      + psc_service_attachment_link    = (known after apply)
+      + public_ip_address              = (known after apply)
+      + region                         = "europe-west1"
+      + replica_names                  = (known after apply)
+      + self_link                      = (known after apply)
+      + server_ca_cert                 = (sensitive value)
+      + service_account_email_address  = (known after apply)
+
+      + replica_configuration (known after apply)
+
+      + replication_cluster (known after apply)
+
+      + settings {
+          + activation_policy           = "ALWAYS"
+          + availability_type           = "ZONAL"
+          + connector_enforcement       = (known after apply)
+          + disk_autoresize             = true
+          + disk_autoresize_limit       = 0
+          + disk_size                   = (known after apply)
+          + disk_type                   = (known after apply)
+          + edition                     = "ENTERPRISE"
+          + effective_availability_type = (known after apply)
+          + pricing_plan                = "PER_USE"
+          + tier                        = "db-custom-1-3840"
+          + user_labels                 = (known after apply)
+          + version                     = (known after apply)
+
+          + backup_configuration {
+              + enabled                        = true
+              + start_time                     = "03:00"
+              + transaction_log_retention_days = (known after apply)
+
+              + backup_retention_settings (known after apply)
+            }
+
+          + connection_pool_config (known after apply)
+
+          + data_cache_config (known after apply)
+
+          + insights_config (known after apply)
+
+          + ip_configuration {
+              + ipv4_enabled    = false
+              + private_network = (known after apply)
+              + server_ca_mode  = (known after apply)
+              + ssl_mode        = (known after apply)
+            }
+
+          + location_preference (known after apply)
+        }
+    }
+
+  # module.cloudsql.google_sql_user.app[0] will be created
+  + resource "google_sql_user" "app" {
+      + host                    = (known after apply)
+      + id                      = (known after apply)
+      + instance                = "mig-flink-pg"
+      + name                    = "mig"
+      + password                = (sensitive value)
+      + project                 = "<project>"
+      + sql_server_user_details = (known after apply)
+    }
+
+  # module.cloudsql.random_password.app_user[0] will be created
+  + resource "random_password" "app_user" {
+      + bcrypt_hash = (sensitive value)
+      + id          = (known after apply)
+      + length      = 32
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + numeric     = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+  # module.flink_gke.google_container_cluster.this[0] will be created
+  + resource "google_container_cluster" "this" {
+      + cluster_ipv4_cidr                        = (known after apply)
+      + datapath_provider                        = (known after apply)
+      + default_max_pods_per_node                = (known after apply)
+      + deletion_protection                      = false
+      + disable_l4_lb_firewall_reconciliation    = false
+      + effective_labels                         = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + enable_cilium_clusterwide_network_policy = false
+      + enable_fqdn_network_policy               = false
+      + enable_intranode_visibility              = (known after apply)
+      + enable_kubernetes_alpha                  = false
+      + enable_l4_ilb_subsetting                 = false
+      + enable_legacy_abac                       = false
+      + enable_multi_networking                  = false
+      + enable_shielded_nodes                    = true
+      + endpoint                                 = (known after apply)
+      + id                                       = (known after apply)
+      + initial_node_count                       = 1
+      + label_fingerprint                        = (known after apply)
+      + location                                 = "europe-west1"
+      + logging_service                          = (known after apply)
+      + master_version                           = (known after apply)
+      + monitoring_service                       = (known after apply)
+      + name                                     = "mig-flink-gke"
+      + network                                  = (known after apply)
+      + networking_mode                          = (known after apply)
+      + node_locations                           = (known after apply)
+      + node_version                             = (known after apply)
+      + operation                                = (known after apply)
+      + private_ipv6_google_access               = (known after apply)
+      + project                                  = "<project>"
+      + remove_default_node_pool                 = true
+      + self_link                                = (known after apply)
+      + services_ipv4_cidr                       = (known after apply)
+      + subnetwork                               = (known after apply)
+      + terraform_labels                         = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + tpu_ipv4_cidr_block                      = (known after apply)
+
+      + addons_config (known after apply)
+
+      + anonymous_authentication_config (known after apply)
+
+      + authenticator_groups_config (known after apply)
+
+      + cluster_autoscaling (known after apply)
+
+      + confidential_nodes (known after apply)
+
+      + control_plane_endpoints_config (known after apply)
+
+      + cost_management_config (known after apply)
+
+      + database_encryption (known after apply)
+
+      + default_snat_status (known after apply)
+
+      + enterprise_config (known after apply)
+
+      + gateway_api_config (known after apply)
+
+      + gke_auto_upgrade_config (known after apply)
+
+      + identity_service_config (known after apply)
+
+      + ip_allocation_policy {
+          + cluster_ipv4_cidr_block       = (known after apply)
+          + cluster_secondary_range_name  = "gke-pods"
+          + services_ipv4_cidr_block      = (known after apply)
+          + services_secondary_range_name = "gke-services"
+          + stack_type                    = "IPV4"
+
+          + pod_cidr_overprovision_config (known after apply)
+        }
+
+      + logging_config (known after apply)
+
+      + master_auth (known after apply)
+
+      + master_authorized_networks_config (known after apply)
+
+      + mesh_certificates (known after apply)
+
+      + monitoring_config (known after apply)
+
+      + node_config (known after apply)
+
+      + node_pool (known after apply)
+
+      + node_pool_auto_config (known after apply)
+
+      + node_pool_defaults (known after apply)
+
+      + notification_config (known after apply)
+
+      + pod_autoscaling (known after apply)
+
+      + rbac_binding_config (known after apply)
+
+      + release_channel {
+          + channel = "REGULAR"
+        }
+
+      + security_posture_config (known after apply)
+
+      + service_external_ips_config (known after apply)
+
+      + vertical_pod_autoscaling (known after apply)
+
+      + workload_identity_config {
+          + workload_pool = "<project>.svc.id.goog"
+        }
+    }
+
+  # module.flink_gke.google_container_node_pool.flink[0] will be created
+  + resource "google_container_node_pool" "flink" {
+      + cluster                     = "mig-flink-gke"
+      + id                          = (known after apply)
+      + initial_node_count          = (known after apply)
+      + instance_group_urls         = (known after apply)
+      + location                    = "europe-west1"
+      + managed_instance_group_urls = (known after apply)
+      + max_pods_per_node           = (known after apply)
+      + name                        = "flink-pool"
+      + name_prefix                 = (known after apply)
+      + node_count                  = (known after apply)
+      + node_locations              = (known after apply)
+      + operation                   = (known after apply)
+      + project                     = "<project>"
+      + version                     = (known after apply)
+
+      + autoscaling {
+          + location_policy = (known after apply)
+          + max_node_count  = 3
+          + min_node_count  = 1
+        }
+
+      + management {
+          + auto_repair  = true
+          + auto_upgrade = true
+        }
+
+      + network_config (known after apply)
+
+      + node_config {
+          + disk_size_gb     = (known after apply)
+          + disk_type        = (known after apply)
+          + effective_taints = (known after apply)
+          + image_type       = (known after apply)
+          + labels           = (known after apply)
+          + local_ssd_count  = (known after apply)
+          + logging_variant  = (known after apply)
+          + machine_type     = "e2-standard-4"
+          + metadata         = (known after apply)
+          + min_cpu_platform = (known after apply)
+          + oauth_scopes     = [
+              + "https://www.googleapis.com/auth/cloud-platform",
+            ]
+          + preemptible      = false
+          + service_account  = (known after apply)
+          + spot             = false
+          + tags             = [
+              + "flink",
+            ]
+
+          + boot_disk (known after apply)
+
+          + confidential_nodes (known after apply)
+
+          + gcfs_config (known after apply)
+
+          + guest_accelerator (known after apply)
+
+          + kubelet_config (known after apply)
+
+          + linux_node_config (known after apply)
+
+          + shielded_instance_config (known after apply)
+
+          + windows_node_config (known after apply)
+
+          + workload_metadata_config {
+              + mode = "GKE_METADATA"
+            }
+        }
+
+      + upgrade_settings (known after apply)
+    }
+
+  # module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/artifactregistry.reader"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/artifactregistry.reader"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/cloudsql.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/cloudsql.client/flink-job"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/cloudsql.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/cloudsql.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/container.developer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/container.developer/flink-job"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/container.developer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/managedkafka.client/flink-job"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-target-system-mock@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/managedkafka.client"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/monitoring.viewer"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/secretmanager.secretAccessor"
+    }
+
+  # module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"] will be created
+  + resource "google_project_iam_member" "this" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/secretmanager.secretAccessor"
+    }
+
+  # module.iam.google_service_account.this["composer-runner"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "mig-flink-composer-runner"
+      + disabled     = false
+      + display_name = "Cloud Composer environment service account"
+      + email        = "mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["flink-job"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "mig-flink-flink-job"
+      + disabled     = false
+      + display_name = "GKE workload identity for the three Flink jobs (intake/curate/produce, or the DataStream job)"
+      + email        = "mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["gate"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "mig-flink-gate"
+      + disabled     = false
+      + display_name = "Gate pod: .FLG/.CHS check before Flink runs"
+      + email        = "mig-flink-gate@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:mig-flink-gate@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["recon-service"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "mig-flink-recon-service"
+      + disabled     = false
+      + display_name = "Reconciliation service (read-mostly)"
+      + email        = "mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_service_account.this["target-system-mock"] will be created
+  + resource "google_service_account" "this" {
+      + account_id   = "mig-flink-target-system-mock"
+      + disabled     = false
+      + display_name = "Target System mock on Cloud Run (Kafka-only intake, publishes confirmations)"
+      + email        = "mig-flink-target-system-mock@<project>.iam.gserviceaccount.com"
+      + id           = (known after apply)
+      + member       = "serviceAccount:mig-flink-target-system-mock@<project>.iam.gserviceaccount.com"
+      + name         = (known after apply)
+      + project      = "<project>"
+      + unique_id    = (known after apply)
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["landing/flink-job"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-landing"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["landing/gate"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-landing"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:mig-flink-gate@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["recon/flink-job"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-recon"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectViewer"
+    }
+
+  # module.iam.google_storage_bucket_iam_member.this["recon/recon-service"] will be created
+  + resource "google_storage_bucket_iam_member" "this" {
+      + bucket = "<project>-recon"
+      + etag   = (known after apply)
+      + id     = (known after apply)
+      + member = "serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + role   = "roles/storage.objectAdmin"
+    }
+
+  # module.kafka.google_managed_kafka_cluster.this[0] will be created
+  + resource "google_managed_kafka_cluster" "this" {
+      + cluster_id       = "mig-flink-kafka"
+      + create_time      = (known after apply)
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id               = (known after apply)
+      + location         = "europe-west1"
+      + name             = (known after apply)
+      + project          = "<project>"
+      + state            = (known after apply)
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + update_time      = (known after apply)
+
+      + capacity_config {
+          + memory_bytes = "3221225472"
+          + vcpu_count   = "3"
+        }
+
+      + gcp_config {
+          + access_config {
+              + network_configs {
+                  + subnet = (known after apply)
+                }
+            }
+        }
+
+      + tls_config (known after apply)
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["confirmations"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-flink-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 1
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-confirmations"
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["rejections"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-flink-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 1
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-rejections"
+    }
+
+  # module.kafka.google_managed_kafka_topic.this["target"] will be created
+  + resource "google_managed_kafka_topic" "this" {
+      + cluster            = "mig-flink-kafka"
+      + configs            = {
+          + "cleanup.policy"    = "delete"
+          + "max.message.bytes" = "1048576"
+          + "retention.ms"      = "604800000"
+        }
+      + id                 = (known after apply)
+      + location           = "europe-west1"
+      + name               = (known after apply)
+      + partition_count    = 12
+      + project            = "<project>"
+      + replication_factor = 3
+      + topic_id           = "target-system-target"
+    }
+
+  # module.network.google_compute_firewall.flink_internal will be created
+  + resource "google_compute_firewall" "flink_internal" {
+      + creation_timestamp = (known after apply)
+      + description        = "JobManager/TaskManager RPC, data plane and blob server (required)."
+      + destination_ranges = (known after apply)
+      + direction          = (known after apply)
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "mig-allow-flink-internal"
+      + network            = "mig-flink-vpc"
+      + priority           = 1000
+      + project            = "<project>"
+      + self_link          = (known after apply)
+      + source_tags        = [
+          + "flink",
+        ]
+      + target_tags        = [
+          + "flink",
+        ]
+
+      + allow {
+          + ports    = [
+              + "6123-6125",
+              + "8081",
+            ]
+          + protocol = "tcp"
+        }
+    }
+
+  # module.network.google_compute_network.this will be created
+  + resource "google_compute_network" "this" {
+      + auto_create_subnetworks                   = false
+      + bgp_always_compare_med                    = (known after apply)
+      + bgp_best_path_selection_mode              = (known after apply)
+      + bgp_inter_region_cost                     = (known after apply)
+      + delete_default_routes_on_create           = false
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "mig-flink-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + network_id                                = (known after apply)
+      + numeric_id                                = (known after apply)
+      + project                                   = "<project>"
+      + routing_mode                              = (known after apply)
+      + self_link                                 = (known after apply)
+    }
+
+  # module.network.google_compute_router.this will be created
+  + resource "google_compute_router" "this" {
+      + creation_timestamp = (known after apply)
+      + id                 = (known after apply)
+      + name               = "mig-flink-router"
+      + network            = (known after apply)
+      + project            = "<project>"
+      + region             = "europe-west1"
+      + self_link          = (known after apply)
+    }
+
+  # module.network.google_compute_router_nat.this will be created
+  + resource "google_compute_router_nat" "this" {
+      + auto_network_tier                   = (known after apply)
+      + drain_nat_ips                       = (known after apply)
+      + enable_dynamic_port_allocation      = (known after apply)
+      + enable_endpoint_independent_mapping = (known after apply)
+      + endpoint_types                      = (known after apply)
+      + icmp_idle_timeout_sec               = 30
+      + id                                  = (known after apply)
+      + min_ports_per_vm                    = (known after apply)
+      + name                                = "mig-flink-nat"
+      + nat_ip_allocate_option              = "AUTO_ONLY"
+      + nat_ips                             = (known after apply)
+      + project                             = "<project>"
+      + region                              = "europe-west1"
+      + router                              = "mig-flink-router"
+      + source_subnetwork_ip_ranges_to_nat  = "LIST_OF_SUBNETWORKS"
+      + tcp_established_idle_timeout_sec    = 1200
+      + tcp_time_wait_timeout_sec           = 120
+      + tcp_transitory_idle_timeout_sec     = 30
+      + type                                = "PUBLIC"
+      + udp_idle_timeout_sec                = 30
+
+      + log_config {
+          + enable = true
+          + filter = "ERRORS_ONLY"
+        }
+
+      + subnetwork {
+          + name                     = (known after apply)
+          + secondary_ip_range_names = []
+          + source_ip_ranges_to_nat  = [
+              + "ALL_IP_RANGES",
+            ]
+        }
+    }
+
+  # module.network.google_compute_subnetwork.this will be created
+  + resource "google_compute_subnetwork" "this" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "10.20.0.0/20"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "mig-flink-subnet"
+      + network                    = (known after apply)
+      + private_ip_google_access   = true
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "<project>"
+      + purpose                    = (known after apply)
+      + region                     = "europe-west1"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + log_config {
+          + aggregation_interval = "INTERVAL_10_MIN"
+          + filter_expr          = "true"
+          + flow_sampling        = 0.5
+          + metadata             = "INCLUDE_ALL_METADATA"
+        }
+
+      + secondary_ip_range {
+          + ip_cidr_range = "10.24.0.0/14"
+          + range_name    = "gke-pods"
+        }
+      + secondary_ip_range {
+          + ip_cidr_range = "10.28.0.0/20"
+          + range_name    = "gke-services"
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["cloudsql-app-password"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "cloudsql-app-password"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["pgp-passphrase"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "pgp-passphrase"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret.this["pgp-private-key"] will be created
+  + resource "google_secret_manager_secret" "this" {
+      + create_time           = (known after apply)
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + project               = "<project>"
+      + secret_id             = "pgp-private-key"
+      + terraform_labels      = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "europe-west1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessor["cloudsql-app-password"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessor" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "cloudsql-app-password"
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessor["pgp-passphrase"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessor" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "pgp-passphrase"
+    }
+
+  # module.secrets.google_secret_manager_secret_iam_member.accessor["pgp-private-key"] will be created
+  + resource "google_secret_manager_secret_iam_member" "accessor" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + project   = "<project>"
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = "pgp-private-key"
+    }
+
+  # module.secrets.google_secret_manager_secret_version.value["cloudsql-app-password"] will be created
+  + resource "google_secret_manager_secret_version" "value" {
+      + create_time            = (known after apply)
+      + deletion_policy        = "DELETE"
+      + destroy_time           = (known after apply)
+      + enabled                = true
+      + id                     = (known after apply)
+      + is_secret_data_base64  = false
+      + name                   = (known after apply)
+      + secret                 = (known after apply)
+      + secret_data            = (sensitive value)
+      + secret_data_wo_version = 0
+      + version                = (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["landing"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-landing"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 90
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+  # module.storage.google_storage_bucket.this["recon"] will be created
+  + resource "google_storage_bucket" "this" {
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST1"
+      + name                        = "<project>-recon"
+      + project                     = "<project>"
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 365
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + age                    = 7
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 3
+              + with_state             = "ARCHIVED"
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+  # module.vpc_connector.google_vpc_access_connector.this[0] will be created
+  + resource "google_vpc_access_connector" "this" {
+      + connected_projects = (known after apply)
+      + id                 = (known after apply)
+      + ip_cidr_range      = "10.20.144.0/28"
+      + machine_type       = "e2-micro"
+      + max_instances      = (known after apply)
+      + max_throughput     = 300
+      + min_instances      = (known after apply)
+      + min_throughput     = 200
+      + name               = "mig-flink-vpc-connector"
+      + network            = (known after apply)
+      + project            = "<project>"
+      + region             = "europe-west1"
+      + self_link          = (known after apply)
+      + state              = (known after apply)
+    }
+
+Plan: 50 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + artifact_registry                 = "europe-west1-docker.pkg.dev/<project>/mig-flink"
+  + buckets                           = {
+      + landing = "<project>-landing"
+      + recon   = "<project>-recon"
+    }
+  + cloudsql_app_password             = (sensitive value)
+  + cloudsql_instance_connection_name = (known after apply)
+  + cloudsql_jdbc_url                 = (known after apply)
+  + cloudsql_private_ip               = (known after apply)
+  + env_file                          = (known after apply)
+  + flink_gke_cluster_name            = "mig-flink-gke"
+  + service_accounts                  = {
+      + composer-runner    = "mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+      + flink-job          = "mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+      + gate               = "mig-flink-gate@<project>.iam.gserviceaccount.com"
+      + recon-service      = "mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+      + target-system-mock = "mig-flink-target-system-mock@<project>.iam.gserviceaccount.com"
+    }
+
+Warning: Resource targeting is in effect
+
+You are creating a plan with the -target option, which means that the result
+of this plan may not represent all of the changes requested by the current
+configuration.
+
+The -target option is not for routine use, and is provided only for
+exceptional situations such as recovering from errors or mistakes, or when
+Terraform specifically suggests to use it as part of an error message.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: s1.plan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "s1.plan"

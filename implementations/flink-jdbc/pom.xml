@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  flink-jdbc: the ETL-R lane read directly from the Source System database.
+  Parent is the Flink lane's root POM (one source of versions and plugin config, including the
+  surefire **/*IT.java include). The reactor also builds four Flink-lane modules IN PLACE, so their
+  target/ directories are shared: never build this lane and implementations/flink at the same time.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ro.mig.flink</groupId>
+    <artifactId>test-gcp-flink</artifactId>
+    <version>0.1.0</version>
+    <relativePath>../flink/pom.xml</relativePath>
+  </parent>
+  <artifactId>flink-jdbc</artifactId>
+  <packaging>pom</packaging>
+  <name>flink-jdbc</name>
+  <modules>
+    <module>../flink/common</module>
+    <module>../flink/variant-flink-sql-batch-job</module>
+    <module>../flink/recon</module>
+    <module>../flink/target-system-mock</module>
+    <module>gate-jdbc</module>
+    <module>intake-jdbc</module>
+    <module>component-tests-jdbc</module>
+  </modules>
+</project>

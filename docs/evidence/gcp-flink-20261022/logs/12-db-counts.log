@@ -1,0 +1,25 @@
+# row counts per run, straight from Cloud SQL (private IP, via a pod on the VPC), 2026-10-22T11:25:34Z
+account_curated | run-200k-20261022 | 200002
+account_curated | run-fixture-20261022 | 52
+account_enriched | run-200k-20261022 | 200002
+account_enriched | run-fixture-20261022 | 52
+account_src | run-200k-20261022 | 200002
+account_src | run-fixture-20261022 | 52
+account_target | run-200k-20261022 | 200000
+account_target | run-fixture-20261022 | 50
+record_lineage | run-200k-20261022 | 5
+record_lineage | run-fixture-20261022 | 5
+reject_log | run-200k-20261022 | 5
+reject_log | run-fixture-20261022 | 5
+run_ledger | run-200k-20261022 | 200005 | 200000 | 5 | t
+run_ledger | run-fixture-20261022 | 55 | 50 | 5 | t
+reject_log by reason | run-200k-20261022 | map | MAP_UNMAPPED_ENUM_VALUE | 1
+reject_log by reason | run-200k-20261022 | parse | PARSE_BAD_COLUMN_COUNT | 1
+reject_log by reason | run-200k-20261022 | parse | PARSE_BAD_DATE | 1
+reject_log by reason | run-200k-20261022 | parse | PARSE_BAD_NUMERIC | 1
+reject_log by reason | run-200k-20261022 | schema | SCHEMA_INVALID | 1
+reject_log by reason | run-fixture-20261022 | map | MAP_UNMAPPED_ENUM_VALUE | 1
+reject_log by reason | run-fixture-20261022 | parse | PARSE_BAD_COLUMN_COUNT | 1
+reject_log by reason | run-fixture-20261022 | parse | PARSE_BAD_DATE | 1
+reject_log by reason | run-fixture-20261022 | parse | PARSE_BAD_NUMERIC | 1
+reject_log by reason | run-fixture-20261022 | schema | SCHEMA_INVALID | 1

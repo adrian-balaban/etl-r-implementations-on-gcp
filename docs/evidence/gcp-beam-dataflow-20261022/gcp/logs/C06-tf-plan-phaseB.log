@@ -1,0 +1,375 @@
+# C06 terraform plan, phase B (Composer + mock + Kafka override), 2026-10-22T13:26:26Z
+data.google_client_config.this: Reading...
+module.dataform.data.google_project.this: Reading...
+module.iam.google_service_account.this["dataflow-worker"]: Refreshing state... [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["target-system-mock"]: Refreshing state... [id=projects/<project>/serviceAccounts/target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["composer-runner"]: Refreshing state... [id=projects/<project>/serviceAccounts/composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["recon-service"]: Refreshing state... [id=projects/<project>/serviceAccounts/recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["dataform-runner"]: Refreshing state... [id=projects/<project>/serviceAccounts/dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["loader-app"]: Refreshing state... [id=projects/<project>/serviceAccounts/loader-app@<project>.iam.gserviceaccount.com]
+module.composer.data.google_project.this[0]: Reading...
+module.bootstrap.google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=<project>/iam.googleapis.com]
+data.google_client_config.this: Read complete after 0s [id=projects/<project>/regions/europe-west1/zones/]
+module.bootstrap.google_project_service.this["bigquery.googleapis.com"]: Refreshing state... [id=<project>/bigquery.googleapis.com]
+module.dataform.data.google_project.this: Read complete after 1s [id=projects/<project>]
+module.bootstrap.google_project_service.this["vpcaccess.googleapis.com"]: Refreshing state... [id=<project>/vpcaccess.googleapis.com]
+module.bootstrap.google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=<project>/artifactregistry.googleapis.com]
+module.bootstrap.google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=<project>/monitoring.googleapis.com]
+module.bootstrap.google_project_service.this["run.googleapis.com"]: Refreshing state... [id=<project>/run.googleapis.com]
+module.bootstrap.google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=<project>/secretmanager.googleapis.com]
+module.bootstrap.google_project_service.this["composer.googleapis.com"]: Refreshing state... [id=<project>/composer.googleapis.com]
+module.bootstrap.google_project_service.this["cloudbuild.googleapis.com"]: Refreshing state... [id=<project>/cloudbuild.googleapis.com]
+module.composer.data.google_project.this[0]: Read complete after 1s [id=projects/<project>]
+module.bootstrap.google_project_service.this["dataform.googleapis.com"]: Refreshing state... [id=<project>/dataform.googleapis.com]
+module.bootstrap.google_project_service.this["managedkafka.googleapis.com"]: Refreshing state... [id=<project>/managedkafka.googleapis.com]
+module.bootstrap.google_project_service.this["storage.googleapis.com"]: Refreshing state... [id=<project>/storage.googleapis.com]
+module.bootstrap.google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=<project>/compute.googleapis.com]
+module.bootstrap.google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=<project>/logging.googleapis.com]
+module.bootstrap.google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=<project>/cloudresourcemanager.googleapis.com]
+module.bootstrap.google_project_service.this["dataflow.googleapis.com"]: Refreshing state... [id=<project>/dataflow.googleapis.com]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataform_runner: Refreshing state... [id=projects/<project>/serviceAccounts/dataform-runner@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountTokenCreator/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.dataflow_worker_acts_as_itself: Refreshing state... [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountUser/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountTokenCreator"]: Refreshing state... [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountTokenCreator/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.dataform.google_project_service_identity.dataform: Refreshing state... [id=projects/<project>/services/dataform.googleapis.com]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountUser"]: Refreshing state... [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountUser/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.dataform.google_dataform_repository.this: Refreshing state... [id=projects/<project>/locations/europe-west1/repositories/etlr-beam]
+module.bootstrap.google_storage_bucket.tfstate: Refreshing state... [id=<project>-tfstate]
+module.network.google_compute_network.this: Refreshing state... [id=projects/<project>/global/networks/mig-vpc]
+module.dataflow.google_artifact_registry_repository.templates: Refreshing state... [id=projects/<project>/locations/europe-west1/repositories/mig-dataflow]
+module.storage.google_storage_bucket.this["landing"]: Refreshing state... [id=<project>-landing]
+module.storage.google_storage_bucket.this["dataflow-templates"]: Refreshing state... [id=<project>-dataflow-templates]
+module.storage.google_storage_bucket.this["json-out"]: Refreshing state... [id=<project>-json-out]
+module.storage.google_storage_bucket.this["dataflow-temp"]: Refreshing state... [id=<project>-dataflow-temp]
+module.storage.google_storage_bucket.this["recon"]: Refreshing state... [id=<project>-recon]
+module.bigquery.google_bigquery_dataset.this["etlr_transformation"]: Refreshing state... [id=projects/<project>/datasets/etlr_transformation]
+module.bigquery.google_bigquery_dataset.this["etlr_extraction"]: Refreshing state... [id=projects/<project>/datasets/etlr_extraction]
+module.bigquery.google_bigquery_dataset.this["etlr_recon"]: Refreshing state... [id=projects/<project>/datasets/etlr_recon]
+module.secrets.google_secret_manager_secret.this["target-system-credentials"]: Refreshing state... [id=projects/<project>/secrets/target-system-credentials]
+module.secrets.google_secret_manager_secret.this["pgp-passphrase"]: Refreshing state... [id=projects/<project>/secrets/pgp-passphrase]
+module.secrets.google_secret_manager_secret.this["pgp-private-key"]: Refreshing state... [id=projects/<project>/secrets/pgp-private-key]
+module.secrets.google_secret_manager_secret.this["dataform-git-token"]: Refreshing state... [id=projects/<project>/secrets/dataform-git-token]
+module.iam.google_storage_bucket_iam_member.this["dataflow-temp/dataflow-worker"]: Refreshing state... [id=b/<project>-dataflow-temp/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["landing/dataflow-worker"]: Refreshing state... [id=b/<project>-landing/roles/storage.objectViewer/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["json-out/loader-app"]: Refreshing state... [id=b/<project>-json-out/roles/storage.objectViewer/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["json-out/dataflow-worker"]: Refreshing state... [id=b/<project>-json-out/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/dataflow-worker"]: Refreshing state... [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/recon-service"]: Refreshing state... [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/loader-app"]: Refreshing state... [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.bigquery.google_bigquery_table.run_ledger: Refreshing state... [id=projects/<project>/datasets/etlr_recon/tables/run_ledger]
+module.bigquery.google_bigquery_table.reject_log: Refreshing state... [id=projects/<project>/datasets/etlr_recon/tables/reject_log]
+module.bigquery.google_bigquery_table.record_lineage: Refreshing state... [id=projects/<project>/datasets/etlr_recon/tables/record_lineage]
+module.network.google_compute_subnetwork.this: Refreshing state... [id=projects/<project>/regions/europe-west1/subnetworks/mig-subnet]
+module.network.google_compute_firewall.dataflow_internal: Refreshing state... [id=projects/<project>/global/firewalls/mig-allow-dataflow-internal]
+module.network.google_compute_router.this: Refreshing state... [id=projects/<project>/regions/europe-west1/routers/mig-router]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-private-key"]: Refreshing state... [id=projects/<project>/secrets/pgp-private-key/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["dataform-git-token"]: Refreshing state... [id=projects/<project>/secrets/dataform-git-token/roles/secretmanager.secretAccessor/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-passphrase"]: Refreshing state... [id=projects/<project>/secrets/pgp-passphrase/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["target-system-credentials"]: Refreshing state... [id=projects/<project>/secrets/target-system-credentials/roles/secretmanager.secretAccessor/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.vpc_connector.google_vpc_access_connector.this[0]: Refreshing state... [id=projects/<project>/locations/europe-west1/connectors/mig-vpc-connector]
+module.network.google_compute_router_nat.this: Refreshing state... [id=<project>/europe-west1/mig-router/mig-nat]
+module.kafka.google_managed_kafka_cluster.this[0]: Refreshing state... [id=projects/<project>/locations/europe-west1/clusters/mig-kafka]
+module.kafka.google_managed_kafka_topic.this["target"]: Refreshing state... [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-target]
+module.kafka.google_managed_kafka_topic.this["confirmations"]: Refreshing state... [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-confirmations]
+module.kafka.google_managed_kafka_topic.this["rejections"]: Refreshing state... [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-rejections]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Refreshing state... [id=<project>/roles/dataflow.worker/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Refreshing state... [id=<project>/roles/managedkafka.client/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"]: Refreshing state... [id=<project>/roles/dataform.editor/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Refreshing state... [id=<project>/roles/artifactregistry.reader/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Refreshing state... [id=<project>/roles/bigquery.dataViewer/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Refreshing state... [id=<project>/roles/bigquery.jobUser/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Refreshing state... [id=<project>/roles/managedkafka.client/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Refreshing state... [id=<project>/roles/managedkafka.client/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Refreshing state... [id=<project>/roles/composer.worker/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Refreshing state... [id=<project>/roles/dataflow.developer/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Refreshing state... [id=<project>/roles/bigquery.jobUser/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Refreshing state... [id=<project>/roles/bigquery.jobUser/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Refreshing state... [id=<project>/roles/artifactregistry.reader/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Refreshing state... [id=<project>/roles/bigquery.dataEditor/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Refreshing state... [id=<project>/roles/dataflow.developer/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Refreshing state... [id=<project>/roles/managedkafka.client/serviceAccount:target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Refreshing state... [id=<project>/roles/bigquery.jobUser/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Refreshing state... [id=<project>/roles/bigquery.dataViewer/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Refreshing state... [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Refreshing state... [id=<project>/roles/bigquery.dataEditor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Refreshing state... [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.composer.google_composer_environment.this[0] will be created
+  + resource "google_composer_environment" "this" {
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id               = (known after apply)
+      + name             = "mig-composer"
+      + project          = "<project>"
+      + region           = "europe-west1"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + config {
+          + airflow_uri                = (known after apply)
+          + dag_gcs_prefix             = (known after apply)
+          + enable_private_builds_only = (known after apply)
+          + enable_private_environment = (known after apply)
+          + environment_size           = "ENVIRONMENT_SIZE_SMALL"
+          + gke_cluster                = (known after apply)
+          + node_count                 = (known after apply)
+          + resilience_mode            = (known after apply)
+
+          + data_retention_config (known after apply)
+
+          + database_config (known after apply)
+
+          + encryption_config (known after apply)
+
+          + maintenance_window (known after apply)
+
+          + node_config {
+              + composer_internal_ipv4_cidr_block = (known after apply)
+              + composer_network_attachment       = (known after apply)
+              + disk_size_gb                      = (known after apply)
+              + enable_ip_masq_agent              = (known after apply)
+              + machine_type                      = (known after apply)
+              + network                           = "projects/<project>/global/networks/mig-vpc"
+              + oauth_scopes                      = (known after apply)
+              + service_account                   = "composer-runner@<project>.iam.gserviceaccount.com"
+              + subnetwork                        = "projects/<project>/regions/europe-west1/subnetworks/mig-subnet"
+              + zone                              = (known after apply)
+
+              + ip_allocation_policy (known after apply)
+            }
+
+          + private_environment_config {
+              + cloud_composer_connection_subnetwork   = (known after apply)
+              + cloud_composer_network_ipv4_cidr_block = (known after apply)
+              + cloud_sql_ipv4_cidr_block              = (known after apply)
+              + connection_type                        = (known after apply)
+              + enable_private_endpoint                = false
+              + enable_privately_used_public_ips       = (known after apply)
+              + master_ipv4_cidr_block                 = (known after apply)
+              + web_server_ipv4_cidr_block             = (known after apply)
+            }
+
+          + software_config {
+              + airflow_config_overrides = {
+                  + "secrets-backend" = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
+                }
+              + env_variables            = (known after apply)
+              + image_version            = "composer-2.9.7-airflow-2.9.3"
+              + python_version           = (known after apply)
+              + scheduler_count          = (known after apply)
+              + web_server_plugins_mode  = (known after apply)
+
+              + cloud_data_lineage_integration (known after apply)
+            }
+
+          + web_server_config (known after apply)
+
+          + web_server_network_access_control (known after apply)
+
+          + workloads_config {
+              + dag_processor (known after apply)
+              + scheduler {
+                  + count      = 1
+                  + cpu        = 0.5
+                  + memory_gb  = 2
+                  + storage_gb = 1
+                }
+              + triggerer (known after apply)
+              + web_server {
+                  + cpu        = 0.5
+                  + memory_gb  = 2
+                  + storage_gb = 1
+                }
+              + worker {
+                  + cpu        = 0.5
+                  + max_count  = 3
+                  + memory_gb  = 2
+                  + min_count  = 1
+                  + storage_gb = 1
+                }
+            }
+        }
+
+      + storage_config (known after apply)
+    }
+
+  # module.composer.google_project_iam_member.composer_service_agent_ext[0] will be created
+  + resource "google_project_iam_member" "composer_service_agent_ext" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:service-<project-number>@cloudcomposer-accounts.iam.gserviceaccount.com"
+      + project = "<project>"
+      + role    = "roles/composer.ServiceAgentV2Ext"
+    }
+
+  # module.composer.google_project_service.gke[0] will be created
+  + resource "google_project_service" "gke" {
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "<project>"
+      + service            = "container.googleapis.com"
+    }
+
+  # module.target_system_mock.google_cloud_run_v2_service.this[0] will be created
+  + resource "google_cloud_run_v2_service" "this" {
+      + conditions              = (known after apply)
+      + create_time             = (known after apply)
+      + creator                 = (known after apply)
+      + delete_time             = (known after apply)
+      + deletion_protection     = false
+      + effective_annotations   = (known after apply)
+      + effective_labels        = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + etag                    = (known after apply)
+      + expire_time             = (known after apply)
+      + generation              = (known after apply)
+      + id                      = (known after apply)
+      + ingress                 = "INGRESS_TRAFFIC_ALL"
+      + last_modifier           = (known after apply)
+      + latest_created_revision = (known after apply)
+      + latest_ready_revision   = (known after apply)
+      + launch_stage            = (known after apply)
+      + location                = "europe-west1"
+      + name                    = "target-system-mock"
+      + observed_generation     = (known after apply)
+      + project                 = "<project>"
+      + reconciling             = (known after apply)
+      + terminal_condition      = (known after apply)
+      + terraform_labels        = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + traffic_statuses        = (known after apply)
+      + uid                     = (known after apply)
+      + update_time             = (known after apply)
+      + uri                     = (known after apply)
+      + urls                    = (known after apply)
+
+      + template {
+          + max_instance_request_concurrency = (known after apply)
+          + service_account                  = "target-system-mock@<project>.iam.gserviceaccount.com"
+          + timeout                          = (known after apply)
+
+          + containers {
+              + build_info = (known after apply)
+              + image      = "europe-west1-docker.pkg.dev/<project>/mig-dataflow/target-system-mock:latest"
+
+              + env {
+                  + name  = "KAFKA_SECURITY_PROTOCOL"
+                  + value = "SASL_SSL"
+                }
+              + env {
+                  + name  = "TARGET_SYSTEM_CONFIRMATION_BOOTSTRAP"
+                  + value = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+                }
+              + env {
+                  + name  = "TARGET_SYSTEM_CONFIRMATION_TOPIC"
+                  + value = "target-system-confirmations"
+                }
+              + env {
+                  + name  = "TARGET_SYSTEM_FAILURE_RATE"
+                  + value = "0.15"
+                }
+              + env {
+                  + name  = "TARGET_SYSTEM_REJECTION_TOPIC"
+                  + value = "target-system-rejections"
+                }
+              + env {
+                  + name  = "TARGET_SYSTEM_TARGET_TOPIC"
+                  + value = "target-system-target"
+                }
+
+              + ports {
+                  + container_port = 8080
+                  + name           = (known after apply)
+                }
+
+              + resources {
+                  + limits = {
+                      + "cpu"    = "1"
+                      + "memory" = "2Gi"
+                    }
+                }
+
+              + startup_probe (known after apply)
+            }
+
+          + scaling {
+              + max_instance_count = 2
+              + min_instance_count = 1
+            }
+
+          + vpc_access {
+              + connector = "projects/<project>/locations/europe-west1/connectors/mig-vpc-connector"
+              + egress    = "PRIVATE_RANGES_ONLY"
+            }
+        }
+
+      + traffic (known after apply)
+    }
+
+  # module.target_system_mock.google_cloud_run_v2_service_iam_member.public[0] will be created
+  + resource "google_cloud_run_v2_service_iam_member" "public" {
+      + etag     = (known after apply)
+      + id       = (known after apply)
+      + location = "europe-west1"
+      + member   = "allUsers"
+      + name     = "target-system-mock"
+      + project  = "<project>"
+      + role     = "roles/run.invoker"
+    }
+
+Plan: 5 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  ~ composer_airflow_uri = null -> (known after apply)
+  ~ composer_dag_bucket  = null -> (known after apply)
+  ~ env_file             = <<-EOT
+        TARGET_PROFILE=real
+        GCP_PROJECT=<project>
+        GCS_LANDING_BUCKET=<project>-landing
+        GCS_JSON_BUCKET=<project>-json-out
+        GCS_RECON_BUCKET=<project>-recon
+        BQ_TARGET=real
+        KAFKA_SECURITY_PROTOCOL=SASL_SSL
+        # KAFKA_BOOTSTRAP, not KAFKA_BOOTSTRAP_SERVERS: config.py reads the former (as does
+        # .env.example). Under the old name the address was emitted but never read, so the
+        # pipeline silently fell back to localhost:19092 — which inside a Dataflow worker is
+        # nothing at all. H8 was recorded as passing because `terraform output` produced a
+        # real address; that only ever proved the value existed, not that it reached anyone.
+        KAFKA_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+        # runner.py defaults these to conventions ("mig-subnet", "dataflow-worker@<project>")
+        # when unset. The convention is right on this environment and wrong on any other, and
+        # the failure mode is the expensive one: a Dataflow job that starts against a
+        # nonexistent subnet and then never progresses. Emitting the real values from state
+        # means a run uses what Terraform actually built.
+        DATAFLOW_SUBNETWORK=https://www.googleapis.com/compute/v1/projects/<project>/regions/europe-west1/subnetworks/mig-subnet
+        DATAFLOW_SERVICE_ACCOUNT=dataflow-worker@<project>.iam.gserviceaccount.com
+        # Without this the loader falls back to http://localhost:8080, which inside a
+        # Dataflow worker or the toolbox container is nothing at all — every document then
+        # fails "transport failure" after exhausting its retries, which reads like a data
+        # problem and is an infrastructure one.
+        TARGET_SYSTEM_URL=
+        # Confirmation stream. Empty when Kafka is off → the
+        # mock and recon both skip the confirmation path and the run is green. Non-empty only
+        # with enable_kafka=true, and the confirmation topic is the second topic on the
+        # cluster (terraform/modules/kafka's topics map).
+        TARGET_SYSTEM_CONFIRMATION_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+        TARGET_SYSTEM_CONFIRMATION_TOPIC=target-system-confirmations
+    EOT -> (known after apply)
+  ~ kafka_bootstrap      = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092" -> "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+  ~ target_system_url    = null -> (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: pb.plan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "pb.plan"

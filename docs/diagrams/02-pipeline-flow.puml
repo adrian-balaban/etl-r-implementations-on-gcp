@@ -1,0 +1,29 @@
+@startuml 02-pipeline-flow
+!pragma layout smetana
+title Eight stages, one balance check
+skinparam defaultTextAlignment center
+|Source System|
+start
+:extract\n.DAT .CHS .FLG;
+|ETL-R|
+:gate\n.FLG · .CHS · PGP;
+:intake\nparse door;
+note right: account_src\nreject_log
+:curate;
+note right: account_curated
+:enrich;
+note right: account_enriched
+:produce\nmap + schema doors;
+note right: account_target\nreject_log
+|Target System|
+:load\nidempotent on account_key;
+|ETL-R|
+:recon\nbalance + settle;
+note right: run_ledger
+if (src_read = written + rejected?) then (yes)
+  :run OK;
+else (no)
+  :run FAILS;
+endif
+stop
+@enduml

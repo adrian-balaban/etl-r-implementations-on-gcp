@@ -1,0 +1,18 @@
+# init-infra: buckets, BigQuery datasets/tables, Kafka topics, 2026-10-22T12:51:21Z
+.venv/bin/python local/scripts/init_infra.py
+init-infra — creating buckets, BigQuery datasets/tables, Kafka topic
+GCS (fake-gcs-server):
+  [32m✓[0m bucket mig-landing
+  [32m✓[0m bucket mig-json-out
+  [32m✓[0m bucket mig-recon
+BigQuery (goccy emulator):
+  [32m✓[0m dataset etlr_extraction
+  [32m✓[0m dataset etlr_transformation
+  [32m✓[0m dataset etlr_recon
+  [32m✓[0m table etlr_recon.run_ledger
+  [32m✓[0m table etlr_recon.record_lineage
+Kafka (redpanda @ localhost:19092):
+  [32m✓[0m topic target-system-target (exists)
+  [32m✓[0m topic target-system-confirmations
+  [32m✓[0m topic target-system-rejections
+init-infra complete.

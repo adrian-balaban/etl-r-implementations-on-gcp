@@ -1,0 +1,72 @@
+@startuml activity-record-journey
+!pragma layout smetana
+title Beam: one record's journey
+
+start
+:Operator triggers DAG with run_id;
+:Wait for extraction/<run_id>/ACCOUNT.FLG;
+note right: Written last by the Extractor,\nonly once the bundle is durable
+
+:Decrypt, unpack, verify .CHS checksums;
+
+partition "intake — PARSE stage" {
+  :Parse line through SRC-TDS\n(common.engine.route_intake);
+  if (Parsed?) then (yes)
+    :Write to etlr_extraction.account_src;
+  else (no)
+    :Record in etlr_recon.record_lineage\nREJECTED + stage=parse + reason;
+    kill
+  endif
+}
+
+partition "Dataform — SQL transformation" {
+  :Build etlr_transformation.account_curated;
+}
+
+partition "enrich" {
+  :Join reference data (side input)\n-> account_enriched;
+  note right: No doors here — enrichment\nadds columns, never drops rows
+}
+
+partition "produce — MAP and SCHEMA stages" {
+  :Re-key via curated.aliases, apply mapping rules;
+  if (Mapped?) then (yes)
+    :Validate against TARGET JSON Schema;
+    if (Schema valid?) then (yes)
+      :Number with ROW_NUMBER(), batch into groups of 200;
+    else (no)
+      :record_lineage — REJECTED, stage=schema;
+      kill
+    endif
+  else (no)
+    :record_lineage — REJECTED, stage=map;
+    kill
+  endif
+}
+
+partition "load — Load" {
+  :Publish batches to the Kafka target topic;
+  :Wait on confirmation and rejection topics;
+  if (Settled?) then (confirmed)
+    :Counted as migrated;
+  elseif (rejected) then
+    :Write .ERR row;
+  else (unsettled)
+    :Fail the loader task;
+    stop
+  endif
+}
+
+partition "recon + balance check" {
+  :Set-difference confirmations against account_target;
+  :Read run_ledger for this run;
+  if (src_read == extraction_written + rejected?) then (balanced)
+    :Run succeeded;
+  else (no)
+    :Fail — a run that doesn't balance is a failed run;
+    stop
+  endif
+}
+
+stop
+@enduml

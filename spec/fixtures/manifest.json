@@ -1,0 +1,25 @@
+{
+  "_comment": "Manifest for the immutable fixture fixtures/ACCOUNT.src (sha256 86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c), taken from the BigQuery reference run of 2026-09-07. Numbers are the oracle Phase 1 checks against — read off fixtures/expected/*.tsv, not derived.",
+  "source_file": "fixtures/ACCOUNT.src",
+  "sha256": "86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c",
+  "src_read": 55,
+  "expected_written": 50,
+  "expected_rejected": 5,
+  "expected_by_stage_reason": [
+    { "stage": "parse", "reason": "PARSE_BAD_COLUMN_COUNT", "detail": "CURRENCY needs column 4, row has 4" },
+    { "stage": "parse", "reason": "PARSE_BAD_DATE", "detail": "OPEN_DATE='20191345'" },
+    { "stage": "parse", "reason": "PARSE_BAD_NUMERIC", "detail": "BALANCE='+0000000ABCD.56'" },
+    { "stage": "map", "reason": "MAP_UNMAPPED_ENUM_VALUE", "detail": "status: 'X' not in ['A', 'C', 'D']" },
+    { "stage": "schema", "reason": "SCHEMA_INVALID", "detail": "accountId: 'acc-bad!0001' does not match '^[A-Z0-9]+$'" }
+  ],
+  "intake_only": {
+    "_comment": "Job 1 (intake) only runs the parse door — map/schema rejects are not visible yet. So at intake: written=52 (55 - 3 parse rejects), rejected=3.",
+    "src_read": 55,
+    "extraction_written": 52,
+    "rejected": 3
+  },
+  "known_keys": {
+    "raw_sha256_16_of_truncated_row": "4d5d9d96692584fa",
+    "account_key_sha256_32_of_ACC000900003": "f3895bd9ae16e8e2626b578dff6f434b"
+  }
+}

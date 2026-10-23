@@ -1,0 +1,47 @@
+@startuml deployment-gcp
+!pragma layout smetana
+title Flink-JDBC on GCP: two databases, TTL guard
+skinparam componentStyle rectangle
+
+cloud "GCP project <project_id>, region var.region" {
+  node "Cloud Scheduler\nevery minute" as cron
+  node "Cloud Run Job mig-flink-orchestrator" as orch {
+    artifact "/app/run.sh" as runsh
+    artifact "/app/gate-jdbc.jar\n(gate-jdbc + recon-jdbc)" as gj
+    artifact "/app/recon-service.jar" as rs
+  }
+  node "Cloud Run Job mig-flink-jdbc-source-seeder\npython + psql 15 + load_db.py" as seeder
+  node "GKE mig-flink-gke" as gke {
+    component "flink-intake-jdbc-<run>\nmig.sql.JdbcIntakeJob" as fi
+    component "flink-curate-enrich-<run>" as fc
+    component "flink-produce-<run>" as fp
+  }
+  database "Cloud SQL mig-flink-jdbc-src\nSource System, private IP\netlr_source.account + extract_control" as src #mistyrose
+  database "Cloud SQL mig-flink-jdbc-lane\nlane, private IP\netlr_* (7 tables) + source_read" as lane #mistyrose
+  queue "Managed Kafka\ntarget-system-target / -confirmations" as kafka #mistyrose
+  node "Cloud Run Service target-system-mock" as mock
+  storage "GCS <project>-landing\nlocks/ done/ failed/ attempts/\nrecon-reports/ evidence/ ttl/" as gcs
+  node "Secret Manager\ncloudsql-app-password\netlr-source-db · etlr-source-admin" as sm
+  node "Cloud Run Job mig-flink-ttl-sweeper" as ttl
+}
+
+cron --> orch : run
+orch --> src : --discover, gate (etlr_reader)
+orch --> gke : kubectl apply FlinkDeployments
+fi --> src : one snapshot read\nfetch-size 1000, no autocommit
+fi --> lane
+fc --> lane
+fp --> kafka
+mock --> kafka : confirm
+orch --> lane : recon-jdbc, recon
+orch --> kafka : settle
+orch --> gcs
+seeder --> src : fixture / tamper
+seeder --> lane : init / dump / count
+orch ..> sm
+seeder ..> sm
+ttl ..> gke : delete after TTL
+ttl ..> src
+ttl ..> lane
+ttl ..> kafka
+@enduml

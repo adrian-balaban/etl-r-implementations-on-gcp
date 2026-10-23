@@ -1,0 +1,5 @@
+# seeder: count (what the source vouched for vs what it holds), 2026-10-22T12:33:24Z
+$ ... --args=count,run-fixture-20261022
+Execution [mig-flink-jdbc-source-seeder-bzx9w] has successfully completed.
+$ ... --args=count,run-200k-20261022
+Execution [mig-flink-jdbc-source-seeder-vh727] has successfully completed.

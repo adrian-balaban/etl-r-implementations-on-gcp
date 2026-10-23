@@ -1,0 +1,56 @@
+line	account_id	in_src	in_curated	in_enriched	in_target	door	stage	reason	deciding_system	kafka_target_msgs	confirmations
+2	ACC000000011	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+3	ACC000000010	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+4	ACC000000046	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+5	ACC000000033	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+6	ACC000000014	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+7	ACC000000018	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+8	ACC000000039	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+9	ACC000000034	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+10	ACC000000043	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+11	ACC000900000	no	no	no	no	rejected	parse	PARSE_BAD_COLUMN_COUNT	intake (Dataflow)	0	
+12	ACC000000020	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+13	ACC000000023	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+14	ACC000000030	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+15	ACC000000026	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+16	ACC000000038	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+17	ACC000000040	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+18	ACC000000006	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+19	ACC000000035	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+20	ACC000000042	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+21	ACC000000049	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+22	ACC000000013	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+23	ACC000000024	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+24	ACC000000032	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+25	ACC000000041	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+26	ACC000000007	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+27	acc-bad!0001	yes	yes	yes	no	rejected	schema	SCHEMA_INVALID	produce (Dataflow)	0	
+28	ACC000000012	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+29	ACC000900001	no	no	no	no	rejected	parse	PARSE_BAD_NUMERIC	intake (Dataflow)	0	
+30	ACC000000009	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+31	ACC000000027	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+32	ACC000000025	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+33	ACC000900003	yes	yes	yes	no	rejected	map	MAP_UNMAPPED_ENUM_VALUE	produce (Dataflow)	0	
+34	ACC000000001	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+35	ACC000000021	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+36	ACC000000037	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+37	ACC000000045	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+38	ACC000000048	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+39	ACC000000036	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+40	ACC000000044	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+41	ACC000000003	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+42	ACC000000005	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+43	ACC000000002	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+44	ACC000000017	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+45	ACC000000016	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+46	ACC000000028	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+47	ACC000000019	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+48	ACC000000022	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+49	ACC000000004	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+50	ACC000000050	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+51	ACC000000029	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+52	ACC000000015	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+53	ACC000000031	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+54	ACC000000047	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+55	ACC000000008	yes	yes	yes	yes	written			intake+curate+enrich+produce	2	created=1,duplicate=1
+56	ACC000900002	no	no	no	no	rejected	parse	PARSE_BAD_DATE	intake (Dataflow)	0	

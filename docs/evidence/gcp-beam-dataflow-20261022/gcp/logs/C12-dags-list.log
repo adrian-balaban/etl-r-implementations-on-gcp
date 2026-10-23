@@ -1,0 +1,7 @@
+# C12 dags list, 2026-10-22T13:47:15Z
+Executing the command: [ airflow dags list ]...
+Command has been started. execution_id=26fe30ac-471e-48cb-8196-1c068d539f1d
+Use ctrl-c to interrupt the command
+dag_id              | fileloc                             | owners   | is_paused
+====================+=====================================+==========+==========
+etlr_beam_migration | /home/airflow/gcs/dags/etlr_beam.py | our-team | None

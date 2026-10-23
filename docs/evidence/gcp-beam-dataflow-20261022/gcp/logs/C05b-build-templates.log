@@ -1,0 +1,35 @@
+# C05b rerun of build_templates.sh after fixing gcloud's quota project, 2026-10-22T13:25:45Z
+image version: 136a32f
+▶ building intake (module=intake) → europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+COMMIT europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f
+d8bda2ac05f252751982abfc1e2e72b50541fde1b7342de97e35031f3f3456ff
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/intake:136a32f (and :latest)
+▶ uploading spec → gs://<project>-dataflow-templates/intake.json
+  
+
+▶ building enrich (module=enrich) → europe-west1-docker.pkg.dev/<project>/mig-dataflow/enrich:136a32f
+COMMIT europe-west1-docker.pkg.dev/<project>/mig-dataflow/enrich:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/enrich:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/enrich:136a32f
+9977c0210e31f23de1b69effe3db00e588509c639f26faf83771c1077b2b7a55
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/enrich:136a32f (and :latest)
+▶ uploading spec → gs://<project>-dataflow-templates/enrich.json
+  
+
+▶ building produce (module=produce) → europe-west1-docker.pkg.dev/<project>/mig-dataflow/produce:136a32f
+COMMIT europe-west1-docker.pkg.dev/<project>/mig-dataflow/produce:136a32f
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/produce:latest
+Successfully tagged europe-west1-docker.pkg.dev/<project>/mig-dataflow/produce:136a32f
+fc8dc11918383805bc751fe4c243ce2beb7f90086e977ca5f4ea8cb02bdcdd03
+▶ pushing europe-west1-docker.pkg.dev/<project>/mig-dataflow/produce:136a32f (and :latest)
+▶ uploading spec → gs://<project>-dataflow-templates/produce.json
+  
+
+
+✓ 3 Flex Templates published.
+  registry: europe-west1-docker.pkg.dev/<project>/mig-dataflow
+  specs:    gs://<project>-dataflow-templates/{intake,enrich,produce}.json
+exit(templates)=0
+done 2026-10-22T13:26:12Z

@@ -1,0 +1,7 @@
+# push + verify images by config id, 2026-10-22T10:44:10Z
+Writing manifest to image destination
+orchestrator tag=136a32f registry-config=7b433fad6c5c local=7b433fad6c5c MATCH
+Writing manifest to image destination
+flink-job tag=136a32f registry-config=0d939c2980fc local=0d939c2980fc MATCH
+Writing manifest to image destination
+target-system-mock tag=136a32f registry-config=63299ee9be76 local=63299ee9be76 MATCH

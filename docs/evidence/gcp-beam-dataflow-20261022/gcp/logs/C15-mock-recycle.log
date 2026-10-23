@@ -1,0 +1,5 @@
+# C15 first run failed at load (published 50, unsettled 50): recycle the mock, 2026-10-22T14:17:35Z
+$ gcloud run services update target-system-mock --region=europe-west1 --update-env-vars=RECYCLED_AT=<utc>
+Service [target-system-mock] revision [target-system-mock-00002-89m] has been deployed and is serving 100 percent of traffic.
+Service URL: <service-url>
+recycled-at: 2026-10-22T14:17:50Z

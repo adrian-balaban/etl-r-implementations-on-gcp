@@ -1,0 +1,4 @@
+run_id	source_key	account_key	door	stage	reason	detail	source_file
+run-fixture-20261022	raw:bf47701944c6abec		rejected	parse	PARSE_MISSING_FIELD	CURRENCY	etlr_source.account
+run-fixture-20261022	acc-bad!0001	5551f11728f2bdd063674462659e002a	rejected	schema	SCHEMA_INVALID	accountId: 'acc-bad!0001' does not match '^[A-Z0-9]+$'	etlr_transformation
+run-fixture-20261022	ACC000900003	f3895bd9ae16e8e2626b578dff6f434b	rejected	map	MAP_UNMAPPED_ENUM_VALUE	status: 'X' not in ['A', 'C', 'D']	etlr_transformation

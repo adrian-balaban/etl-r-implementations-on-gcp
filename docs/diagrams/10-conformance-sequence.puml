@@ -1,0 +1,25 @@
+@startuml 10-conformance-sequence
+!pragma layout smetana
+title Row for row, never counts alone
+actor Dev
+participant "implementation" as I
+participant "tables" as T
+participant "compare.py" as C
+database "spec/fixtures\n/expected\n(TDS)" as O
+database "spec/fixtures\n/db/expected\n(typed)" as O2
+Dev -> I : make conformance
+I -> I : run lane on the fixture
+I -> I : recon (writes run_ledger)
+I -> T : dump 7 tables for the run
+note over T : account_src · account_curated · account_enriched ·\naccount_target · reject_log · record_lineage · run_ledger
+Dev <- I : dump dir
+I -> C : --profile staged | single-pass
+C -> O : read oracle (beam · flink)
+C -> O2 : read oracle (flink-jdbc)
+C -> C : compare row by row
+alt all checks pass
+  C --> Dev : ALL CONFORMANCE CHECKS PASSED
+else any difference
+  C --> Dev : N FAILED (exit 1)
+end
+@enduml

@@ -1,0 +1,21 @@
+@startuml sequence-run
+!pragma layout smetana
+title Flink-JDBC: one run, two count checks
+participant "Source System" as src
+participant "gate-jdbc" as gate
+participant "JdbcIntakeJob" as intake
+participant "Curate + Produce" as cp
+participant "recon-jdbc" as rj
+participant "recon" as rec
+src -> src : load snapshot; write control row\n(row_count, content_digest)
+gate -> src : REPEATABLE READ: count, digest, duplicates
+alt mismatch or no control row
+  gate --> gate : fail / refuse — zero rows written
+end
+intake -> src : one JDBC scan
+intake -> intake : parse door; digest of what was read
+cp -> cp : curate, enrich, map, schema, publish to Kafka
+rj -> src : control row
+rj -> rj : source_read == control row?
+rec -> rec : src_read = written + rejected; settle
+@enduml

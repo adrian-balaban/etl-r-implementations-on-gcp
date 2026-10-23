@@ -1,0 +1,61 @@
+@startuml sequence-dag-run
+!pragma layout smetana
+title Beam: one run, trigger to balance
+
+actor Operator
+participant "Airflow\n(Composer)" as Composer
+participant "GCS" as GCS
+participant "Beam pods\n(Dataflow)" as Beam
+participant "Dataform\nrunner" as Dataform
+database "BigQuery" as BQ
+participant "load" as Loader
+queue "Kafka" as Kafka
+participant "Target System\nmock" as Mock
+participant "recon" as Recon
+
+Operator -> Composer: Trigger DAG {"run_id": "run-2026...."}
+Composer -> GCS: Poll extraction/<run_id>/ACCOUNT.FLG\n(reschedule, up to 12h)
+GCS --> Composer: Semaphore present
+
+Composer -> Beam: intake
+Beam -> GCS: Read encrypted bundle, verify .CHS
+Beam -> BQ: account_src + run_ledger + record_lineage
+Beam --> Composer: Done
+
+Composer -> Dataform: curate_run
+Dataform -> BQ: Build etlr_transformation.account_curated
+Dataform --> Composer: Done
+
+Composer -> Beam: enrich
+Beam -> BQ: Read account_curated, write account_enriched
+Beam --> Composer: Done
+
+Composer -> Beam: produce (--sinks both)
+Beam -> BQ: Read account_enriched, map + validate
+Beam -> GCS: Write JSON batches of exactly 200
+Beam -> Kafka: Publish target documents
+Beam --> Composer: Done
+
+Composer -> Loader: loader_app (--sink kafka)
+Loader -> GCS: Read JSON batches
+Loader -> Kafka: Produce to target topic
+Kafka -> Mock: Deliver documents
+Mock -> Kafka: Confirmations / rejections
+Kafka --> Loader: Settle within timeout
+Loader -> GCS: Write .ERR for rejected
+note right of Loader: Anything neither confirmed nor\nrejected is "unsettled" — non-zero fails
+Loader --> Composer: Done
+
+Composer -> Recon: reconciliation
+Kafka --> Recon: Read confirmation stream
+Recon -> BQ: Set-difference against account_target
+Recon --> Composer: Done
+
+Composer -> BQ: assert_run_balanced — read run_ledger
+BQ --> Composer: src_read, extraction_written, rejected, balanced
+alt balanced
+  Composer --> Operator: Run succeeded
+else not balanced
+  Composer --> Operator: Run FAILED — the equation did not close
+end
+@enduml

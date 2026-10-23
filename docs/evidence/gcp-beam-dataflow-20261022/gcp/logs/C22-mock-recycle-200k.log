@@ -1,0 +1,5 @@
+# C22 200k run: load published 200000, unsettled 200000 -> the mock is ~40 min old (documented ~34 min wedge): recycle, 2026-10-22T15:04:16Z
+mock instance started: 2026-10-22T14:17:50Z (previous recycle)
+Service [target-system-mock] revision [target-system-mock-00003-brr] has been deployed and is serving 100 percent of traffic.
+Service URL: <service-url>
+recycled-at: 2026-10-22T15:04:30Z

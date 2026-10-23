@@ -1,0 +1,170 @@
+version: '3.8'
+
+# Podman-compatible Compose file, modelled on
+# ../../poc-for-presentation-on-flink-variants-for-cdc-and-outbox/local-development-podman.
+#
+#   podman-compose -f podman-compose.yml up -d --build
+#   podman-compose -f podman-compose.yml down -v
+#
+# Deliberately NOT copied from the POC:
+#   - no MinIO/S3, no checkpointing config — batch has no checkpoints
+#   - no fake-gcs — landing is the ./work bind mount
+#   - postgres replaces BigQuery; redpanda replaces Managed Kafka
+
+networks:
+  mig-net:
+    driver: bridge
+
+services:
+
+  postgres:
+    image: docker.io/library/postgres:16
+    container_name: mig-postgres
+    networks:
+      - mig-net
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: mig
+      POSTGRES_PASSWORD: mig
+      POSTGRES_DB: mig
+    volumes:
+      - ../sql/postgres-init.sql:/docker-entrypoint-initdb.d/01-init.sql:Z
+    healthcheck:
+      test: pg_isready -U mig -d mig
+      interval: 5s
+      retries: 10
+
+  redpanda:
+    image: docker.io/redpandadata/redpanda:latest
+    container_name: mig-redpanda
+    networks:
+      - mig-net
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --memory=512M
+      - --overprovisioned
+      - --node-id=0
+      - --check=false
+      - --kafka-addr=internal://0.0.0.0:29092,external://0.0.0.0:9092
+      - --advertise-kafka-addr=internal://redpanda:29092,external://localhost:9092
+    healthcheck:
+      test: rpk cluster health | grep -q 'Healthy:.*true'
+      interval: 10s
+      retries: 10
+      start_period: 10s
+
+  redpanda-topics:
+    image: docker.io/redpandadata/redpanda:latest
+    container_name: mig-redpanda-topics
+    networks:
+      - mig-net
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+      rpk topic create target-system-target -p 1 -r 1 --brokers redpanda:29092 || true;
+      rpk topic create target-system-confirmations -p 1 -r 1 --brokers redpanda:29092 || true;
+      rpk topic create target-system-rejections -p 1 -r 1 --brokers redpanda:29092 || true;
+      echo topics ready"
+    restart: "no"
+
+  flink-jobmanager:
+    build:
+      context: ./flink-image
+    container_name: mig-flink-jm
+    networks:
+      - mig-net
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      FLINK_PROPERTIES: |
+        jobmanager.rpc.address: flink-jobmanager
+        jobmanager.rpc.port: 6123
+        taskmanager.numberOfTaskSlots: 4
+        rest.bind-address: 0.0.0.0
+        rest.bind-port: 8081
+        execution.runtime-mode: BATCH
+    volumes:
+      - ../work:/opt/mig/work:Z
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: curl -sf http://localhost:8081/overview
+      interval: 10s
+      retries: 10
+      start_period: 20s
+
+  flink-taskmanager:
+    build:
+      context: ./flink-image
+    container_name: mig-flink-tm
+    networks:
+      - mig-net
+    command: taskmanager
+    environment:
+      FLINK_PROPERTIES: |
+        jobmanager.rpc.address: flink-jobmanager
+        jobmanager.rpc.port: 6123
+        taskmanager.numberOfTaskSlots: 4
+        execution.runtime-mode: BATCH
+    volumes:
+      - ../work:/opt/mig/work:Z
+    depends_on:
+      - flink-jobmanager
+    healthcheck:
+      test: curl -sf http://localhost:6122 || pgrep -f taskmanager
+      interval: 10s
+      retries: 5
+      start_period: 20s
+
+  # target-system-mock — the oracle for the settle loop. Kafka-only by
+  # design (no HTTP POST /v1/accounts — see its class javadoc), so it consumes
+  # target-system-target and publishes target-system-confirmations. Built from this repo's
+  # own sources, which is why it needs the reactor build context at the repo root.
+  target-system-mock:
+    build:
+      context: ..
+      dockerfile: gcp/docker/Dockerfile.javaapp
+      args:
+        MIG_MODULE: target-system-mock
+    container_name: mig-target-system-mock
+    networks:
+      - mig-net
+    ports:
+      - "8098:8098"
+    environment:
+      KAFKA_BOOTSTRAP: redpanda:29092
+      TARGET_SYSTEM_TARGET_TOPIC: target-system-target
+      TARGET_SYSTEM_CONFIRMATION_TOPIC: target-system-confirmations
+      TARGET_SYSTEM_PORT: "8098"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    healthcheck:
+      # The runtime image is a plain JRE (no curl/wget) — a bash TCP probe is what it has.
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8098'"]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+
+  kafka-ui:
+    image: docker.io/provectuslabs/kafka-ui:latest
+    container_name: mig-kafka-ui
+    networks:
+      - mig-net
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: mig-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:29092
+    depends_on:
+      - redpanda

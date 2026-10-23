@@ -1,0 +1,4 @@
+# stack down, 2026-10-22T12:55:17Z
+keep set()
+['podman', 'volume', 'ls', '--noheading', '--filter', 'label=io.podman.compose.project=etlr-beam', '--format', '{{.Name}}']
+containers left: 0

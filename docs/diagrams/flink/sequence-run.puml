@@ -1,0 +1,73 @@
+@startuml sequence-run
+!pragma layout smetana
+title Flink: one run, lock to done-marker
+
+autonumber
+
+actor "Producer" as src
+participant "Cloud Scheduler" as cron
+participant "Orchestrator" as orch
+database "GCS landing bucket" as gcs
+participant "gate.jar" as gate
+participant "Flink jobs" as flink
+database "Postgres" as pg
+queue "Kafka" as kafka
+participant "Target System\n(mock)" as target
+participant "recon-service.jar" as recon
+
+src -> gcs: ACCOUNT.tar.gz (data + .CHS)
+src -> gcs: ACCOUNT.FLG, **last, outside the archive**
+cron -> orch: fire, every minute
+activate orch
+
+orch -> gcs: done-marker present?
+alt reconciled already
+  orch --> cron: exit 0
+else not yet
+  orch -> gcs: take the lock (atomic)
+  alt another execution holds it
+    orch --> cron: exit 0
+  else lock taken
+    orch -> gcs: .FLG present?
+    alt absent
+      orch --> cron: exit 0, nothing to do
+    else present
+      orch -> gate: run
+      gate -> gate: unpack; verify sha256 and record count
+      gate -> gcs: write work/<run_id>/ACCOUNT.src
+      note right of gate: A mismatch fails the run\nwith zero rows written
+
+      group Three jobs in sequence: apply, wait for FINISHED, delete
+        orch -> flink: intake
+        flink -> pg: clear own run_id rows
+        flink -> pg: parse door: account_src, rejects, lineage
+        orch -> flink: curate-enrich
+        flink -> pg: normalise, join branches: curated, enriched\n**no door**
+        orch -> flink: produce
+        flink -> pg: clear target rows and map/schema rejects\n(parse rejects survive)
+        flink -> flink: map door, then schema door;\ntarget JSON built once
+        flink -> pg: account_target, rejects, lineage
+        flink -> kafka: documents, same statement set
+      end
+      note over orch: A FAILED job, or no FINISHED in ~10 min,\nexits 1 with no done-marker. The next firing retries.
+
+      kafka -> target: documents
+      target -> kafka: confirmation or rejection,\nidempotent on account_key
+
+      orch -> recon: run, with src_read from the producer's .CHS
+      recon -> pg: count written and rejected
+      recon -> recon: balanced = src_read == written + rejected
+      recon -> pg: batches of 200; replace the run_ledger row
+      recon -> kafka: read confirmations (fresh group,\nbounded by end offsets, 120 s)
+      recon -> recon: unconfirmed = targets minus confirmed
+      recon -> gcs: recon-reports/
+      recon --> orch: exit 0 only if balanced and none unconfirmed
+
+      orch -> gcs: write done-marker
+      note right of orch: Done means reconciled,\nnot merely finished.
+    end
+  end
+end
+orch -> gcs: release the lock
+deactivate orch
+@enduml

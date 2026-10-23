@@ -1,0 +1,30 @@
+{
+  "lane" : "extraction",
+  "record" : "ACCOUNT",
+  "runId" : "run-gcp-200k-20261022",
+  "generatedAt" : "2026-10-22T14:26:35.554580931Z",
+  "sourceRecordsRead" : 200005,
+  "recordsWritten" : 200005,
+  "extractionErrors" : 0,
+  "datFiles" : [ {
+    "name" : "ACCOUNT.001.DAT",
+    "records" : 50000,
+    "sha256" : "336c20121b42af71dc2250fce58c9e3acff5a6c9c6bdafc1a6a2f2a742876bd4"
+  }, {
+    "name" : "ACCOUNT.002.DAT",
+    "records" : 50000,
+    "sha256" : "b2011465cba6d1e15072d89c076df8acc58060f08904c7f10e7f971d78867c65"
+  }, {
+    "name" : "ACCOUNT.003.DAT",
+    "records" : 50000,
+    "sha256" : "2b90e7bfb86e3a3f7276b5adcfc0c0f1fc0b6f30afbddccd3e8713a447dd5501"
+  }, {
+    "name" : "ACCOUNT.004.DAT",
+    "records" : 50000,
+    "sha256" : "1d26290a4532e2942e64ae4c80dd75b2bfbc15aec2ee98c3b41f705ff2f5fb44"
+  }, {
+    "name" : "ACCOUNT.005.DAT",
+    "records" : 5,
+    "sha256" : "c76b3c226281084c22679f1293b3a008e35d0c6151b767c683a8dd5970a4171b"
+  } ]
+}

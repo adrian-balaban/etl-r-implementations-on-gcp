@@ -1,0 +1,12 @@
+# teardown (flink-jdbc): protect the state bucket; remove the four db user/database addresses from state; destroy, 2026-10-22T12:35:26Z
+Successfully removed 17 resource instance(s).
+Successfully removed 4 resource instance(s).
+Plan: 0 to add, 0 to change, 77 to destroy.
+Error: Unable to remove Service Networking Connection, err: Error waiting for Delete Service Networking Connection: Error code 9, message: Failed to delete connection; Producer services (e.g. CloudSQL, Cloud Memstore, etc.) are still using this connection.
+# teardown (flink-jdbc) pass 2: the peering fallback, 2026-10-22T12:49:00Z
+sql instances left: []  gke: []  kafka: []
+Updated [https://www.googleapis.com/compute/v1/projects/<project>/global/networks/mig-flink-vpc].
+Successfully removed 1 resource instance(s).
+Plan: 0 to add, 0 to change, 2 to destroy.
+state left: 0 resources
+billing-window-end: 2026-10-22T12:50:06Z

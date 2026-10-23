@@ -1,0 +1,20 @@
+IMAGE: dataform-runner
+TAGS: 136a32f,latest
+
+IMAGE: enrich
+TAGS: 136a32f,latest
+
+IMAGE: intake
+TAGS: 136a32f,latest
+
+IMAGE: load
+TAGS: 136a32f,latest
+
+IMAGE: produce
+TAGS: 136a32f,latest
+
+IMAGE: recon
+TAGS: 136a32f,latest
+
+IMAGE: target-system-mock
+TAGS: 136a32f,latest

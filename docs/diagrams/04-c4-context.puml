@@ -1,0 +1,25 @@
+@startuml 04-c4-context
+!pragma layout smetana
+!include <C4/C4_Context>
+title Four roles, five systems
+Person(op, "Operator", "runs and watches a migration")
+Person(aud, "Auditor", "reads the evidence")
+Person(eng, "Engineer", "edits contracts only")
+Person(sre, "Platform operator", "provisions and tears down")
+System(etlr, "ETL-R", "migrates every record, proves the count")
+System_Ext(src, "Source System", "TDS files, or read directly (flink-jdbc)")
+System_Ext(tgt, "Target System", "consumes accounts, confirms or rejects")
+System_Ext(plat, "Platform", "GCP or local containers")
+System_Ext(sec, "Secrets", "PGP keys, credentials")
+System_Ext(mon, "Monitoring", "run outcome, balance failures")
+Rel(src, etlr, "TDS bundle + .FLG/.CHS", "files")
+Rel(etlr, tgt, "accounts", "Kafka")
+Rel(tgt, etlr, "confirmations · rejections", "Kafka")
+Rel(etlr, plat, "runs on")
+Rel(op, etlr, "triggers")
+Rel(aud, etlr, "reads ledger · lineage")
+Rel(eng, etlr, "contracts/")
+Rel(sre, plat, "Terraform")
+Rel(sec, etlr, "keys")
+Rel(etlr, mon, "logs · metrics")
+@enduml

@@ -1,0 +1,6 @@
+# C41 Composer's own bucket is not in Terraform state and survives the environment: remove it, 2026-10-22T15:27:40Z
+buckets before: <project>-tfstate europe-west1-mig-composer-<hash>-bucket 
+Removing gs://europe-west1-mig-composer-<hash>-bucket/...
+
+buckets after: <project>-tfstate 
+billing-window-end: 2026-10-22T15:27:46Z

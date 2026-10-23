@@ -1,0 +1,12 @@
+# C14 unpause + trigger the DAG, 2026-10-22T13:47:48Z
+$ airflow dags unpause etlr_beam_migration
+Use ctrl-c to interrupt the command
+No paused DAGs were found
+$ airflow dags trigger etlr_beam_migration --conf {"run_id":"run-gcp-fixture-20261022"}
+|                   |                   | data_interval_sta |                   |          |                  | last_scheduling_d |                  |          |            |
+conf               | dag_id            | dag_run_id        | rt                | data_interval_end | end_date | external_trigger | ecision           | logical_date     | run_type | start_date | state
+===================+===================+===================+===================+===================+==========+==================+===================+==================+==========+============+=======
+{'run_id':         | etlr_beam_migrati | manual__2026-10-2 | 2026-10-22        | 2026-10-22        | None     | True             | None              | 2026-10-22       | manual   | None       | queued
+'run-gcp-fixture-2 | on                | 2T13:51:40+00:00  | 13:51:40+00:00    | 13:51:40+00:00    |          |                  |                   | 13:51:40+00:00   |          |            |
+0261022'}          |                   |                   |                   |                   |          |                  |                   |                  |          |            |
+triggered-at: 2026-10-22T13:51:51Z

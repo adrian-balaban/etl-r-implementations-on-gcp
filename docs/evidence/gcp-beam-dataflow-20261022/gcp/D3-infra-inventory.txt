@@ -1,0 +1,57 @@
+# D3 infrastructure as deployed (beam-dataflow), 2026-10-22T14:38:15Z
+
+## Cloud Composer
+name: mig-composer | state: RUNNING | image: composer-2.9.7-airflow-2.9.3 | size: ENVIRONMENT_SIZE_SMALL | resilience: STANDARD
+  scheduler: {'count': 1, 'cpu': 0.5, 'memoryGb': 2.0, 'storageGb': 1.0}
+  webServer: {'cpu': 0.5, 'memoryGb': 2.0, 'storageGb': 1.0}
+  worker: {'cpu': 0.5, 'maxCount': 3, 'memoryGb': 2.0, 'minCount': 1, 'storageGb': 1.0}
+  worker zone pin (MIG_WORKER_ZONE): europe-west1-d | image tag: 136a32f
+
+## Managed Kafka
+capacityConfig:
+  memoryBytes: '3221225472'
+  vcpuCount: '3'
+state: ACTIVE
+
+## Cloud Run service (mock)
+NAME: target-system-mock
+IMAGE: target-system-mock:latest
+STATUS: True
+
+## GKE (Composer's own, in the project)
+NAME: europe-west1-mig-composer-<hash>-gke
+LOCATION: europe-west1
+CURRENT_NODE_COUNT: 4
+STATUS: RUNNING
+
+## Dataflow jobs so far
+NAME: beamapp-root-1022143545-637473-4tsdh1fe
+STATE: Running
+CREATION_TIME: 2026-10-22 14:35:47
+
+NAME: beamapp-root-1022142744-182100-qtffm9dx
+STATE: Done
+CREATION_TIME: 2026-10-22 14:27:45
+
+
+## BigQuery
+  etlr_extraction      
+  etlr_recon           
+  etlr_transformation  
+
+## Buckets
+<project>-dataflow-temp
+<project>-dataflow-templates
+<project>-json-out
+<project>-landing
+<project>-recon
+<project>-tfstate
+europe-west1-mig-composer-<hash>-bucket
+
+## Registry images
+dataform-runner enrich intake load produce recon target-system-mock 
+
+## Secrets
+dataform-git-token pgp-passphrase pgp-private-key target-system-credentials 
+## VPC connector / networks
+mig-vpc-connector	READY	2	3

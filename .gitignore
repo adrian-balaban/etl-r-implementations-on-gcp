@@ -1,0 +1,18 @@
+# Each implementation keeps its own .gitignore (git applies nested ones); this file only
+# covers the root and cross-cutting cases.
+
+# Per-deployment Terraform backend copies — the tracked file is backend.tf.example.
+implementations/*/terraform/envs/*/backend.tf
+
+# Editors / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Python bytecode (spec/harness is reached through symlinks from both implementations)
+__pycache__/
+*.pyc
+
+# Conformance run output (Flink already ignores work/ itself; Beam does not)
+implementations/*/work/

@@ -1,0 +1,409 @@
+# C03 terraform apply, phase A, 2026-10-22T12:56:44Z
+module.dataform.google_project_service_identity.dataform: Creating...
+module.iam.google_service_account.this["dataflow-worker"]: Creating...
+module.iam.google_service_account.this["composer-runner"]: Creating...
+module.iam.google_service_account.this["recon-service"]: Creating...
+module.iam.google_service_account.this["loader-app"]: Creating...
+module.iam.google_service_account.this["target-system-mock"]: Creating...
+module.iam.google_service_account.this["dataform-runner"]: Creating...
+module.network.google_compute_network.this: Creating...
+module.bigquery.google_bigquery_dataset.this["etlr_transformation"]: Creating...
+module.dataflow.google_artifact_registry_repository.templates: Creating...
+module.dataform.google_project_service_identity.dataform: Creation complete after 0s [id=projects/<project>/services/dataform.googleapis.com]
+module.bigquery.google_bigquery_dataset.this["etlr_recon"]: Creating...
+module.bigquery.google_bigquery_dataset.this["etlr_transformation"]: Creation complete after 2s [id=projects/<project>/datasets/etlr_transformation]
+module.bigquery.google_bigquery_dataset.this["etlr_extraction"]: Creating...
+module.bigquery.google_bigquery_dataset.this["etlr_recon"]: Creation complete after 3s [id=projects/<project>/datasets/etlr_recon]
+module.storage.google_storage_bucket.this["recon"]: Creating...
+module.bigquery.google_bigquery_dataset.this["etlr_extraction"]: Creation complete after 1s [id=projects/<project>/datasets/etlr_extraction]
+module.storage.google_storage_bucket.this["landing"]: Creating...
+module.storage.google_storage_bucket.this["landing"]: Creation complete after 1s [id=<project>-landing]
+module.storage.google_storage_bucket.this["dataflow-temp"]: Creating...
+module.storage.google_storage_bucket.this["recon"]: Creation complete after 1s [id=<project>-recon]
+module.storage.google_storage_bucket.this["dataflow-templates"]: Creating...
+module.storage.google_storage_bucket.this["dataflow-temp"]: Creation complete after 1s [id=<project>-dataflow-temp]
+module.storage.google_storage_bucket.this["json-out"]: Creating...
+module.storage.google_storage_bucket.this["dataflow-templates"]: Creation complete after 2s [id=<project>-dataflow-templates]
+module.secrets.google_secret_manager_secret.this["dataform-git-token"]: Creating...
+module.storage.google_storage_bucket.this["json-out"]: Creation complete after 2s [id=<project>-json-out]
+module.secrets.google_secret_manager_secret.this["pgp-passphrase"]: Creating...
+module.secrets.google_secret_manager_secret.this["dataform-git-token"]: Creation complete after 1s [id=projects/<project>/secrets/dataform-git-token]
+module.secrets.google_secret_manager_secret.this["pgp-private-key"]: Creating...
+module.secrets.google_secret_manager_secret.this["pgp-passphrase"]: Creation complete after 0s [id=projects/<project>/secrets/pgp-passphrase]
+module.secrets.google_secret_manager_secret.this["target-system-credentials"]: Creating...
+module.secrets.google_secret_manager_secret.this["pgp-private-key"]: Creation complete after 1s [id=projects/<project>/secrets/pgp-private-key]
+module.bigquery.google_bigquery_table.reject_log: Creating...
+module.secrets.google_secret_manager_secret.this["target-system-credentials"]: Creation complete after 1s [id=projects/<project>/secrets/target-system-credentials]
+module.bigquery.google_bigquery_table.run_ledger: Creating...
+module.bigquery.google_bigquery_table.reject_log: Creation complete after 0s [id=projects/<project>/datasets/etlr_recon/tables/reject_log]
+module.bigquery.google_bigquery_table.record_lineage: Creating...
+module.bigquery.google_bigquery_table.run_ledger: Creation complete after 1s [id=projects/<project>/datasets/etlr_recon/tables/run_ledger]
+module.bigquery.google_bigquery_table.record_lineage: Creation complete after 1s [id=projects/<project>/datasets/etlr_recon/tables/record_lineage]
+module.iam.google_service_account.this["loader-app"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["target-system-mock"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["recon-service"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [10s elapsed]
+module.network.google_compute_network.this: Still creating... [10s elapsed]
+module.dataflow.google_artifact_registry_repository.templates: Still creating... [10s elapsed]
+module.dataflow.google_artifact_registry_repository.templates: Creation complete after 10s [id=projects/<project>/locations/europe-west1/repositories/mig-dataflow]
+module.iam.google_service_account.this["dataflow-worker"]: Creation complete after 13s [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["target-system-mock"]: Creation complete after 13s [id=projects/<project>/serviceAccounts/target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.dataflow_worker_acts_as_itself: Creating...
+module.iam.google_service_account.this["recon-service"]: Creation complete after 15s [id=projects/<project>/serviceAccounts/recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["composer-runner"]: Creation complete after 16s [id=projects/<project>/serviceAccounts/composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountTokenCreator"]: Creating...
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountUser"]: Creating...
+module.iam.google_service_account_iam_member.dataflow_worker_acts_as_itself: Creation complete after 5s [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountUser/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [20s elapsed]
+module.iam.google_service_account.this["loader-app"]: Still creating... [20s elapsed]
+module.network.google_compute_network.this: Still creating... [20s elapsed]
+module.iam.google_service_account.this["loader-app"]: Creation complete after 20s [id=projects/<project>/serviceAccounts/loader-app@<project>.iam.gserviceaccount.com]
+module.network.google_compute_network.this: Creation complete after 22s [id=projects/<project>/global/networks/mig-vpc]
+module.network.google_compute_firewall.dataflow_internal: Creating...
+module.vpc_connector.google_vpc_access_connector.this[0]: Creating...
+module.network.google_compute_router.this: Creating...
+module.network.google_compute_subnetwork.this: Creating...
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountUser"]: Still creating... [10s elapsed]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountTokenCreator"]: Still creating... [10s elapsed]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountTokenCreator"]: Creation complete after 12s [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountTokenCreator/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataflow_worker["roles/iam.serviceAccountUser"]: Creation complete after 12s [id=projects/<project>/serviceAccounts/dataflow-worker@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountUser/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [30s elapsed]
+module.network.google_compute_firewall.dataflow_internal: Still creating... [10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [10s elapsed]
+module.network.google_compute_subnetwork.this: Still creating... [10s elapsed]
+module.network.google_compute_router.this: Still creating... [10s elapsed]
+module.network.google_compute_router.this: Creation complete after 11s [id=projects/<project>/regions/europe-west1/routers/mig-router]
+module.network.google_compute_firewall.dataflow_internal: Creation complete after 11s [id=projects/<project>/global/firewalls/mig-allow-dataflow-internal]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [40s elapsed]
+module.network.google_compute_subnetwork.this: Still creating... [20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [20s elapsed]
+module.network.google_compute_subnetwork.this: Creation complete after 21s [id=projects/<project>/regions/europe-west1/subnetworks/mig-subnet]
+module.kafka.google_managed_kafka_cluster.this[0]: Creating...
+module.network.google_compute_router_nat.this: Creating...
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [50s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [10s elapsed]
+module.network.google_compute_router_nat.this: Still creating... [10s elapsed]
+module.network.google_compute_router_nat.this: Creation complete after 11s [id=<project>/europe-west1/mig-router/mig-nat]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [1m0s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [20s elapsed]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [1m10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [30s elapsed]
+module.iam.google_service_account.this["dataform-runner"]: Still creating... [1m20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [40s elapsed]
+module.iam.google_service_account.this["dataform-runner"]: Creation complete after 1m27s [id=projects/<project>/serviceAccounts/dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["dataflow-temp/dataflow-worker"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/recon-service"]: Creating...
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataform_runner: Creating...
+module.iam.google_storage_bucket_iam_member.this["landing/dataflow-worker"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/loader-app"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/dataflow-worker"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["json-out/dataflow-worker"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["json-out/loader-app"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/recon-service"]: Creation complete after 4s [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["dataflow-temp/dataflow-worker"]: Creation complete after 4s [id=b/<project>-dataflow-temp/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["target-system-credentials"]: Creating...
+module.dataform.google_dataform_repository.this: Creating...
+module.iam.google_storage_bucket_iam_member.this["landing/dataflow-worker"]: Creation complete after 4s [id=b/<project>-landing/roles/storage.objectViewer/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-private-key"]: Creating...
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m10s elapsed]
+module.iam.google_service_account_iam_member.composer_runner_impersonates_dataform_runner: Creation complete after 5s [id=projects/<project>/serviceAccounts/dataform-runner@<project>.iam.gserviceaccount.com/roles/iam.serviceAccountTokenCreator/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-passphrase"]: Creating...
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [50s elapsed]
+module.dataform.google_dataform_repository.this: Creation complete after 3s [id=projects/<project>/locations/europe-west1/repositories/etlr-beam]
+module.secrets.google_secret_manager_secret_iam_member.accessors["dataform-git-token"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["json-out/dataflow-worker"]: Creation complete after 8s [id=b/<project>-json-out/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["json-out/loader-app"]: Creation complete after 8s [id=b/<project>-json-out/roles/storage.objectViewer/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["target-system-credentials"]: Creation complete after 6s [id=projects/<project>/secrets/target-system-credentials/roles/secretmanager.secretAccessor/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-private-key"]: Creation complete after 6s [id=projects/<project>/secrets/pgp-private-key/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_storage_bucket_iam_member.this["recon/loader-app"]: Still creating... [10s elapsed]
+module.secrets.google_secret_manager_secret_iam_member.accessors["pgp-passphrase"]: Creation complete after 6s [id=projects/<project>/secrets/pgp-passphrase/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/loader-app"]: Creation complete after 12s [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["recon/dataflow-worker"]: Creation complete after 12s [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessors["dataform-git-token"]: Creation complete after 5s [id=projects/<project>/secrets/dataform-git-token/roles/secretmanager.secretAccessor/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m0s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m30s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [2m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m40s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m50s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Creation complete after 2m18s [id=projects/<project>/locations/europe-west1/connectors/mig-vpc-connector]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Creation complete after 9m58s [id=projects/<project>/locations/europe-west1/clusters/mig-kafka]
+module.kafka.google_managed_kafka_topic.this["rejections"]: Creating...
+module.kafka.google_managed_kafka_topic.this["confirmations"]: Creating...
+module.kafka.google_managed_kafka_topic.this["target"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Creating...
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Creating...
+module.kafka.google_managed_kafka_topic.this["confirmations"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-confirmations]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Creating...
+module.kafka.google_managed_kafka_topic.this["target"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-target]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Creating...
+module.kafka.google_managed_kafka_topic.this["rejections"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-kafka/topics/target-system-rejections]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/dataflow-worker"]: Creation complete after 38s [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/loader-app"]: Creation complete after 44s [id=<project>/roles/managedkafka.client/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/recon-service"]: Creation complete after 44s [id=<project>/roles/bigquery.jobUser/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_managedkafka.client/target-system-mock"]: Creation complete after 45s [id=<project>/roles/managedkafka.client/serviceAccount:target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_dataflow.developer/composer-runner"]: Creation complete after 45s [id=<project>/roles/dataflow.developer/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/dataflow-worker"]: Creation complete after 46s [id=<project>/roles/managedkafka.client/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataflow-worker"]: Creation complete after 46s [id=<project>/roles/bigquery.jobUser/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Creating...
+module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/dataform-runner"]: Creation complete after 47s [id=<project>/roles/bigquery.jobUser/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/composer-runner"]: Creation complete after 47s [id=<project>/roles/bigquery.dataViewer/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.dataViewer/recon-service"]: Creation complete after 48s [id=<project>/roles/bigquery.dataViewer/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Creating...
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_dataform.editor/composer-runner"]: Creation complete after 22s [id=<project>/roles/dataform.editor/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Creating...
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_managedkafka.client/recon-service"]: Creation complete after 49s [id=<project>/roles/managedkafka.client/serviceAccount:recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataform-runner"]: Creation complete after 51s [id=<project>/roles/bigquery.dataEditor/serviceAccount:dataform-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.developer/dataflow-worker"]: Creation complete after 52s [id=<project>/roles/dataflow.developer/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/composer-runner"]: Creation complete after 51s [id=<project>/roles/artifactregistry.reader/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.jobUser/composer-runner"]: Creation complete after 51s [id=<project>/roles/bigquery.jobUser/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_composer.worker/composer-runner"]: Creation complete after 52s [id=<project>/roles/composer.worker/serviceAccount:composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles_artifactregistry.reader/dataflow-worker"]: Creation complete after 50s [id=<project>/roles/artifactregistry.reader/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_dataflow.worker/dataflow-worker"]: Creation complete after 51s [id=<project>/roles/dataflow.worker/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_bigquery.dataEditor/dataflow-worker"]: Creation complete after 52s [id=<project>/roles/bigquery.dataEditor/serviceAccount:dataflow-worker@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles_secretmanager.secretAccessor/loader-app"]: Creation complete after 44s [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:loader-app@<project>.iam.gserviceaccount.com]
+
+Warning: Check block assertion failed
+
+  on main.tf line 155, in check "kafka_bootstrap_override_is_set":
+ 155:     condition     = !var.enable_kafka || var.kafka_bootstrap_override != ""
+    ├────────────────
+    │ var.enable_kafka is true
+    │ var.kafka_bootstrap_override is ""
+
+enable_kafka=true but kafka_bootstrap_override is empty. Read the real
+address once the cluster exists and pass it:
+-var="kafka_bootstrap_override=$(gcloud managed-kafka clusters describe
+mig-kafka --location=<region> --format='value(bootstrapAddress)')" (see
+docs/runbook-gcp.md, B8).
+
+Apply complete! Resources: 70 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+buckets = {
+  "dataflow-temp" = "<project>-dataflow-temp"
+  "dataflow-templates" = "<project>-dataflow-templates"
+  "json-out" = "<project>-json-out"
+  "landing" = "<project>-landing"
+  "recon" = "<project>-recon"
+}
+composer_airflow_uri = ""
+composer_dag_bucket = ""
+dataflow_registry = "europe-west1-docker.pkg.dev/<project>/mig-dataflow"
+dataform_repository = "etlr-beam"
+datasets = {
+  "etlr_extraction" = "etlr_extraction"
+  "etlr_recon" = "etlr_recon"
+  "etlr_transformation" = "etlr_transformation"
+}
+env_file = <<EOT
+TARGET_PROFILE=real
+GCP_PROJECT=<project>
+GCS_LANDING_BUCKET=<project>-landing
+GCS_JSON_BUCKET=<project>-json-out
+GCS_RECON_BUCKET=<project>-recon
+BQ_TARGET=real
+KAFKA_SECURITY_PROTOCOL=SASL_SSL
+# KAFKA_BOOTSTRAP, not KAFKA_BOOTSTRAP_SERVERS: config.py reads the former (as does
+# .env.example). Under the old name the address was emitted but never read, so the
+# pipeline silently fell back to localhost:19092 — which inside a Dataflow worker is
+# nothing at all. H8 was recorded as passing because `terraform output` produced a
+# real address; that only ever proved the value existed, not that it reached anyone.
+KAFKA_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+# runner.py defaults these to conventions ("mig-subnet", "dataflow-worker@<project>")
+# when unset. The convention is right on this environment and wrong on any other, and
+# the failure mode is the expensive one: a Dataflow job that starts against a
+# nonexistent subnet and then never progresses. Emitting the real values from state
+# means a run uses what Terraform actually built.
+DATAFLOW_SUBNETWORK=https://www.googleapis.com/compute/v1/projects/<project>/regions/europe-west1/subnetworks/mig-subnet
+DATAFLOW_SERVICE_ACCOUNT=dataflow-worker@<project>.iam.gserviceaccount.com
+# Without this the loader falls back to http://localhost:8080, which inside a
+# Dataflow worker or the toolbox container is nothing at all — every document then
+# fails "transport failure" after exhausting its retries, which reads like a data
+# problem and is an infrastructure one.
+TARGET_SYSTEM_URL=
+# Confirmation stream. Empty when Kafka is off → the
+# mock and recon both skip the confirmation path and the run is green. Non-empty only
+# with enable_kafka=true, and the confirmation topic is the second topic on the
+# cluster (terraform/modules/kafka's topics map).
+TARGET_SYSTEM_CONFIRMATION_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+TARGET_SYSTEM_CONFIRMATION_TOPIC=target-system-confirmations
+
+EOT
+kafka_bootstrap = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+service_accounts = {
+  "composer-runner" = "composer-runner@<project>.iam.gserviceaccount.com"
+  "dataflow-worker" = "dataflow-worker@<project>.iam.gserviceaccount.com"
+  "dataform-runner" = "dataform-runner@<project>.iam.gserviceaccount.com"
+  "loader-app" = "loader-app@<project>.iam.gserviceaccount.com"
+  "recon-service" = "recon-service@<project>.iam.gserviceaccount.com"
+  "target-system-mock" = "target-system-mock@<project>.iam.gserviceaccount.com"
+}
+target_system_url = ""
+templates_bucket = "<project>-dataflow-templates"
+exit 0

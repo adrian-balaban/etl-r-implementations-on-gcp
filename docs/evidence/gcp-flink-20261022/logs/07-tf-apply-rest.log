@@ -1,0 +1,93 @@
+# terraform apply, stage (c), 2026-10-22T11:05:47Z
+module.ttl_guard.google_service_account.sweeper[0]: Creating...
+module.flink_gke.google_service_account_iam_member.flink_workload_identity[0]: Creating...
+module.ttl_guard.time_static.armed_at[0]: Creating...
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Creating...
+module.ttl_guard.time_static.armed_at[0]: Creation complete after 0s [id=2026-10-22T11:05:49Z]
+module.ttl_guard.google_storage_bucket_object.expires_at[0]: Creating...
+module.scheduler.google_cloud_run_v2_job.orchestrator[0]: Creating...
+module.ttl_guard.google_storage_bucket_object.expires_at[0]: Creation complete after 0s [id=<project>-landing-ttl/expires-at]
+module.flink_gke.helm_release.flink_operator[0]: Creating...
+module.flink_gke.google_service_account_iam_member.flink_workload_identity[0]: Creation complete after 6s [id=projects/<project>/serviceAccounts/mig-flink-flink-job@<project>.iam.gserviceaccount.com/roles/iam.workloadIdentityUser/serviceAccount:<project>.svc.id.goog[flink-operator/flink]]
+module.ttl_guard.google_service_account.sweeper[0]: Still creating... [10s elapsed]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Still creating... [10s elapsed]
+module.scheduler.google_cloud_run_v2_job.orchestrator[0]: Still creating... [10s elapsed]
+module.scheduler.google_cloud_run_v2_job.orchestrator[0]: Creation complete after 11s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-orchestrator]
+module.scheduler.google_cloud_run_v2_job_iam_member.scheduler_invoker[0]: Creating...
+module.flink_gke.helm_release.flink_operator[0]: Still creating... [10s elapsed]
+module.ttl_guard.google_service_account.sweeper[0]: Creation complete after 14s [id=projects/<project>/serviceAccounts/mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_storage_bucket_iam_member.sweeper_bucket[0]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/container.admin"]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/cloudsql.admin"]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/cloudscheduler.admin"]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/managedkafka.admin"]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/vpcaccess.admin"]: Creating...
+module.ttl_guard.google_cloud_run_v2_job.sweeper[0]: Creating...
+module.scheduler.google_cloud_run_v2_job_iam_member.scheduler_invoker[0]: Creation complete after 5s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-orchestrator/roles/run.invoker/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_project_iam_member.sweeper["roles/run.admin"]: Creating...
+module.ttl_guard.google_storage_bucket_iam_member.sweeper_bucket[0]: Creation complete after 4s [id=b/<project>-landing/roles/storage.objectAdmin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.scheduler.google_cloud_scheduler_job.orchestrator[0]: Creating...
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Still creating... [20s elapsed]
+module.flink_gke.helm_release.flink_operator[0]: Still creating... [20s elapsed]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Creation complete after 21s [id=projects/<project>/locations/europe-west1/services/mig-flink-target-system-mock]
+module.ttl_guard.google_project_iam_member.sweeper["roles/run.admin"]: Creation complete after 7s [id=<project>/roles/run.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_project_iam_member.sweeper["roles/cloudscheduler.admin"]: Creation complete after 9s [id=<project>/roles/cloudscheduler.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_project_iam_member.sweeper["roles/vpcaccess.admin"]: Still creating... [10s elapsed]
+module.ttl_guard.google_project_iam_member.sweeper["roles/managedkafka.admin"]: Still creating... [10s elapsed]
+module.ttl_guard.google_project_iam_member.sweeper["roles/cloudsql.admin"]: Still creating... [10s elapsed]
+module.ttl_guard.google_project_iam_member.sweeper["roles/container.admin"]: Still creating... [10s elapsed]
+module.ttl_guard.google_cloud_run_v2_job.sweeper[0]: Still creating... [10s elapsed]
+module.ttl_guard.google_project_iam_member.sweeper["roles/container.admin"]: Creation complete after 10s [id=<project>/roles/container.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_project_iam_member.sweeper["roles/cloudsql.admin"]: Creation complete after 10s [id=<project>/roles/cloudsql.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_cloud_run_v2_job.sweeper[0]: Creation complete after 11s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-ttl-sweeper]
+module.ttl_guard.google_cloud_run_v2_job_iam_member.sweeper_invoker[0]: Creating...
+module.ttl_guard.google_project_iam_member.sweeper["roles/managedkafka.admin"]: Creation complete after 11s [id=<project>/roles/managedkafka.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_project_iam_member.sweeper["roles/vpcaccess.admin"]: Creation complete after 11s [id=<project>/roles/vpcaccess.admin/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.scheduler.google_cloud_scheduler_job.orchestrator[0]: Creation complete after 9s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-orchestrator-trigger]
+module.ttl_guard.google_cloud_run_v2_job_iam_member.sweeper_invoker[0]: Creation complete after 5s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-ttl-sweeper/roles/run.invoker/serviceAccount:mig-flink-ttl-sweeper@<project>.iam.gserviceaccount.com]
+module.ttl_guard.google_cloud_scheduler_job.sweeper[0]: Creating...
+module.flink_gke.helm_release.flink_operator[0]: Still creating... [30s elapsed]
+module.ttl_guard.google_cloud_scheduler_job.sweeper[0]: Creation complete after 4s [id=projects/<project>/locations/europe-west1/jobs/mig-flink-ttl-sweeper-trigger]
+module.flink_gke.helm_release.flink_operator[0]: Creation complete after 33s [id=flink-kubernetes-operator]
+module.flink_gke.kubernetes_cluster_role_binding.orchestrator[0]: Creating...
+module.flink_gke.kubernetes_annotations.flink_ksa[0]: Creating...
+module.flink_gke.kubernetes_cluster_role_binding.orchestrator[0]: Creation complete after 1s [id=mig-flink-orchestrator-admin]
+module.flink_gke.kubernetes_annotations.flink_ksa[0]: Creation complete after 1s [id=apiVersion=v1,kind=ServiceAccount,name=flink,namespace=flink-operator]
+
+Apply complete! Resources: 21 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+artifact_registry = "europe-west1-docker.pkg.dev/<project>/mig-flink"
+buckets = {
+  "landing" = "<project>-landing"
+  "recon" = "<project>-recon"
+}
+cloudsql_app_password = <sensitive>
+cloudsql_instance_connection_name = "<project>:europe-west1:mig-flink-pg"
+cloudsql_jdbc_url = "jdbc:postgresql://10.144.0.3:5432/mig"
+cloudsql_private_ip = "10.144.0.3"
+env_file = <<EOT
+GCS_LANDING_BUCKET=<project>-landing
+GCS_RECON_BUCKET=<project>-recon
+CLOUDSQL_JDBC_URL=jdbc:postgresql://10.144.0.3:5432/mig
+CLOUDSQL_APP_USER=mig
+KAFKA_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+KAFKA_SECURITY_PROTOCOL=SASL_SSL
+TARGET_SYSTEM_CONFIRMATION_TOPIC=target-system-confirmations
+
+EOT
+flink_gke_cluster_name = "mig-flink-gke"
+kafka_bootstrap = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+orchestrator_job_name = "mig-flink-orchestrator"
+scheduler_job_name = "mig-flink-orchestrator-trigger"
+service_accounts = {
+  "composer-runner" = "mig-flink-composer-runner@<project>.iam.gserviceaccount.com"
+  "flink-job" = "mig-flink-flink-job@<project>.iam.gserviceaccount.com"
+  "gate" = "mig-flink-gate@<project>.iam.gserviceaccount.com"
+  "recon-service" = "mig-flink-recon-service@<project>.iam.gserviceaccount.com"
+  "target-system-mock" = "mig-flink-target-system-mock@<project>.iam.gserviceaccount.com"
+}
+target_system_mock_url = "<service-url>"
+ttl_expires_at = "2026-10-22T14:05:49Z"
+exit 0

@@ -1,0 +1,13 @@
+# source-seeder (spec "Seeding the source"): Python for spec/harness/load_db.py and generate.py, psql to run
+# the SQL load_db.py prints — the same path as `make seed` locally, so no Python Postgres driver is needed.
+# bookworm's postgresql-client is psql 15; seed.sh's `\getenv` needs psql >= 15.
+# Context: implementations/; see Dockerfile.orchestrator for the command.
+FROM docker.io/library/python:3.12-slim-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY --from=spec harness/load_db.py harness/generate.py /seed/harness/
+COPY --from=spec fixtures/ACCOUNT.src /seed/fixtures/ACCOUNT.src
+COPY flink/sql/postgres-init.sql flink-jdbc/sql/postgres-init-jdbc.sql /seed/sql/
+COPY flink-jdbc/gcp/seeder/seed.sh /seed/seed.sh
+RUN chmod +x /seed/seed.sh
+ENTRYPOINT ["/seed/seed.sh"]

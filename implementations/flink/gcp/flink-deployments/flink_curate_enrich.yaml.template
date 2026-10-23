@@ -1,0 +1,51 @@
+# FlinkDeployment CR for CurateEnrichJob — see flink_intake.yaml.template for the shared notes.
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-curate-enrich-${RUN_ID}
+  namespace: flink-operator
+spec:
+  image: REGION-docker.pkg.dev/PROJECT_ID/mig-flink/flink-job:${IMAGE_TAG}
+  flinkVersion: v2_2
+  imagePullPolicy: Always
+  flinkConfiguration:
+    execution.runtime-mode: BATCH
+    taskmanager.numberOfTaskSlots: "4"
+  serviceAccount: flink
+  # The database password arrives as the Secret `mig-db` (created by the orchestrator), exposed as
+  # the environment variable the job's "env:JDBC_PASSWORD" argument names. `optional: true` so the
+  # older DB_PASSWORD_MODE=arg path — where no Secret exists — still starts. See
+  # mig.common.ConnectionArgs.
+  podTemplate:
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mig-db
+                  key: password
+                  optional: true
+  jobManager:
+    resource:
+      memory: "1024m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  job:
+    jarURI: local:///opt/flink/usrlib/job.jar
+    entryClass: mig.sql.CurateEnrichJob
+    args:
+      - "${RUN_ID}"
+      - "${AS_OF_DATE}"
+      - "${JDBC_URL}"
+      - "${JDBC_USER}"
+      - "${JDBC_PASSWORD}"
+      - "/opt/flink"
+    parallelism: 1
+    upgradeMode: stateless

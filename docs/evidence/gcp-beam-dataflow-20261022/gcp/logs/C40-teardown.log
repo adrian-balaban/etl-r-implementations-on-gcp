@@ -1,0 +1,16 @@
+# C40 teardown (beam-dataflow): keep the state bucket, plan -destroy, apply, 2026-10-22T15:09:10Z
+Successfully removed 17 resource instance(s).
+Plan: 0 to add, 0 to change, 75 to destroy.
+module.iam.google_service_account.this["dataform-runner"]: Destruction complete after 0s
+module.iam.google_service_account.this["target-system-mock"]: Destruction complete after 1s
+module.iam.google_service_account.this["recon-service"]: Destruction complete after 1s
+module.iam.google_service_account.this["composer-runner"]: Destruction complete after 1s
+module.iam.google_service_account.this["dataflow-worker"]: Destruction complete after 1s
+module.iam.google_service_account.this["loader-app"]: Destruction complete after 1s
+module.vpc_connector.google_vpc_access_connector.this[0]: Destruction complete after 3m33s
+module.kafka.google_managed_kafka_cluster.this[0]: Destruction complete after 9m26s
+module.network.google_compute_subnetwork.this: Destroying... [id=projects/<project>/regions/europe-west1/subnetworks/mig-subnet]
+module.network.google_compute_subnetwork.this: Destruction complete after 21s
+module.network.google_compute_network.this: Destroying... [id=projects/<project>/global/networks/mig-vpc]
+module.network.google_compute_network.this: Destruction complete after 22s
+exit-apply 0

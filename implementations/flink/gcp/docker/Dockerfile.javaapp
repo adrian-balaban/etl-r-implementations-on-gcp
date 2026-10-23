@@ -1,0 +1,42 @@
+# Generic Java app image — one Dockerfile, one module per build, chosen by MIG_MODULE.
+# Mirrors beam-dataflow's Dockerfile.javaapp. Builds gate,
+# recon, or target-system-mock — whichever module's shade-plugin jar is needed.
+#
+#   podman build --build-arg MIG_MODULE=gate -f gcp/docker/Dockerfile.javaapp -t gate .
+#   podman build --build-arg MIG_MODULE=recon -f gcp/docker/Dockerfile.javaapp -t recon-service .
+#   podman build --build-arg MIG_MODULE=target-system-mock -f gcp/docker/Dockerfile.javaapp -t target-system-mock .
+
+FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+
+ARG MIG_MODULE
+WORKDIR /build
+
+COPY pom.xml ./
+COPY common/pom.xml ./common/pom.xml
+COPY gate/pom.xml ./gate/pom.xml
+COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+COPY recon/pom.xml ./recon/pom.xml
+COPY component-tests/pom.xml ./component-tests/pom.xml
+RUN mvn -B -q -pl "${MIG_MODULE}" -am dependency:go-offline -DskipTests
+
+COPY common/src ./common/src
+COPY "${MIG_MODULE}/src" "./${MIG_MODULE}/src"
+
+# finalName differs from the module directory for `recon` (jar is recon-service.jar),
+# and a plain (non-shaded, no Main-Class manifest) jar with the Maven version suffix
+# also lands in target/ alongside the shaded uber-jar — sorting by name picks the wrong
+# one (e.g. "target-system-mock-0.1.0.jar" < "target-system-mock.jar" lexicographically).
+# The shaded jar is always the largest, so pick by size instead of by name.
+RUN mvn -B -q -pl "${MIG_MODULE}" -am package -DskipTests \
+ && ls -la "${MIG_MODULE}"/target/*.jar \
+ && cp "$(ls -S ${MIG_MODULE}/target/*.jar | grep -v original- | head -1)" /build/app.jar
+
+# ── runtime ───────────────────────────────────────────────────────────────────
+FROM docker.io/library/eclipse-temurin:17-jre
+
+COPY --from=build /build/app.jar /app/app.jar
+
+# The JVM default is 25% of the container's memory (128 MB of a 512 Mi Cloud Run instance).
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=70", "-jar", "/app/app.jar"]

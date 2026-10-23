@@ -1,0 +1,66 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.uv/
+
+# Java / Maven
+target/
+*.class
+
+# Node (Dataform CLI)
+node_modules/
+dataform/.df-credentials.json
+dataform/.df/
+
+# Local runtime state — generated, never committed
+local/keys/
+local/state/
+local/data/
+out/
+.env
+.env.local
+# The generated GCP environment — real project id, bucket names and the Cloud Run URL.
+.env.gcp
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+.terraform.lock.hcl
+
+# OS / editor
+.DS_Store
+*.swp
+
+# Claude Code agent-local settings
+.claude/
+# Service-account keys — the whole directory, never one filename (this repo is public).
+terraform/envs/dev/sa-json-keys/
+tfplan*
+
+# Eclipse/VS Code Java extension metadata
+.project
+.classpath
+.settings/
+docs/plantuml/Arhi*.jpeg
+docs/plantuml/prepare*.org
+various/*
+docs/status26082026/*
+docs/plantuml/17-*.*
+docs/plantuml/18-*.*
+docs/plantuml/19-*.*
+docs/plantuml/20-*.*
+docs/plantuml/21-*.*
+docs/plantuml/22-*.*
+docs/plantuml/23-*.*
+
+tmp/*
+terraform/envs/*/terraform.tfvars
+
+# Terraform plan files carry a copy of the state, including short-lived access tokens: never commit
+*.plan
+*.tfplan

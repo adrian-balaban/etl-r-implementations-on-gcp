@@ -1,0 +1,63 @@
+# FlinkDeployment CR for IntakeJob — one of three, alongside
+# flink_curate_enrich.yaml.template and flink_produce.yaml.template (same shape, different
+# jarURI main class / args).
+#
+# TEMPLATE, not a static manifest: ${RUN_ID}, ${LANDING_BUCKET}, ${JDBC_URL},
+# ${IMAGE_TAG} are substituted before `kubectl apply` — by envsubst or an equivalent
+# rendering step the DAG's flink_intake task runs before applying (NOT wired in this
+# pass; the DAG task in gcp/composer/dags/mig_flink.py assumes an already-rendered file
+# at /manifests/flink_intake.yaml — rendering it per run_id is the missing step,
+# analogous to how *.sql.template files are rendered by Java, not by hand).
+#
+# apiVersion/kind per the Flink Kubernetes Operator's own CRD — NOT verified against the
+# operator version pinned in terraform/modules/flink_gke/main.tf.
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-intake-${RUN_ID}
+  namespace: flink-operator
+spec:
+  image: REGION-docker.pkg.dev/PROJECT_ID/mig-flink/flink-job:${IMAGE_TAG}
+  flinkVersion: v2_2
+  imagePullPolicy: Always
+  flinkConfiguration:
+    execution.runtime-mode: BATCH  # never streaming
+    taskmanager.numberOfTaskSlots: "4"
+  serviceAccount: flink
+  # The database password arrives as the Secret `mig-db` (created by the orchestrator), exposed as
+  # the environment variable the job's "env:JDBC_PASSWORD" argument names. `optional: true` so the
+  # older DB_PASSWORD_MODE=arg path — where no Secret exists — still starts. See
+  # mig.common.ConnectionArgs.
+  podTemplate:
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mig-db
+                  key: password
+                  optional: true
+  jobManager:
+    resource:
+      memory: "1024m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  job:
+    jarURI: local:///opt/flink/usrlib/job.jar
+    entryClass: mig.sql.IntakeJob
+    args:
+      - "gs://${LANDING_BUCKET}/work/${RUN_ID}/ACCOUNT.src"
+      - "${RUN_ID}"
+      - "${JDBC_URL}"
+      - "${JDBC_USER}"
+      - "${JDBC_PASSWORD}"
+      - "/opt/flink" # repoRoot — contracts/ baked into the image (Dockerfile.flinkjob COPY), so no GCS read needed at parse time
+    parallelism: 1
+    upgradeMode: stateless # batch: no savepoint to preserve across a resubmission

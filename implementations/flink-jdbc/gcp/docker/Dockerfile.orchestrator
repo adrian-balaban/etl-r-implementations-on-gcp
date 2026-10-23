@@ -1,0 +1,39 @@
+# flink-jdbc orchestrator image (module.scheduler's Cloud Run Job and module.ttl_guard's sweeper).
+# Context: implementations/ (both lanes' sources). Build with gcp/docker/build.sh, or from implementations/:
+#   podman build --build-context spec=../spec --ignorefile flink-jdbc/gcp/docker/build.ignore \
+#     -f flink-jdbc/gcp/docker/Dockerfile.orchestrator -t <registry>/orchestrator:<tag> .
+FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /build
+# Every reactor POM: Maven refuses a reactor with a missing module.
+COPY flink/pom.xml flink/pom.xml
+COPY flink/common/pom.xml flink/common/pom.xml
+COPY flink/variant-flink-sql-batch-job/pom.xml flink/variant-flink-sql-batch-job/pom.xml
+COPY flink/recon/pom.xml flink/recon/pom.xml
+COPY flink/target-system-mock/pom.xml flink/target-system-mock/pom.xml
+COPY flink-jdbc/pom.xml flink-jdbc/pom.xml
+COPY flink-jdbc/gate-jdbc/pom.xml flink-jdbc/gate-jdbc/pom.xml
+COPY flink-jdbc/intake-jdbc/pom.xml flink-jdbc/intake-jdbc/pom.xml
+COPY flink-jdbc/component-tests-jdbc/pom.xml flink-jdbc/component-tests-jdbc/pom.xml
+RUN mvn -B -q -f flink-jdbc/pom.xml -pl :gate-jdbc,:recon -am dependency:go-offline -DskipTests
+COPY flink/common/src flink/common/src
+COPY flink/recon/src flink/recon/src
+COPY flink-jdbc/gate-jdbc/src flink-jdbc/gate-jdbc/src
+RUN mvn -B -q -f flink-jdbc/pom.xml -pl :gate-jdbc,:recon -am package -DskipTests \
+ && cp flink-jdbc/gate-jdbc/target/gate-jdbc.jar /build/gate-jdbc.jar \
+ && cp flink/recon/target/recon-service.jar /build/recon-service.jar
+
+FROM docker.io/google/cloud-sdk:slim
+# The auth plugin is not optional: without it kubectl fails on GKE with "gke-gcloud-auth-plugin: not found".
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openjdk-21-jre-headless kubectl google-cloud-cli-gke-gcloud-auth-plugin \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+# gate-jdbc.jar carries both gate-jdbc (Main-Class) and recon-jdbc (java -cp … mig.gatejdbc.ReconJdbc).
+COPY --from=build /build/gate-jdbc.jar /app/gate-jdbc.jar
+COPY --from=build /build/recon-service.jar /app/recon-service.jar
+COPY flink-jdbc/gcp/flink-deployments/flink_intake_jdbc.yaml.template /manifests/
+COPY flink/gcp/flink-deployments/flink_curate_enrich.yaml.template flink/gcp/flink-deployments/flink_produce.yaml.template /manifests/
+COPY flink-jdbc/gcp/orchestrator/run.sh /app/run.sh
+COPY flink/gcp/ttl/sweep.sh /app/sweep.sh
+RUN chmod +x /app/run.sh /app/sweep.sh
+ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
+ENTRYPOINT ["/app/run.sh"]

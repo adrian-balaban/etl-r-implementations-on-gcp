@@ -1,0 +1,68 @@
+# infrastructure as deployed (flink), 2026-10-22T11:25:49Z
+
+## GKE
+NAME: mig-flink-gke
+LOCATION: europe-west1
+CURRENT_MASTER_VERSION: 1.36.4-gke.1495002
+CURRENT_NODE_COUNT: 1
+CHANNEL: REGULAR
+NETWORK: mig-flink-vpc
+SUBNETWORK: mig-flink-subnet
+NAME: flink-pool
+MACHINE_TYPE: e2-standard-4
+DISK_SIZE_GB: 100
+MIN_NODE_COUNT: 1
+MAX_NODE_COUNT: 3
+STATUS: RUNNING
+
+## Cloud SQL
+NAME: mig-flink-pg
+DATABASE_VERSION: POSTGRES_16
+TIER: db-custom-1-3840
+EDITION: ENTERPRISE
+AVAILABILITY_TYPE: ZONAL
+IPV4_ENABLED: False
+STATE: RUNNABLE
+
+## Managed Kafka
+capacityConfig:
+  memoryBytes: '3221225472'
+  vcpuCount: '3'
+name: projects/<project>/locations/europe-west1/clusters/mig-flink-kafka
+state: ACTIVE
+ERROR: (gcloud.managed-kafka.topics.list) unrecognized arguments: --cluster=mig-flink-kafka (did you mean '--filter'?) 
+
+To search the help text of gcloud commands, run:
+  gcloud help -- SEARCH_TERMS
+
+## Cloud Run
+NAME: mig-flink-target-system-mock
+IMAGE: target-system-mock:136a32f
+STATUS: True
+NAME: mig-flink-orchestrator
+IMAGE: orchestrator:136a32f
+
+NAME: mig-flink-ttl-sweeper
+IMAGE: orchestrator:136a32f
+
+## Scheduler
+ID: mig-flink-ttl-sweeper-trigger
+SCHEDULE: 17 * * * *
+STATE: ENABLED
+
+ID: mig-flink-orchestrator-trigger
+SCHEDULE: * * * * *
+STATE: ENABLED
+
+## TTL guard
+expires-at: 1792677949 (2026-10-22T14:05:49Z)
+
+## Artifact Registry images
+Listing items under project <project>, location europe-west1, repository mig-flink.
+
+IMAGE: flink-job
+TAG: 
+
+IMAGE: orchestrator
+TAG: 
+

@@ -1,0 +1,47 @@
+{
+  "runId" : "run-fixture-20261022",
+  "ok" : true,
+  "balance" : {
+    "written" : 50,
+    "balanced" : true,
+    "srcRead" : 53,
+    "rejected" : 3
+  },
+  "batches" : {
+    "count" : 1,
+    "size" : 200,
+    "consistent" : true,
+    "lastBatchSize" : 50
+  },
+  "stages" : [ {
+    "holds" : true,
+    "stage" : "intake",
+    "rhs" : 53,
+    "equation" : "account_src + parse rejects = src_read",
+    "lhs" : 53
+  }, {
+    "holds" : true,
+    "stage" : "curate",
+    "rhs" : 52,
+    "equation" : "account_curated = account_src",
+    "lhs" : 52
+  }, {
+    "holds" : true,
+    "stage" : "enrich",
+    "rhs" : 52,
+    "equation" : "account_enriched = account_curated",
+    "lhs" : 52
+  }, {
+    "holds" : true,
+    "stage" : "produce",
+    "rhs" : 52,
+    "equation" : "account_target + map/schema rejects = account_enriched",
+    "lhs" : 52
+  } ],
+  "settle" : {
+    "checked" : true,
+    "confirmed" : 50,
+    "targetRows" : 50,
+    "unconfirmed" : [ ]
+  }
+}

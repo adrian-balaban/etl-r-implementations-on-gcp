@@ -1,0 +1,27 @@
+# Dataform project settings — architecture diagram's "Transformation Engine / SQL Transformation" box.
+#
+# These are real Dataform artefacts, not a local approximation. `dataform compile` is a
+# purely local operation, so the same .sqlx files compile here and execute unchanged in a
+# Dataform repository on GCP (see docs/runbook-gcp.md). Only the *executor* differs:
+# locally, and by default on GCP (composer/dags/etlr_beam.py's
+# MIG_DATAFORM_EXECUTION_MODE=pod), local/scripts/run_dataform.py compiles this project
+# with the CLI and runs the SQL itself; with MIG_DATAFORM_EXECUTION_MODE=managed and the
+# repository linked to GitHub, the
+# Dataform service compiles and runs it instead, invoked by Composer's managed operators.
+
+dataformCoreVersion: 3.0.0
+
+defaultProject: mig-local
+defaultDataset: etlr_transformation
+# EU here is only what a local/CLI compile uses. The managed path overrides this per
+# compilation via code_compilation_config.default_location, which must equal
+# terraform var.region — see the "Location mismatch" risk.
+defaultLocation: EU
+defaultAssertionDataset: etlr_recon
+
+vars:
+  extractionDataset: etlr_extraction
+  transformationDataset: etlr_transformation
+  # Overridden per run: `dataform compile --vars=runId=...`. Reconciliation always
+  # scopes to one run id.
+  runId: ""

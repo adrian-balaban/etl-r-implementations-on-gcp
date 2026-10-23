@@ -1,0 +1,74 @@
+# infrastructure as deployed (flink-jdbc), 2026-10-22T12:35:00Z
+
+## GKE
+NAME: flink-pool
+MACHINE_TYPE: e2-standard-4
+DISK_SIZE_GB: 100
+MIN_NODE_COUNT: 1
+MAX_NODE_COUNT: 3
+STATUS: RUNNING
+
+## Cloud SQL (two instances)
+NAME: mig-flink-jdbc-lane
+DATABASE_VERSION: POSTGRES_16
+TIER: db-custom-1-3840
+EDITION: ENTERPRISE
+IPV4_ENABLED: False
+STATUS: RUNNABLE
+
+NAME: mig-flink-jdbc-src
+DATABASE_VERSION: POSTGRES_16
+TIER: db-custom-1-3840
+EDITION: ENTERPRISE
+IPV4_ENABLED: False
+STATUS: RUNNABLE
+
+## Managed Kafka
+capacityConfig:
+  memoryBytes: '3221225472'
+  vcpuCount: '3'
+state: ACTIVE
+
+## Cloud Run
+NAME: mig-flink-target-system-mock
+IMAGE: target-system-mock:136a32f
+NAME: mig-flink-jdbc-source-seeder
+IMAGE: source-seeder:136a32f
+
+NAME: mig-flink-orchestrator
+IMAGE: orchestrator:136a32f
+
+NAME: mig-flink-ttl-sweeper
+IMAGE: orchestrator:136a32f
+
+## Scheduler
+ID: mig-flink-ttl-sweeper-trigger
+SCHEDULE: 17 * * * *
+STATE: ENABLED
+
+ID: mig-flink-orchestrator-trigger
+SCHEDULE: * * * * *
+STATE: ENABLED
+
+## TTL guard
+expires-at: 2026-10-22T15:06:00Z
+
+## landing bucket
+gs://<project>-landing/done/:
+        63  2026-10-22T12:32:51Z  gs://<project>-landing/done/run-200k-20261022.done
+        63  2026-10-22T12:20:00Z  gs://<project>-landing/done/run-fixture-20261022.done
+        77  2026-10-22T12:21:15Z  gs://<project>-landing/evidence/run-fixture-20261022/source_read.tsv
+      7013  2026-10-22T12:21:13Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/account_curated.tsv
+      7207  2026-10-22T12:21:13Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/account_enriched.tsv
+      8894  2026-10-22T12:21:13Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/account_src.tsv
+     21139  2026-10-22T12:21:14Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/account_target.tsv
+       506  2026-10-22T12:21:14Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/record_lineage.tsv
+      1343  2026-10-22T12:21:14Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/reject_log.tsv
+       110  2026-10-22T12:21:15Z  gs://<project>-landing/evidence/run-fixture-20261022/tables/run_ledger.tsv
+gs://<project>-landing/recon-reports/:
+         0  2026-10-22T12:15:36Z  gs://<project>-landing/recon-reports/
+      1759  2026-10-22T12:32:49Z  gs://<project>-landing/recon-reports/recon-run-200k-20261022.html
+      1007  2026-10-22T12:32:49Z  gs://<project>-landing/recon-reports/recon-run-200k-20261022.json
+      1713  2026-10-22T12:19:59Z  gs://<project>-landing/recon-reports/recon-run-fixture-20261022.html
+       958  2026-10-22T12:19:58Z  gs://<project>-landing/recon-reports/recon-run-fixture-20261022.json
+TOTAL: 19 objects, 51863 bytes (50.65 KiB)

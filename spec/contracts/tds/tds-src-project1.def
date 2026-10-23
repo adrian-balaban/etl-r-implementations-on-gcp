@@ -1,0 +1,28 @@
+# SRC-TDS — project1 (retail accounts out of the Source System's relational database via the Extractor)
+#
+# Homogeneous definition: every field here is `.DAT`,
+# addressed by column (pipe-delimited). No field is JSON — a record definition is one
+# format, never both. Enrichment fields (segment, branch, riskRating, branchName) are no
+# longer carried on the source record; they are joined in by Dataform/the enrichment
+# pipeline downstream (see `curated.aliases` in mapping-project1.yaml) and are absent
+# (null) on any path that reads SRC directly.
+#
+# Pipe-delimited CSV only — the fixed-width copybook layout was removed
+# (the reference COBOL PIC clauses
+# that used to live at contracts/copybooks/ACCOUNT.cpy are gone with it).
+#
+# The layout carries a header row (contracts/README.md "Source `.DAT` physical format"):
+# the first line names the columns and is skipped by `RecordParser.is_header`, not parsed
+# as a record.
+
+record ACCOUNT
+  layout csv    delimiter=|  header=true
+
+  field ACCT_ID       col=0  type=string   required=true
+  field CUST_ID       col=1  type=string   required=true
+  field CLIENT_TYPE   col=2  type=string   required=true
+  field PRODUCT_CODE  col=3  type=string   required=true
+  field CURRENCY      col=4  type=string   required=true
+  field OPEN_DATE     col=5  type=date     required=true
+  field STATUS        col=6  type=string   required=true
+  field BALANCE       col=7  type=decimal  scale=2  required=true

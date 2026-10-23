@@ -1,0 +1,19 @@
+# schema init from a pod on the VPC, 2026-10-22T11:06:37Z
+kubeconfig entry generated for mig-flink-gke.
+cloud sql private ip: 10.144.0.3
+namespaces: namespace/default namespace/flink-operator namespace/gke-managed-cim namespace/gke-managed-filestorecsi namespace/gke-managed-networking-dra-driver namespace/gke-managed-system namespace/gke-managed-volumepopulator namespace/gmp-public namespace/gmp-system namespace/kube-node-lease namespace/kube-public namespace/kube-system 
+operator pods: flink-kubernetes-operator-6c97f5d8c5-hfsls Running;
+$ kubectl -n flink-operator run schema-init --rm -i --restart=Never --image=postgres:16 --env=PGPASSWORD=<from Secret Manager> -- psql -h <cloudsql-private-ip> -U mig -d mig -v ON_ERROR_STOP=1 -f - < sql/postgres-init.sql
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+CREATE SCHEMA
+CREATE SCHEMA
+CREATE SCHEMA
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+pod "schema-init" deleted from flink-operator namespace

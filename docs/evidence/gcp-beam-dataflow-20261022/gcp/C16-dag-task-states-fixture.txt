@@ -1,0 +1,16 @@
+# C16 DAG run state + task states, fixture run, 2026-10-22T14:19:05Z
+Executing the command: [ airflow dags list-runs -d etlr_beam_migration ]...
+dag_id              | run_id                            | state   | execution_date            | start_date                       | end_date
+====================+===================================+=========+===========================+==================================+=================================
+etlr_beam_migration | manual__2026-10-22T13:51:40+00:00 | success | 2026-10-22T13:51:40+00:00 | 2026-10-22T13:52:35.261482+00:00 | 2026-10-22T14:18:42.652548+00:00
+Executing the command: [ airflow tasks states-for-dag-run etlr_beam_migration manual__2026-10-22T13:51:40+00:00 ]...
+dag_id              | execution_date            | task_id             | state   | start_date                       | end_date
+====================+===========================+=====================+=========+==================================+=================================
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | recon               | success | 2026-10-22T14:18:07.839417+00:00 | 2026-10-22T14:18:29.983386+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | assert_run_balanced | success | 2026-10-22T14:18:33.921625+00:00 | 2026-10-22T14:18:41.783984+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | intake              | success | 2026-10-22T13:52:45.536326+00:00 | 2026-10-22T13:58:07.907412+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | gate                | success | 2026-10-22T13:52:40.355783+00:00 | 2026-10-22T13:52:42.277586+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | enrich              | success | 2026-10-22T13:58:49.342213+00:00 | 2026-10-22T14:03:09.723791+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | curate_run          | success | 2026-10-22T13:58:13.008758+00:00 | 2026-10-22T13:58:45.430658+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | produce             | success | 2026-10-22T14:03:14.223944+00:00 | 2026-10-22T14:07:52.841225+00:00
+etlr_beam_migration | 2026-10-22T13:51:40+00:00 | load                | success | 2026-10-22T14:16:35.423048+00:00 | 2026-10-22T14:17:59.732913+00:00

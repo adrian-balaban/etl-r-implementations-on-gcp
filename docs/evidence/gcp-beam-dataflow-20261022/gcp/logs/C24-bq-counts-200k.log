@@ -1,0 +1,12 @@
+account_src        200002
+account_curated    200002
+account_enriched   200002
+account_target     200000
+reject_log         5
+record_lineage     5
+run_ledger         [{'run_id': 'run-gcp-200k-20261022', 'src_read': 200005, 'extraction_written': 200002, 'rejected': 3, 'balanced': True}]
+reject map MAP_UNMAPPED_ENUM_VALUE 1
+reject parse PARSE_BAD_COLUMN_COUNT 1
+reject parse PARSE_BAD_DATE 1
+reject parse PARSE_BAD_NUMERIC 1
+reject schema SCHEMA_INVALID 1

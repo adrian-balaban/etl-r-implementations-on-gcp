@@ -1,0 +1,357 @@
+# terraform apply, stage (b) infrastructure, 2026-10-22T11:53:21Z
+random_password.etlr_reader: Creating...
+random_password.etlr_reader: Creation complete after 0s [id=none]
+module.iam.google_service_account.this["composer-runner"]: Creating...
+module.iam.google_service_account.this["target-system-mock"]: Creating...
+module.cloudsql.random_password.app_user[0]: Creating...
+module.network.google_compute_network.this: Creating...
+module.iam.google_service_account.this["gate"]: Creating...
+module.iam.google_service_account.this["flink-job"]: Creating...
+module.iam.google_service_account.this["recon-service"]: Creating...
+module.artifact_registry.google_artifact_registry_repository.this: Creating...
+module.storage.google_storage_bucket.this["recon"]: Creating...
+module.storage.google_storage_bucket.this["landing"]: Creating...
+module.cloudsql.random_password.app_user[0]: Creation complete after 0s [id=none]
+module.secrets.google_secret_manager_secret.this["etlr-source-db"]: Creating...
+module.storage.google_storage_bucket.this["landing"]: Creation complete after 2s [id=<project>-landing]
+module.secrets.google_secret_manager_secret.this["pgp-passphrase"]: Creating...
+module.secrets.google_secret_manager_secret.this["etlr-source-db"]: Creation complete after 2s [id=projects/<project>/secrets/etlr-source-db]
+module.secrets.google_secret_manager_secret.this["cloudsql-app-password"]: Creating...
+module.storage.google_storage_bucket.this["recon"]: Creation complete after 2s [id=<project>-recon]
+module.secrets.google_secret_manager_secret.this["pgp-private-key"]: Creating...
+module.secrets.google_secret_manager_secret.this["pgp-passphrase"]: Creation complete after 0s [id=projects/<project>/secrets/pgp-passphrase]
+module.secrets.google_secret_manager_secret.this["etlr-source-admin"]: Creating...
+module.secrets.google_secret_manager_secret.this["cloudsql-app-password"]: Creation complete after 0s [id=projects/<project>/secrets/cloudsql-app-password]
+module.secrets.google_secret_manager_secret.this["pgp-private-key"]: Creation complete after 1s [id=projects/<project>/secrets/pgp-private-key]
+module.secrets.google_secret_manager_secret.this["etlr-source-admin"]: Creation complete after 1s [id=projects/<project>/secrets/etlr-source-admin]
+module.iam.google_service_account.this["composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["target-system-mock"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["recon-service"]: Still creating... [10s elapsed]
+module.iam.google_service_account.this["gate"]: Still creating... [10s elapsed]
+module.network.google_compute_network.this: Still creating... [10s elapsed]
+module.iam.google_service_account.this["flink-job"]: Still creating... [10s elapsed]
+module.artifact_registry.google_artifact_registry_repository.this: Still creating... [10s elapsed]
+module.iam.google_service_account.this["gate"]: Creation complete after 13s [id=projects/<project>/serviceAccounts/mig-flink-gate@<project>.iam.gserviceaccount.com]
+module.artifact_registry.google_artifact_registry_repository.this: Creation complete after 13s [id=projects/<project>/locations/europe-west1/repositories/mig-flink]
+module.iam.google_service_account.this["composer-runner"]: Creation complete after 13s [id=projects/<project>/serviceAccounts/mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["target-system-mock"]: Creation complete after 14s [id=projects/<project>/serviceAccounts/mig-flink-target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["flink-job"]: Still creating... [20s elapsed]
+module.iam.google_service_account.this["recon-service"]: Still creating... [20s elapsed]
+module.network.google_compute_network.this: Still creating... [20s elapsed]
+module.network.google_compute_network.this: Creation complete after 22s [id=projects/<project>/global/networks/mig-flink-vpc]
+module.cloudsql.google_compute_global_address.private_ip_range[0]: Creating...
+module.network.google_compute_router.this: Creating...
+module.network.google_compute_firewall.flink_internal: Creating...
+module.vpc_connector.google_vpc_access_connector.this[0]: Creating...
+module.network.google_compute_subnetwork.this: Creating...
+module.iam.google_service_account.this["recon-service"]: Creation complete after 29s [id=projects/<project>/serviceAccounts/mig-flink-recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_service_account.this["flink-job"]: Creation complete after 29s [id=projects/<project>/serviceAccounts/mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["landing/flink-job"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/recon-service"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/flink-job"]: Creating...
+module.secrets.google_secret_manager_secret_iam_member.accessor["etlr-source-admin"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["landing/gate"]: Creating...
+module.cloudsql.google_compute_global_address.private_ip_range[0]: Still creating... [10s elapsed]
+module.network.google_compute_router.this: Still creating... [10s elapsed]
+module.network.google_compute_firewall.flink_internal: Still creating... [10s elapsed]
+module.network.google_compute_subnetwork.this: Still creating... [10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [10s elapsed]
+module.iam.google_storage_bucket_iam_member.this["recon/flink-job"]: Creation complete after 4s [id=b/<project>-recon/roles/storage.objectViewer/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessor["etlr-source-db"]: Creating...
+module.network.google_compute_router.this: Creation complete after 11s [id=projects/<project>/regions/europe-west1/routers/mig-flink-router]
+module.secrets.google_secret_manager_secret_iam_member.accessor["cloudsql-app-password"]: Creating...
+module.iam.google_storage_bucket_iam_member.this["landing/flink-job"]: Creation complete after 5s [id=b/<project>-landing/roles/storage.objectAdmin/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.network.google_compute_firewall.flink_internal: Creation complete after 11s [id=projects/<project>/global/firewalls/mig-allow-flink-internal]
+module.secrets.google_secret_manager_secret_iam_member.accessor["etlr-source-admin"]: Creation complete after 6s [id=projects/<project>/secrets/etlr-source-admin/roles/secretmanager.secretAccessor/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.cloudsql.google_compute_global_address.private_ip_range[0]: Creation complete after 14s [id=projects/<project>/global/addresses/mig-flink-cloudsql-range]
+module.cloudsql.google_service_networking_connection.this[0]: Creating...
+module.iam.google_storage_bucket_iam_member.this["recon/recon-service"]: Creation complete after 8s [id=b/<project>-recon/roles/storage.objectAdmin/serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_storage_bucket_iam_member.this["landing/gate"]: Creation complete after 9s [id=b/<project>-landing/roles/storage.objectAdmin/serviceAccount:mig-flink-gate@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessor["etlr-source-db"]: Creation complete after 6s [id=projects/<project>/secrets/etlr-source-db/roles/secretmanager.secretAccessor/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret_iam_member.accessor["cloudsql-app-password"]: Creation complete after 5s [id=projects/<project>/secrets/cloudsql-app-password/roles/secretmanager.secretAccessor/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [20s elapsed]
+module.network.google_compute_subnetwork.this: Still creating... [20s elapsed]
+module.network.google_compute_subnetwork.this: Creation complete after 21s [id=projects/<project>/regions/europe-west1/subnetworks/mig-flink-subnet]
+module.kafka.google_managed_kafka_cluster.this[0]: Creating...
+module.network.google_compute_router_nat.this: Creating...
+module.flink_gke.google_container_cluster.this[0]: Creating...
+module.cloudsql.google_service_networking_connection.this[0]: Still creating... [10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [10s elapsed]
+module.network.google_compute_router_nat.this: Still creating... [10s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [10s elapsed]
+module.network.google_compute_router_nat.this: Creation complete after 11s [id=<project>/europe-west1/mig-flink-router/mig-flink-nat]
+module.cloudsql.google_service_networking_connection.this[0]: Still creating... [20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [20s elapsed]
+module.cloudsql.google_service_networking_connection.this[0]: Still creating... [30s elapsed]
+module.cloudsql.google_service_networking_connection.this[0]: Creation complete after 33s [id=projects%2F<project>%2Fglobal%2Fnetworks%2Fmig-flink-vpc:servicenetworking.googleapis.com]
+module.cloudsql.google_sql_database_instance.this[0]: Creating...
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [30s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [40s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [50s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [50s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [30s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m0s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m0s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [40s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m10s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m10s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [50s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m20s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m0s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [1m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m30s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m10s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [2m0s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m40s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m20s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [1m50s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [1m50s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m30s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Still creating... [2m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m0s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m40s elapsed]
+module.vpc_connector.google_vpc_access_connector.this[0]: Creation complete after 2m28s [id=projects/<project>/locations/europe-west1/connectors/mig-flink-vpc-connector]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m10s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [1m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m20s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m0s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m30s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m40s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [2m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [2m50s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m0s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m10s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [2m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m20s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [3m0s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m30s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [3m10s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m40s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [3m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [3m50s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [3m50s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [3m30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m0s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Still creating... [3m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m10s elapsed]
+module.cloudsql.google_sql_database_instance.this[0]: Creation complete after 3m47s [id=mig-flink-jdbc-lane]
+module.cloudsql.google_sql_database.mig[0]: Creating...
+module.cloudsql.google_sql_user.app[0]: Creating...
+module.cloudsql.google_sql_database.mig[0]: Creation complete after 0s [id=projects/<project>/instances/mig-flink-jdbc-lane/databases/mig]
+module.cloudsql.google_sql_user.app[0]: Creation complete after 1s [id=mig//mig-flink-jdbc-lane]
+module.cloudsql_source.random_password.app_user[0]: Creating...
+module.cloudsql_source.google_sql_database_instance.this[0]: Creating...
+module.cloudsql_source.random_password.app_user[0]: Creation complete after 0s [id=none]
+module.secrets.google_secret_manager_secret_version.value["etlr-source-db"]: Creating...
+module.secrets.google_secret_manager_secret_version.value["cloudsql-app-password"]: Creating...
+module.secrets.google_secret_manager_secret_version.value["etlr-source-admin"]: Creating...
+module.secrets.google_secret_manager_secret_version.value["cloudsql-app-password"]: Creation complete after 2s [id=projects/<project-number>/secrets/cloudsql-app-password/versions/1]
+module.secrets.google_secret_manager_secret_version.value["etlr-source-admin"]: Creation complete after 2s [id=projects/<project-number>/secrets/etlr-source-admin/versions/1]
+module.secrets.google_secret_manager_secret_version.value["etlr-source-db"]: Creation complete after 2s [id=projects/<project-number>/secrets/etlr-source-db/versions/1]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m20s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [10s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m30s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m40s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [4m50s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [4m50s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m0s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [5m0s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m10s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [5m10s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m20s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [5m20s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [5m30s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m40s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Still creating... [5m40s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m30s elapsed]
+module.flink_gke.google_container_cluster.this[0]: Creation complete after 5m50s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-gke]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [5m50s elapsed]
+module.flink_gke.google_container_node_pool.flink[0]: Creating...
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m0s elapsed]
+module.flink_gke.google_container_node_pool.flink[0]: Still creating... [10s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [1m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m10s elapsed]
+module.flink_gke.google_container_node_pool.flink[0]: Still creating... [20s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m20s elapsed]
+module.flink_gke.google_container_node_pool.flink[0]: Still creating... [30s elapsed]
+module.flink_gke.google_container_node_pool.flink[0]: Creation complete after 34s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-gke/nodePools/flink-pool]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m30s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m40s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [6m50s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m0s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [2m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m10s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Still creating... [3m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m20s elapsed]
+module.cloudsql_source.google_sql_database_instance.this[0]: Creation complete after 3m7s [id=mig-flink-jdbc-src]
+module.cloudsql_source.google_sql_database.mig[0]: Creating...
+module.cloudsql_source.google_sql_user.app[0]: Creating...
+module.cloudsql_source.google_sql_database.mig[0]: Creation complete after 1s [id=projects/<project>/instances/mig-flink-jdbc-src/databases/source]
+module.cloudsql_source.google_sql_user.app[0]: Creation complete after 1s [id=mig//mig-flink-jdbc-src]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [7m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [8m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m20s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m30s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m40s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [9m50s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [10m0s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Still creating... [10m10s elapsed]
+module.kafka.google_managed_kafka_cluster.this[0]: Creation complete after 10m17s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-kafka]
+module.kafka.google_managed_kafka_topic.this["confirmations"]: Creating...
+module.kafka.google_managed_kafka_topic.this["target"]: Creating...
+module.kafka.google_managed_kafka_topic.this["rejections"]: Creating...
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Creating...
+module.iam.google_project_iam_member.this["roles/container.developer/flink-job"]: Creating...
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Creating...
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Creating...
+module.iam.google_project_iam_member.this["roles/managedkafka.client/flink-job"]: Creating...
+module.kafka.google_managed_kafka_topic.this["rejections"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-kafka/topics/target-system-rejections]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Creating...
+module.kafka.google_managed_kafka_topic.this["confirmations"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-kafka/topics/target-system-confirmations]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Creating...
+module.kafka.google_managed_kafka_topic.this["target"]: Creation complete after 6s [id=projects/<project>/locations/europe-west1/clusters/mig-flink-kafka/topics/target-system-target]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles/managedkafka.client/flink-job"]: Creation complete after 10s [id=<project>/roles/managedkafka.client/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Creating...
+module.iam.google_project_iam_member.this["roles/container.developer/flink-job"]: Creation complete after 10s [id=<project>/roles/container.developer/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Creating...
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Still creating... [20s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Still creating... [30s elapsed]
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/recon-service"]: Creation complete after 47s [id=<project>/roles/managedkafka.client/serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/flink-job"]: Creating...
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/flink-job"]: Creation complete after 48s [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/container.developer/composer-runner"]: Creation complete after 48s [id=<project>/roles/container.developer/serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/monitoring.viewer/composer-runner"]: Creation complete after 48s [id=<project>/roles/monitoring.viewer/serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/flink-job"]: Creation complete after 49s [id=<project>/roles/artifactregistry.reader/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Still creating... [40s elapsed]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/composer-runner"]: Creation complete after 49s [id=<project>/roles/cloudsql.client/serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/recon-service"]: Creation complete after 49s [id=<project>/roles/cloudsql.client/serviceAccount:mig-flink-recon-service@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/secretmanager.secretAccessor/composer-runner"]: Creation complete after 50s [id=<project>/roles/secretmanager.secretAccessor/serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/flink-job"]: Still creating... [10s elapsed]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Still creating... [50s elapsed]
+module.iam.google_project_iam_member.this["roles/artifactregistry.reader/composer-runner"]: Creation complete after 52s [id=<project>/roles/artifactregistry.reader/serviceAccount:mig-flink-composer-runner@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/managedkafka.client/target-system-mock"]: Creation complete after 52s [id=<project>/roles/managedkafka.client/serviceAccount:mig-flink-target-system-mock@<project>.iam.gserviceaccount.com]
+module.iam.google_project_iam_member.this["roles/cloudsql.client/flink-job"]: Creation complete after 15s [id=<project>/roles/cloudsql.client/serviceAccount:mig-flink-flink-job@<project>.iam.gserviceaccount.com]
+
+Warning: Applied changes may be incomplete
+
+The plan was created with the -target option in effect, so some changes
+requested in the configuration may have been ignored and the output values
+may not be fully updated. Run the following command to verify that no other
+changes are pending:
+    terraform plan
+
+Note that the -target option is not suitable for routine use, and is provided
+only for exceptional situations such as recovering from errors or mistakes,
+or when Terraform specifically suggests to use it as part of an error
+message.
+
+Apply complete! Resources: 59 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+artifact_registry = "europe-west1-docker.pkg.dev/<project>/mig-flink"
+flink_gke_cluster_name = "mig-flink-gke"
+landing_bucket = "<project>-landing"
+lane_jdbc_url = "jdbc:postgresql://10.246.0.3:5432/mig"
+source_jdbc_url = "jdbc:postgresql://10.246.0.5:5432/source"
+exit 0

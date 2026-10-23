@@ -1,0 +1,17 @@
+{
+  "lane" : "load",
+  "record" : "ACCOUNT",
+  "runId" : "run-local-20261022",
+  "reportVersion" : 2,
+  "sink" : "kafka",
+  "generatedAt" : "2026-10-22T12:51:51.036457880Z",
+  "jsonFilesRead" : 1,
+  "documentsRead" : 50,
+  "published" : 50,
+  "accepted" : 0,
+  "duplicatesIgnored" : 50,
+  "errors" : 0,
+  "unsettled" : 0,
+  "retriesPerformed" : 0,
+  "sourceFiles" : [ "json/run-local-20261022/ACCOUNT.00000.json" ]
+}

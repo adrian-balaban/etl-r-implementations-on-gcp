@@ -1,0 +1,53 @@
+@startuml c2-containers
+' C4_Component (not C4_Container) because the two jars bundled inside the orchestrator
+' image are drawn as Component() — C4_Container.puml does not define that macro.
+!pragma layout smetana
+!include <C4/C4_Component>
+
+title Flink: one job runs the whole lane
+
+Person(operator, "Migration Operator", "Triggers a run; reads the recon report")
+
+System_Ext(producer, "Extract Producer", "harness/bundle.py")
+System_Ext(target_system, "Target System", "The mock: Kafka-only, idempotent on account_key")
+
+System_Boundary(migration, "Migration Lane") {
+    Container(gcs, "Landing Bucket", "GCS", "Bundles, locks, done-markers, recon reports")
+    Container(orchestrator, "Orchestrator", "Cloud Run Job", "One execution = the whole run")
+    Component(gate, "gate.jar", "Java, in the orchestrator image", "Refuses without .FLG; verifies .CHS; unpacks the source")
+    Component(recon_service, "recon-service.jar", "Java, in the orchestrator image", "Balances the run; settles against confirmations")
+    Container(flink_sql, "Flink SQL variant", "Flink 2.2.1, deployed", "Three sequential jobs: intake, curate + enrich, produce")
+    Container(flink_ds, "Flink DataStream variant", "Flink 2.2.1", "Parity oracle, not deployed. Never writes src, curated, enriched")
+    Container(common, "common", "Java library", "The one two-door engine")
+    ContainerDb(postgres, "Migration Database", "Cloud SQL Postgres 16", "etlr_extraction, etlr_transformation, etlr_recon")
+    ContainerQueue(kafka, "Message Broker", "Managed Kafka", "Documents, confirmations, rejections")
+}
+
+Rel(operator, orchestrator, "Enables / triggers a run_id")
+Rel(operator, gcs, "Reads recon-reports/recon-<runId>.html")
+Rel(producer, gcs, "Uploads ACCOUNT.tar.gz then ACCOUNT.FLG")
+
+Rel(orchestrator, gcs, "Waits for .FLG; holds the lock; writes the done-marker")
+Rel(orchestrator, gate, "Runs, once, before any Flink job")
+Rel(gate, gcs, "Unpacks the bundle into work/")
+
+Rel(orchestrator, flink_sql, "Applies each job; waits for FINISHED")
+Rel(flink_sql, gcs, "Intake reads the unpacked source")
+Rel(flink_sql, postgres, "Clears its run_id rows, then reads and writes", "JDBC")
+Rel(flink_sql, kafka, "Produce publishes documents", "upsert-kafka, at-least-once")
+Rel(flink_sql, common, "Contracts via Tds and Mapping; doors as SQL CASE")
+
+Rel(flink_ds, postgres, "account_target, reject_log, record_lineage only", "JDBC")
+Rel(flink_ds, kafka, "KafkaTargetSink")
+Rel(flink_ds, common, "Calls RecordRouter directly")
+
+Rel(orchestrator, recon_service, "Runs last; src_read comes from the producer's .CHS")
+Rel(recon_service, postgres, "Counts account_target + reject_log; writes run_ledger")
+Rel(recon_service, kafka, "Reads confirmations up to the end offsets")
+Rel(recon_service, gcs, "Writes recon-<runId>.{json,html}")
+
+Rel(kafka, target_system, "Delivers target documents")
+Rel(target_system, kafka, "Publishes confirmations and rejections")
+
+SHOW_LEGEND()
+@enduml

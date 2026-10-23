@@ -1,0 +1,19 @@
+# landing bucket layout after both runs, 2026-10-22T11:26:08Z
+gs://<project>-landing/done/:
+        63  2026-10-22T11:24:41Z  gs://<project>-landing/done/run-200k-20261022.done
+        63  2026-10-22T11:15:38Z  gs://<project>-landing/done/run-fixture-20261022.done
+        25  2026-10-22T11:17:34Z  gs://<project>-landing/extraction/run-200k-20261022/incoming/ACCOUNT.FLG
+   3607959  2026-10-22T11:17:34Z  gs://<project>-landing/extraction/run-200k-20261022/incoming/ACCOUNT.tar.gz
+        28  2026-10-22T11:07:17Z  gs://<project>-landing/extraction/run-fixture-20261022/incoming/ACCOUNT.FLG
+      1399  2026-10-22T11:07:17Z  gs://<project>-landing/extraction/run-fixture-20261022/incoming/ACCOUNT.tar.gz
+gs://<project>-landing/recon-reports/:
+         0  2026-10-22T11:15:35Z  gs://<project>-landing/recon-reports/
+      1759  2026-10-22T11:24:39Z  gs://<project>-landing/recon-reports/recon-run-200k-20261022.html
+      1007  2026-10-22T11:24:39Z  gs://<project>-landing/recon-reports/recon-run-200k-20261022.json
+      1713  2026-10-22T11:15:36Z  gs://<project>-landing/recon-reports/recon-run-fixture-20261022.html
+       958  2026-10-22T11:15:35Z  gs://<project>-landing/recon-reports/recon-run-fixture-20261022.json
+gs://<project>-landing/ttl/:
+        11  2026-10-22T11:05:50Z  gs://<project>-landing/ttl/expires-at
+  13400379  2026-10-22T11:18:03Z  gs://<project>-landing/work/run-200k-20261022/ACCOUNT.src
+      3729  2026-10-22T11:10:02Z  gs://<project>-landing/work/run-fixture-20261022/ACCOUNT.src
+TOTAL: 17 objects, 17019093 bytes (16.23 MiB)

@@ -1,0 +1,5 @@
+# conformance of the local run against the oracle, 2026-10-22T12:52:26Z
+$ python3 spec/conformance/compare.py <dump-dir> --profile staged
+  PASS  balanced, and src_read == written + rejected
+
+ALL CONFORMANCE CHECKS PASSED  (68 checks, profile staged)

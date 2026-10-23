@@ -1,0 +1,5 @@
+{
+  "runId" : "run-gcp-fixture-20261022",
+  "completedAt" : "2026-10-22T13:47:38.095129122Z",
+  "bundledArtefacts" : [ "ACCOUNT.001.DAT", "ACCOUNT.ERR", "ACCOUNT.CHS", "ACCOUNT.RPT" ]
+}

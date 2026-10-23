@@ -1,0 +1,343 @@
+2026-10-22T15:04:57.254132956Z  ::group::Pre task execution logs
+2026-10-22T15:04:57.301527457Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.recon manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T15:04:57.343202959Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.recon manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T15:04:57.343306882Z  Starting attempt 1 of 3
+2026-10-22T15:04:57.367407521Z  Executing <Task(KubernetesPodOperator): recon> on 2026-10-22 14:27:22+00:00
+2026-10-22T15:04:57.384824849Z  Started process 2245 to run task
+2026-10-22T15:04:57.437038058Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'recon', 'manual__2026-10-22T14:27:22+00:00', '--job-id', '29', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmpwue97ayw']
+2026-10-22T15:04:57.437096601Z  Job 29: Subtask recon
+2026-10-22T15:04:58.033142345Z  Running <TaskInstance: etlr_beam_migration.recon manual__2026-10-22T14:27:22+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T15:04:58.375185727Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='recon' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T14:27:22+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T14:27:22+00:00'
+2026-10-22T15:04:58.376771863Z  ::endgroup::
+2026-10-22T15:04:58.432459109Z  Building pod recon-ys55hxg2 with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'recon', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T15:04:58.790347139Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T15:04:59.029700272Z  Found matching pod recon-ys55hxg2 with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'task_id': 'recon', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T15:04:59.030229527Z  `try_number` of task_instance: 1
+2026-10-22T15:04:59.030438155Z  `try_number` of pod: 1
+2026-10-22T15:04:59.059982252Z  Pod not yet started: recon-ys55hxg2
+2026-10-22T15:05:12.494354465Z  [base] [main] INFO org.apache.kafka.common.config.AbstractConfig - ConsumerConfig values:
+2026-10-22T15:05:12.494620321Z  [base] 	allow.auto.create.topics = true
+2026-10-22T15:05:12.494905550Z  [base] 	auto.commit.interval.ms = 5000
+2026-10-22T15:05:12.495207028Z  [base] 	auto.offset.reset = earliest
+2026-10-22T15:05:12.495620635Z  [base] 	bootstrap.servers = [bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092]
+2026-10-22T15:05:12.495954373Z  [base] 	check.crcs = true
+2026-10-22T15:05:12.496313832Z  [base] 	client.dns.lookup = use_all_dns_ips
+2026-10-22T15:05:12.496581783Z  [base] 	client.id = consumer-recon-run-gcp-200k-20261022-1
+2026-10-22T15:05:12.496969028Z  [base] 	client.rack =
+2026-10-22T15:05:12.497182365Z  [base] 	config.providers = []
+2026-10-22T15:05:12.497438022Z  [base] 	connections.max.idle.ms = 540000
+2026-10-22T15:05:12.497743013Z  [base] 	default.api.timeout.ms = 60000
+2026-10-22T15:05:12.497982874Z  [base] 	enable.auto.commit = false
+2026-10-22T15:05:12.498289205Z  [base] 	enable.metrics.push = true
+2026-10-22T15:05:12.498528258Z  [base] 	exclude.internal.topics = true
+2026-10-22T15:05:12.498745069Z  [base] 	fetch.max.bytes = 52428800
+2026-10-22T15:05:12.498971542Z  [base] 	fetch.max.wait.ms = 500
+2026-10-22T15:05:12.499240105Z  [base] 	fetch.min.bytes = 1
+2026-10-22T15:05:12.500663846Z  [base] 	group.id = recon-run-gcp-200k-20261022
+2026-10-22T15:05:12.500832364Z  [base] 	group.instance.id = null
+2026-10-22T15:05:12.501130581Z  [base] 	group.protocol = classic
+2026-10-22T15:05:12.501409916Z  [base] 	group.remote.assignor = null
+2026-10-22T15:05:12.501707499Z  [base] 	heartbeat.interval.ms = 3000
+2026-10-22T15:05:12.501994903Z  [base] 	interceptor.classes = []
+2026-10-22T15:05:12.502348595Z  [base] 	internal.throw.on.fetch.stable.offset.unsupported = false
+2026-10-22T15:05:12.502728254Z  [base] 	isolation.level = read_uncommitted
+2026-10-22T15:05:12.503012520Z  [base] 	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+2026-10-22T15:05:12.503281740Z  [base] 	max.partition.fetch.bytes = 1048576
+2026-10-22T15:05:12.503566665Z  [base] 	max.poll.interval.ms = 300000
+2026-10-22T15:05:12.503877240Z  [base] 	max.poll.records = 500
+2026-10-22T15:05:12.504125170Z  [base] 	metadata.max.age.ms = 300000
+2026-10-22T15:05:12.504424914Z  [base] 	metadata.recovery.rebootstrap.trigger.ms = 300000
+2026-10-22T15:05:12.504707117Z  [base] 	metadata.recovery.strategy = rebootstrap
+2026-10-22T15:05:12.505063849Z  [base] 	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+2026-10-22T15:05:12.505290050Z  [base] 	metrics.num.samples = 2
+2026-10-22T15:05:12.505612886Z  [base] 	metrics.recording.level = INFO
+2026-10-22T15:05:12.505840899Z  [base] 	metrics.sample.window.ms = 30000
+2026-10-22T15:05:12.506089065Z  [base] 	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+2026-10-22T15:05:12.506395212Z  [base] 	receive.buffer.bytes = 65536
+2026-10-22T15:05:12.506687153Z  [base] 	reconnect.backoff.max.ms = 1000
+2026-10-22T15:05:12.506998976Z  [base] 	reconnect.backoff.ms = 50
+2026-10-22T15:05:12.507212875Z  [base] 	request.timeout.ms = 30000
+2026-10-22T15:05:12.507631794Z  [base] 	retry.backoff.max.ms = 1000
+2026-10-22T15:05:12.507807053Z  [base] 	retry.backoff.ms = 100
+2026-10-22T15:05:12.508098916Z  [base] 	sasl.client.callback.handler.class = null
+2026-10-22T15:05:12.508356044Z  [base] 	sasl.jaas.config = [hidden]
+2026-10-22T15:05:12.508649132Z  [base] 	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+2026-10-22T15:05:12.508907303Z  [base] 	sasl.kerberos.min.time.before.relogin = 60000
+2026-10-22T15:05:12.509185636Z  [base] 	sasl.kerberos.service.name = null
+2026-10-22T15:05:12.509462637Z  [base] 	sasl.kerberos.ticket.renew.jitter = 0.05
+2026-10-22T15:05:12.509743765Z  [base] 	sasl.kerberos.ticket.renew.window.factor = 0.8
+2026-10-22T15:05:12.510090599Z  [base] 	sasl.login.callback.handler.class = class ro.mig.common.GcpTokenOauthCallbackHandler
+2026-10-22T15:05:12.510352446Z  [base] 	sasl.login.class = null
+2026-10-22T15:05:12.510597443Z  [base] 	sasl.login.connect.timeout.ms = null
+2026-10-22T15:05:12.510862618Z  [base] 	sasl.login.read.timeout.ms = null
+2026-10-22T15:05:12.511141307Z  [base] 	sasl.login.refresh.buffer.seconds = 300
+2026-10-22T15:05:12.511431610Z  [base] 	sasl.login.refresh.min.period.seconds = 60
+2026-10-22T15:05:12.511706300Z  [base] 	sasl.login.refresh.window.factor = 0.8
+2026-10-22T15:05:12.511991349Z  [base] 	sasl.login.refresh.window.jitter = 0.05
+2026-10-22T15:05:12.512277540Z  [base] 	sasl.login.retry.backoff.max.ms = 10000
+2026-10-22T15:05:12.512603833Z  [base] 	sasl.login.retry.backoff.ms = 100
+2026-10-22T15:05:12.512827667Z  [base] 	sasl.mechanism = OAUTHBEARER
+2026-10-22T15:05:12.513142856Z  [base] 	sasl.oauthbearer.assertion.algorithm = RS256
+2026-10-22T15:05:12.513453827Z  [base] 	sasl.oauthbearer.assertion.claim.aud = null
+2026-10-22T15:05:12.513657161Z  [base] 	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+2026-10-22T15:05:12.513944949Z  [base] 	sasl.oauthbearer.assertion.claim.iss = null
+2026-10-22T15:05:12.514199803Z  [base] 	sasl.oauthbearer.assertion.claim.jti.include = false
+2026-10-22T15:05:12.514565526Z  [base] 	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+2026-10-22T15:05:12.514813182Z  [base] 	sasl.oauthbearer.assertion.claim.sub = null
+2026-10-22T15:05:12.515118741Z  [base] 	sasl.oauthbearer.assertion.file = null
+2026-10-22T15:05:12.515342390Z  [base] 	sasl.oauthbearer.assertion.private.key.file = null
+2026-10-22T15:05:12.515603170Z  [base] 	sasl.oauthbearer.assertion.private.key.passphrase = null
+2026-10-22T15:05:12.515900213Z  [base] 	sasl.oauthbearer.assertion.template.file = null
+2026-10-22T15:05:12.516100740Z  [base] 	sasl.oauthbearer.client.credentials.client.id = null
+2026-10-22T15:05:12.516590204Z  [base] 	sasl.oauthbearer.client.credentials.client.secret = null
+2026-10-22T15:05:12.516705275Z  [base] 	sasl.oauthbearer.clock.skew.seconds = 30
+2026-10-22T15:05:12.516982650Z  [base] 	sasl.oauthbearer.expected.audience = []
+2026-10-22T15:05:12.517329189Z  [base] 	sasl.oauthbearer.expected.issuer = null
+2026-10-22T15:05:12.517510520Z  [base] 	sasl.oauthbearer.header.urlencode = false
+2026-10-22T15:05:12.517782283Z  [base] 	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+2026-10-22T15:05:12.518058405Z  [base] 	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+2026-10-22T15:05:12.518347607Z  [base] 	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+2026-10-22T15:05:12.518812366Z  [base] 	sasl.oauthbearer.jwks.endpoint.url = null
+2026-10-22T15:05:12.518995907Z  [base] 	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+2026-10-22T15:05:12.519396282Z  [base] 	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+2026-10-22T15:05:12.519440553Z  [base] 	sasl.oauthbearer.scope = null
+2026-10-22T15:05:12.519792662Z  [base] 	sasl.oauthbearer.scope.claim.name = scope
+2026-10-22T15:05:12.520080494Z  [base] 	sasl.oauthbearer.sub.claim.name = sub
+2026-10-22T15:05:12.520348800Z  [base] 	sasl.oauthbearer.token.endpoint.url = null
+2026-10-22T15:05:12.520564755Z  [base] 	security.protocol = SASL_SSL
+2026-10-22T15:05:12.520861263Z  [base] 	security.providers = null
+2026-10-22T15:05:12.521100046Z  [base] 	send.buffer.bytes = 131072
+2026-10-22T15:05:12.521696340Z  [base] 	session.timeout.ms = 45000
+2026-10-22T15:05:12.522021201Z  [base] 	share.acknowledgement.mode = implicit
+2026-10-22T15:05:12.522248159Z  [base] 	share.acquire.mode = BATCH_OPTIMIZED
+2026-10-22T15:05:12.522668836Z  [base] 	socket.connection.setup.timeout.max.ms = 30000
+2026-10-22T15:05:12.522932181Z  [base] 	socket.connection.setup.timeout.ms = 10000
+2026-10-22T15:05:12.523266838Z  [base] 	ssl.cipher.suites = []
+2026-10-22T15:05:12.523565963Z  [base] 	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+2026-10-22T15:05:12.523909587Z  [base] 	ssl.endpoint.identification.algorithm = https
+2026-10-22T15:05:12.524120246Z  [base] 	ssl.engine.factory.class = null
+2026-10-22T15:05:12.524432059Z  [base] 	ssl.key.password = null
+2026-10-22T15:05:12.524712129Z  [base] 	ssl.keymanager.algorithm = SunX509
+2026-10-22T15:05:12.524980141Z  [base] 	ssl.keystore.certificate.chain = null
+2026-10-22T15:05:12.525314044Z  [base] 	ssl.keystore.key = null
+2026-10-22T15:05:12.525554393Z  [base] 	ssl.keystore.location = null
+2026-10-22T15:05:12.525843843Z  [base] 	ssl.keystore.password = null
+2026-10-22T15:05:12.526167938Z  [base] 	ssl.keystore.type = JKS
+2026-10-22T15:05:12.526410488Z  [base] 	ssl.protocol = TLSv1.3
+2026-10-22T15:05:12.526697009Z  [base] 	ssl.provider = null
+2026-10-22T15:05:12.526987200Z  [base] 	ssl.secure.random.implementation = null
+2026-10-22T15:05:12.527326409Z  [base] 	ssl.trustmanager.algorithm = PKIX
+2026-10-22T15:05:12.527582882Z  [base] 	ssl.truststore.certificates = null
+2026-10-22T15:05:12.527884197Z  [base] 	ssl.truststore.location = null
+2026-10-22T15:05:12.528163469Z  [base] 	ssl.truststore.password = null
+2026-10-22T15:05:12.528475237Z  [base] 	ssl.truststore.type = JKS
+2026-10-22T15:05:12.585547400Z  [base] 	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+2026-10-22T15:05:12.489594367Z 
+
+2026-10-22T15:05:13.125794968Z  [base] [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector - initializing Kafka metrics collector
+2026-10-22T15:05:13.128972499Z  [base] [main] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - Successfully logged in.
+2026-10-22T15:05:13.174148659Z  [base] [kafka-expiring-relogin-thread-recon-service@<project>.iam.gserviceaccount.com] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - [Principal=:recon-service@<project>.iam.gserviceaccount.com]: Expiring credential re-login thread started.
+2026-10-22T15:05:13.174353683Z  [base] [kafka-expiring-relogin-thread-recon-service@<project>.iam.gserviceaccount.com] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - [Principal=recon-service@<project>.iam.gserviceaccount.com]: Expiring credential valid from Thu Oct 22 15:05:13 UTC 2026 to Thu Oct 22 16:05:13 UTC 2026
+2026-10-22T15:05:13.280403807Z  [base] [kafka-expiring-relogin-thread-recon-service@<project>.iam.gserviceaccount.com] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - [Principal=:recon-service@<project>.iam.gserviceaccount.com]: Expiring credential re-login sleeping until: Thu Oct 22 15:54:23 UTC 2026
+2026-10-22T15:05:13.280703986Z  [base] [main] INFO org.apache.kafka.common.utils.AppInfoParser - Kafka version: 4.2.1
+2026-10-22T15:05:13.281033287Z  [base] [main] INFO org.apache.kafka.common.utils.AppInfoParser - Kafka commitId: 92f61c44867f39dc
+2026-10-22T15:05:14.694800944Z  [base] [main] INFO org.apache.kafka.common.utils.AppInfoParser - Kafka startTimeMs: 1792681513275
+2026-10-22T15:05:14.707427257Z  [base] [main] INFO org.apache.kafka.clients.Metadata - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Cluster ID: D6CF-btSTnqRkFxobijUPg
+2026-10-22T15:05:14.714159866Z  [base] [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Assigned to partition(s): target-system-confirmations-0
+2026-10-22T15:05:14.892536487Z  [base] [main] INFO org.apache.kafka.clients.consumer.internals.SubscriptionState - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Seeking to AutoOffsetResetStrategy{type=earliest} offset of partition target-system-confirmations-0
+2026-10-22T15:05:22.971982915Z  [base] [main] INFO org.apache.kafka.clients.consumer.internals.SubscriptionState - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Resetting offset for partition target-system-confirmations-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[broker.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092 (id: 11 rack: europe-west1-d isFenced: false)], epoch=0}}.
+2026-10-22T15:05:22.972870712Z  [base] [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-10-22T15:05:23.470854295Z  [base] [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator - [Consumer clientId=consumer-recon-run-gcp-200k-20261022-1, groupId=recon-run-gcp-200k-20261022] Request joining group due to: consumer pro-actively leaving the group
+2026-10-22T15:05:23.472163649Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Metrics scheduler closed
+2026-10-22T15:05:23.472740117Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-10-22T15:05:23.473048134Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-10-22T15:05:23.486704210Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Metrics reporters closed
+2026-10-22T15:05:23.489919263Z  [base] [kafka-expiring-relogin-thread-recon-service@<project>.iam.gserviceaccount.com] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - [Principal=:recon-service@<project>.iam.gserviceaccount.com]: Expiring credential re-login thread has been interrupted and will exit.
+2026-10-22T15:05:23.854320643Z  [base] [main] INFO org.apache.kafka.common.utils.AppInfoParser - App info kafka.consumer for consumer-recon-run-gcp-200k-20261022-1 unregistered
+2026-10-22T15:05:23.854619718Z  [base] {
+2026-10-22T15:05:23.854881107Z  [base]   "runId" : "run-gcp-200k-20261022",
+2026-10-22T15:05:23.855175874Z  [base]   "generatedAt" : "2026-10-22T15:05:23.650381833Z",
+2026-10-22T15:05:23.855540520Z  [base]   "sourceReconciliation" : {
+2026-10-22T15:05:23.855790821Z  [base]     "extractorReportedRecords" : 200005,
+2026-10-22T15:05:23.856083199Z  [base]     "extractionErrors" : 0,
+2026-10-22T15:05:23.856300880Z  [base]     "loadedToExtractionDataset" : 200002,
+2026-10-22T15:05:23.856605639Z  [base]     "distinctAccountKeys" : 200002,
+2026-10-22T15:05:23.856854243Z  [base]     "duplicateKeysInExtraction" : 0
+2026-10-22T15:05:23.857093353Z  [base]   },
+2026-10-22T15:05:23.857484201Z  [base]   "transformationLoadReconciliation" : {
+2026-10-22T15:05:23.857669760Z  [base]     "curatedRows" : 200002,
+2026-10-22T15:05:23.857927619Z  [base]     "enrichedRows" : 200002,
+2026-10-22T15:05:23.858160218Z  [base]     "targetDocuments" : 200000,
+2026-10-22T15:05:23.858478434Z  [base]     "targetDistinctKeys" : 200000,
+2026-10-22T15:05:23.858763425Z  [base]     "orphanTargetKeys" : 0,
+2026-10-22T15:05:23.859017003Z  [base]     "loaderDocumentsRead" : 200000,
+2026-10-22T15:05:23.859292823Z  [base]     "loaderErrors" : 0
+2026-10-22T15:05:23.859626617Z  [base]   },
+2026-10-22T15:05:23.859859740Z  [base]   "targetSystemReconciliation" : {
+2026-10-22T15:05:23.860106949Z  [base]     "enabled" : true,
+2026-10-22T15:05:23.860422271Z  [base]     "targetRows" : 200000,
+2026-10-22T15:05:23.860697301Z  [base]     "confirmations" : 200000,
+2026-10-22T15:05:23.860955492Z  [base]     "confirmedTargetRows" : 200000,
+2026-10-22T15:05:23.861228704Z  [base]     "unconfirmedTargetRows" : 0,
+2026-10-22T15:05:23.861568684Z  [base]     "allTargetRowsConfirmed" : true,
+2026-10-22T15:05:23.861823157Z  [base]     "unconfirmedAccountKeys" : [ ]
+2026-10-22T15:05:23.862088899Z  [base]   },
+2026-10-22T15:05:23.862387313Z  [base]   "balancingEquation" : {
+2026-10-22T15:05:23.862675554Z  [base]     "srcRead" : 200005,
+2026-10-22T15:05:23.862917771Z  [base]     "written" : 200000,
+2026-10-22T15:05:23.863184698Z  [base]     "rejected" : 5,
+2026-10-22T15:05:23.863482493Z  [base]     "accounted" : 200005,
+2026-10-22T15:05:23.863746133Z  [base]     "balances" : true,
+2026-10-22T15:05:23.864017565Z  [base]     "imbalance" : 0
+2026-10-22T15:05:23.864289453Z  [base]   },
+2026-10-22T15:05:23.864669671Z  [base]   "ledgerAgreement" : {
+2026-10-22T15:05:23.864834430Z  [base]     "rejectLogRejected" : 5,
+2026-10-22T15:05:23.865098724Z  [base]     "lineageRejected" : 5,
+2026-10-22T15:05:23.865393617Z  [base]     "agrees" : true
+2026-10-22T15:05:23.865659051Z  [base]   },
+2026-10-22T15:05:23.865940975Z  [base]   "rejectsByReason" : [ {
+2026-10-22T15:05:23.866182966Z  [base]     "stage" : "map",
+2026-10-22T15:05:23.866481365Z  [base]     "reason" : "MAP_UNMAPPED_ENUM_VALUE",
+2026-10-22T15:05:23.866754262Z  [base]     "count" : 1
+2026-10-22T15:05:23.867005203Z  [base]   }, {
+2026-10-22T15:05:23.867464366Z  [base]     "stage" : "parse",
+2026-10-22T15:05:23.867711365Z  [base]     "reason" : "PARSE_BAD_COLUMN_COUNT",
+2026-10-22T15:05:23.867969592Z  [base]     "count" : 1
+2026-10-22T15:05:23.868230422Z  [base]   }, {
+2026-10-22T15:05:23.868726871Z  [base]     "stage" : "parse",
+2026-10-22T15:05:23.868981004Z  [base]     "reason" : "PARSE_BAD_DATE",
+2026-10-22T15:05:23.869303366Z  [base]     "count" : 1
+2026-10-22T15:05:23.869629335Z  [base]   }, {
+2026-10-22T15:05:23.869834345Z  [base]     "stage" : "parse",
+2026-10-22T15:05:23.870138050Z  [base]     "reason" : "PARSE_BAD_NUMERIC",
+2026-10-22T15:05:23.870420680Z  [base]     "count" : 1
+2026-10-22T15:05:23.870689459Z  [base]   }, {
+2026-10-22T15:05:23.870953245Z  [base]     "stage" : "schema",
+2026-10-22T15:05:23.871242983Z  [base]     "reason" : "SCHEMA_INVALID",
+2026-10-22T15:05:23.872226469Z  [base]     "count" : 1
+2026-10-22T15:05:23.872534591Z  [base]   } ],
+2026-10-22T15:05:23.872777317Z  [base]   "migrability" : {
+2026-10-22T15:05:23.873046465Z  [base]     "candidates" : 200005,
+2026-10-22T15:05:23.873352692Z  [base]     "migrated" : 200000,
+2026-10-22T15:05:23.873656934Z  [base]     "blockedByDataQuality" : 5,
+2026-10-22T15:05:23.873929793Z  [base]     "migrabilityRate" : 100.0,
+2026-10-22T15:05:23.874191927Z  [base]     "balanceBands" : [ {
+2026-10-22T15:05:23.874495284Z  [base]       "band" : "HIGH",
+2026-10-22T15:05:23.874765817Z  [base]       "count" : 158350
+2026-10-22T15:05:23.875031549Z  [base]     }, {
+2026-10-22T15:05:23.875333223Z  [base]       "band" : "LOW",
+2026-10-22T15:05:23.876409009Z  [base]       "count" : 386
+2026-10-22T15:05:23.876684249Z  [base]     }, {
+2026-10-22T15:05:23.876956268Z  [base]       "band" : "MEDIUM",
+2026-10-22T15:05:23.877271212Z  [base]       "count" : 39294
+2026-10-22T15:05:23.877511674Z  [base]     }, {
+2026-10-22T15:05:23.877762247Z  [base]       "band" : "OVERDRAWN",
+2026-10-22T15:05:23.878097034Z  [base]       "count" : 1972
+2026-10-22T15:05:23.878306924Z  [base]     } ]
+2026-10-22T15:05:23.878661386Z  [base]   }
+2026-10-22T15:05:23.878892267Z  [base] }
+2026-10-22T15:05:23.879198957Z  [base] recon: reports at gs://<project>-recon/reconciliation/run-gcp-200k-20261022/
+2026-10-22T15:05:23.880377592Z  [base] recon: balancing equation closes; key-level reconciliation clean.
+2026-10-22T15:05:24.866343495Z  [base] recon: target system confirmed all 200000 TARGET rows.
+
+2026-10-22T15:05:24.945175851Z  Pod recon-ys55hxg2 log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T15:05:26.135729963Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Metrics scheduler closed
+2026-10-22T15:05:26.136080503Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-10-22T15:05:26.136412666Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-10-22T15:05:26.136645063Z  [base] [main] INFO org.apache.kafka.common.metrics.Metrics - Metrics reporters closed
+2026-10-22T15:05:26.136879607Z  [base] [kafka-expiring-relogin-thread-recon-service@<project>.iam.gserviceaccount.com] INFO org.apache.kafka.common.security.oauthbearer.internals.expiring.ExpiringCredentialRefreshingLogin - [Principal=:recon-service@<project>.iam.gserviceaccount.com]: Expiring credential re-login thread has been interrupted and will exit.
+2026-10-22T15:05:26.137133439Z  [base] [main] INFO org.apache.kafka.common.utils.AppInfoParser - App info kafka.consumer for consumer-recon-run-gcp-200k-20261022-1 unregistered
+2026-10-22T15:05:26.137397426Z  [base] {
+2026-10-22T15:05:26.137663057Z  [base]   "runId" : "run-gcp-200k-20261022",
+2026-10-22T15:05:26.137910251Z  [base]   "generatedAt" : "2026-10-22T15:05:23.650381833Z",
+2026-10-22T15:05:26.138191173Z  [base]   "sourceReconciliation" : {
+2026-10-22T15:05:26.138514342Z  [base]     "extractorReportedRecords" : 200005,
+2026-10-22T15:05:26.138787311Z  [base]     "extractionErrors" : 0,
+2026-10-22T15:05:26.139082166Z  [base]     "loadedToExtractionDataset" : 200002,
+2026-10-22T15:05:26.139371607Z  [base]     "distinctAccountKeys" : 200002,
+2026-10-22T15:05:26.139664806Z  [base]     "duplicateKeysInExtraction" : 0
+2026-10-22T15:05:26.139876838Z  [base]   },
+2026-10-22T15:05:26.140118667Z  [base]   "transformationLoadReconciliation" : {
+2026-10-22T15:05:26.140354192Z  [base]     "curatedRows" : 200002,
+2026-10-22T15:05:26.140767797Z  [base]     "enrichedRows" : 200002,
+2026-10-22T15:05:26.141034233Z  [base]     "targetDocuments" : 200000,
+2026-10-22T15:05:26.141285662Z  [base]     "targetDistinctKeys" : 200000,
+2026-10-22T15:05:26.141543641Z  [base]     "orphanTargetKeys" : 0,
+2026-10-22T15:05:26.141985629Z  [base]     "loaderDocumentsRead" : 200000,
+2026-10-22T15:05:26.142207282Z  [base]     "loaderErrors" : 0
+2026-10-22T15:05:26.142398995Z  [base]   },
+2026-10-22T15:05:26.142708261Z  [base]   "targetSystemReconciliation" : {
+2026-10-22T15:05:26.142990182Z  [base]     "enabled" : true,
+2026-10-22T15:05:26.143290732Z  [base]     "targetRows" : 200000,
+2026-10-22T15:05:26.143641595Z  [base]     "confirmations" : 200000,
+2026-10-22T15:05:26.143975942Z  [base]     "confirmedTargetRows" : 200000,
+2026-10-22T15:05:26.144194846Z  [base]     "unconfirmedTargetRows" : 0,
+2026-10-22T15:05:26.144488549Z  [base]     "allTargetRowsConfirmed" : true,
+2026-10-22T15:05:26.144843055Z  [base]     "unconfirmedAccountKeys" : [ ]
+2026-10-22T15:05:26.145099743Z  [base]   },
+2026-10-22T15:05:26.145372365Z  [base]   "balancingEquation" : {
+2026-10-22T15:05:26.145630118Z  [base]     "srcRead" : 200005,
+2026-10-22T15:05:26.145850696Z  [base]     "written" : 200000,
+2026-10-22T15:05:26.146095917Z  [base]     "rejected" : 5,
+2026-10-22T15:05:26.146333921Z  [base]     "accounted" : 200005,
+2026-10-22T15:05:26.146589733Z  [base]     "balances" : true,
+2026-10-22T15:05:26.146807071Z  [base]     "imbalance" : 0
+2026-10-22T15:05:26.147103534Z  [base]   },
+2026-10-22T15:05:26.147317245Z  [base]   "ledgerAgreement" : {
+2026-10-22T15:05:26.147540500Z  [base]     "rejectLogRejected" : 5,
+2026-10-22T15:05:26.147761315Z  [base]     "lineageRejected" : 5,
+2026-10-22T15:05:26.147985020Z  [base]     "agrees" : true
+2026-10-22T15:05:26.148213833Z  [base]   },
+2026-10-22T15:05:26.148539029Z  [base]   "rejectsByReason" : [ {
+2026-10-22T15:05:26.148787829Z  [base]     "stage" : "map",
+2026-10-22T15:05:26.149017263Z  [base]     "reason" : "MAP_UNMAPPED_ENUM_VALUE",
+2026-10-22T15:05:26.149282072Z  [base]     "count" : 1
+2026-10-22T15:05:26.149550075Z  [base]   }, {
+2026-10-22T15:05:26.149770924Z  [base]     "stage" : "parse",
+2026-10-22T15:05:26.150035437Z  [base]     "reason" : "PARSE_BAD_COLUMN_COUNT",
+2026-10-22T15:05:26.150271119Z  [base]     "count" : 1
+2026-10-22T15:05:26.166908512Z  [base]   }, {
+2026-10-22T15:05:26.168900927Z  [base]     "stage" : "parse",
+2026-10-22T15:05:26.169356249Z  [base]     "reason" : "PARSE_BAD_DATE",
+2026-10-22T15:05:26.169671935Z  [base]     "count" : 1
+2026-10-22T15:05:26.169992768Z  [base]   }, {
+2026-10-22T15:05:26.170247541Z  [base]     "stage" : "parse",
+2026-10-22T15:05:26.170644928Z  [base]     "reason" : "PARSE_BAD_NUMERIC",
+2026-10-22T15:05:26.170882156Z  [base]     "count" : 1
+2026-10-22T15:05:26.171287742Z  [base]   }, {
+2026-10-22T15:05:26.171492229Z  [base]     "stage" : "schema",
+2026-10-22T15:05:26.171721088Z  [base]     "reason" : "SCHEMA_INVALID",
+2026-10-22T15:05:26.171946431Z  [base]     "count" : 1
+2026-10-22T15:05:26.172187813Z  [base]   } ],
+2026-10-22T15:05:26.172894788Z  [base]   "migrability" : {
+2026-10-22T15:05:26.173123111Z  [base]     "candidates" : 200005,
+2026-10-22T15:05:26.232480110Z  [base]     "migrated" : 200000,
+2026-10-22T15:05:26.233015642Z  [base]     "blockedByDataQuality" : 5,
+2026-10-22T15:05:26.233360748Z  [base]     "migrabilityRate" : 100.0,
+2026-10-22T15:05:26.233641912Z  [base]     "balanceBands" : [ {
+2026-10-22T15:05:26.234002465Z  [base]       "band" : "HIGH",
+2026-10-22T15:05:26.234288828Z  [base]       "count" : 158350
+2026-10-22T15:05:26.234761165Z  [base]     }, {
+2026-10-22T15:05:26.234960318Z  [base]       "band" : "LOW",
+2026-10-22T15:05:26.235209238Z  [base]       "count" : 386
+2026-10-22T15:05:26.235674721Z  [base]     }, {
+2026-10-22T15:05:26.235958313Z  [base]       "band" : "MEDIUM",
+2026-10-22T15:05:26.236147587Z  [base]       "count" : 39294
+2026-10-22T15:05:26.236403523Z  [base]     }, {
+2026-10-22T15:05:26.236678376Z  [base]       "band" : "OVERDRAWN",
+2026-10-22T15:05:26.236887688Z  [base]       "count" : 1972
+2026-10-22T15:05:26.237150566Z  [base]     } ]
+2026-10-22T15:05:26.237470144Z  [base]   }
+2026-10-22T15:05:26.237811007Z  [base] }
+2026-10-22T15:05:26.238039233Z  [base] recon: reports at gs://<project>-recon/reconciliation/run-gcp-200k-20261022/
+2026-10-22T15:05:26.238248546Z  [base] recon: balancing equation closes; key-level reconciliation clean.
+2026-10-22T15:05:26.238723472Z  [base] recon: target system confirmed all 200000 TARGET rows.
+
+2026-10-22T15:05:26.544483497Z  Pod recon-ys55hxg2 has phase Running
+2026-10-22T15:05:28.738500300Z  Deleting pod: recon-ys55hxg2
+2026-10-22T15:05:28.850891182Z  ::group::Post task execution logs
+2026-10-22T15:05:28.945352505Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=recon, run_id=manual__2026-10-22T14:27:22+00:00, execution_date=20261022T142722, start_date=20261022T150457, end_date=20261022T150528
+2026-10-22T15:05:29.133933436Z  Task exited with return code 0
+2026-10-22T15:05:29.249949750Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T15:05:29.253756447Z  ::endgroup::

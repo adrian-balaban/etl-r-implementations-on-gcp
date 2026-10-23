@@ -1,0 +1,19 @@
+# teardown (flink): keep the state bucket, plan -destroy, apply, 2026-10-22T11:26:18Z
+Removed module.bootstrap.google_storage_bucket.tfstate
+Successfully removed 17 resource instance(s).
+Plan: 0 to add, 0 to change, 71 to destroy.
+Error: Error, failed to deleteuser mig in instance mig-flink-pg: googleapi: Error 400: Invalid request: failed to delete user mig: . role "mig" cannot be dropped because some objects depend on it Details: 10 objects in database mig., invalid
+# teardown (flink), pass 2: the db role blocks the instance delete -> state rm the user and database only, 2026-10-22T11:39:30Z
+Removed module.cloudsql.google_sql_user.app[0]
+Successfully removed 1 resource instance(s).
+remaining in state: 5
+module.cloudsql.google_sql_database_instance.this[0]
+Plan: 0 to add, 0 to change, 5 to destroy.
+Error: Unable to remove Service Networking Connection, err: Error waiting for Delete Service Networking Connection: Error code 9, message: Failed to delete connection; Producer services (e.g. CloudSQL, Cloud Memstore, etc.) are still using this connection.
+# teardown (flink), pass 3: the peering fallback, 2026-10-22T11:42:15Z
+sql instances: []
+Updated [https://www.googleapis.com/compute/v1/projects/<project>/global/networks/mig-flink-vpc].
+Successfully removed 1 resource instance(s).
+Plan: 0 to add, 0 to change, 2 to destroy.
+state left: 0 resources
+billing-window-end: 2026-10-22T11:43:14Z

@@ -1,0 +1,18 @@
+@startuml gate-handshake
+!pragma layout smetana
+title Control row: the promise, the check, the proof
+start
+:source writes extract_control\nrow_count · content_digest;
+:gate-jdbc recomputes in REPEATABLE READ;
+if (count, digest match and no trimmed duplicate?) then (yes)
+  :intake reads, measures source_read\nover the same scan;
+  if (source_read == control row?) then (yes)
+    :recon: balance + settle;
+  else (no)
+    :run FAILS\n(source changed after the gate); <<#mistyrose>>
+  endif
+else (no)
+  :run FAILS\nzero rows written; <<#mistyrose>>
+endif
+stop
+@enduml

@@ -1,0 +1,10 @@
+target/
+work/
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+terraform.tfvars
+*.tfplan
+*.plan
+.terraform.tfstate.lock.info

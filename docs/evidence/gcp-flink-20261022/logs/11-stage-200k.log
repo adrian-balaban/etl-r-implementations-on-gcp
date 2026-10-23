@@ -1,0 +1,9 @@
+# stage the 200,000-account input, 2026-10-22T11:17:30Z
+$ python3 harness/generate.py --accounts 200000 --out <tmp>
+200005 records -> <workdir>  (written=200000 rejected=5)
+input: 200005 data records (+1 header), 13M, sha256 5f29f6219b30e7e82979e52716c5838335f64e9a30782a202d06c9e65168dc66
+bundled gen200k/ACCOUNT.src -> <workdir> (run_id=run-200k-20261022)
+4.0K	bundle-200k/run-200k-20261022/incoming/ACCOUNT.FLG
+3.5M	bundle-200k/run-200k-20261022/incoming/ACCOUNT.tar.gz
+$ gsutil cp -r <tmp>/run-200k-20261022 gs://<project>-landing/extraction/
+uploaded-at: 2026-10-22T11:17:34Z

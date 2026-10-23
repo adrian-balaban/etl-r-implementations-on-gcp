@@ -1,0 +1,6 @@
+run_id	source_key	account_key	door	stage	reason	detail	source_file
+run-gcp-20261017a	raw:4d5d9d96692584fa		rejected	parse	PARSE_BAD_COLUMN_COUNT	CURRENCY needs column 4, row has 4	
+run-gcp-20261017a	raw:4e22eef52fbd1338		rejected	parse	PARSE_BAD_NUMERIC	BALANCE='+0000000ABCD.56'	
+run-gcp-20261017a	raw:8e81e78cbd3f33ee		rejected	parse	PARSE_BAD_DATE	OPEN_DATE='20191345'	
+run-gcp-20261017a	acc-bad!0001	5551f11728f2bdd063674462659e002a	rejected	schema	SCHEMA_INVALID	accountId: 'acc-bad!0001' does not match '^[A-Z0-9]+$'	mig_transformation
+run-gcp-20261017a	ACC000900003	f3895bd9ae16e8e2626b578dff6f434b	rejected	map	MAP_UNMAPPED_ENUM_VALUE	status: 'X' not in ['A', 'C', 'D']	mig_transformation

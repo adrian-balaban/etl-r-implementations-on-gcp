@@ -1,0 +1,182 @@
+# C07 terraform apply, phase B, 2026-10-22T13:26:53Z
+module.composer.google_project_iam_member.composer_service_agent_ext[0]: Creating...
+module.composer.google_project_service.gke[0]: Creating...
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Creating...
+module.composer.google_project_service.gke[0]: Creation complete after 4s [id=<project>/container.googleapis.com]
+module.composer.google_project_iam_member.composer_service_agent_ext[0]: Creation complete after 10s [id=<project>/roles/composer.ServiceAgentV2Ext/serviceAccount:service-<project-number>@cloudcomposer-accounts.iam.gserviceaccount.com]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Still creating... [10s elapsed]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Still creating... [20s elapsed]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Still creating... [30s elapsed]
+module.target_system_mock.google_cloud_run_v2_service.this[0]: Creation complete after 32s [id=projects/<project>/locations/europe-west1/services/target-system-mock]
+module.target_system_mock.google_cloud_run_v2_service_iam_member.public[0]: Creating...
+module.composer.google_composer_environment.this[0]: Creating...
+module.target_system_mock.google_cloud_run_v2_service_iam_member.public[0]: Creation complete after 5s [id=projects/<project>/locations/europe-west1/services/target-system-mock/roles/run.invoker/allUsers]
+module.composer.google_composer_environment.this[0]: Still creating... [10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [1m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [2m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [3m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [4m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [5m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [6m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [7m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [8m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m10s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m20s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m30s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m40s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [9m50s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m0s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [10m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [11m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [12m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [13m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [14m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [15m51s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m1s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m11s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m21s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m31s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m41s elapsed]
+module.composer.google_composer_environment.this[0]: Still creating... [16m51s elapsed]
+module.composer.google_composer_environment.this[0]: Creation complete after 16m54s [id=projects/<project>/locations/europe-west1/environments/mig-composer]
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+buckets = {
+  "dataflow-temp" = "<project>-dataflow-temp"
+  "dataflow-templates" = "<project>-dataflow-templates"
+  "json-out" = "<project>-json-out"
+  "landing" = "<project>-landing"
+  "recon" = "<project>-recon"
+}
+composer_airflow_uri = "<airflow-url>"
+composer_dag_bucket = "gs://europe-west1-mig-composer-<hash>-bucket/dags"
+dataflow_registry = "europe-west1-docker.pkg.dev/<project>/mig-dataflow"
+dataform_repository = "etlr-beam"
+datasets = {
+  "etlr_extraction" = "etlr_extraction"
+  "etlr_recon" = "etlr_recon"
+  "etlr_transformation" = "etlr_transformation"
+}
+env_file = <<EOT
+TARGET_PROFILE=real
+GCP_PROJECT=<project>
+GCS_LANDING_BUCKET=<project>-landing
+GCS_JSON_BUCKET=<project>-json-out
+GCS_RECON_BUCKET=<project>-recon
+BQ_TARGET=real
+KAFKA_SECURITY_PROTOCOL=SASL_SSL
+# KAFKA_BOOTSTRAP, not KAFKA_BOOTSTRAP_SERVERS: config.py reads the former (as does
+# .env.example). Under the old name the address was emitted but never read, so the
+# pipeline silently fell back to localhost:19092 — which inside a Dataflow worker is
+# nothing at all. H8 was recorded as passing because `terraform output` produced a
+# real address; that only ever proved the value existed, not that it reached anyone.
+KAFKA_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+# runner.py defaults these to conventions ("mig-subnet", "dataflow-worker@<project>")
+# when unset. The convention is right on this environment and wrong on any other, and
+# the failure mode is the expensive one: a Dataflow job that starts against a
+# nonexistent subnet and then never progresses. Emitting the real values from state
+# means a run uses what Terraform actually built.
+DATAFLOW_SUBNETWORK=https://www.googleapis.com/compute/v1/projects/<project>/regions/europe-west1/subnetworks/mig-subnet
+DATAFLOW_SERVICE_ACCOUNT=dataflow-worker@<project>.iam.gserviceaccount.com
+# Without this the loader falls back to http://localhost:8080, which inside a
+# Dataflow worker or the toolbox container is nothing at all — every document then
+# fails "transport failure" after exhausting its retries, which reads like a data
+# problem and is an infrastructure one.
+TARGET_SYSTEM_URL=<service-url>
+# Confirmation stream. Empty when Kafka is off → the
+# mock and recon both skip the confirmation path and the run is green. Non-empty only
+# with enable_kafka=true, and the confirmation topic is the second topic on the
+# cluster (terraform/modules/kafka's topics map).
+TARGET_SYSTEM_CONFIRMATION_BOOTSTRAP=bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092
+TARGET_SYSTEM_CONFIRMATION_TOPIC=target-system-confirmations
+
+EOT
+kafka_bootstrap = "bootstrap.<cluster>.europe-west1.managedkafka.<project>.cloud.goog:9092"
+service_accounts = {
+  "composer-runner" = "composer-runner@<project>.iam.gserviceaccount.com"
+  "dataflow-worker" = "dataflow-worker@<project>.iam.gserviceaccount.com"
+  "dataform-runner" = "dataform-runner@<project>.iam.gserviceaccount.com"
+  "loader-app" = "loader-app@<project>.iam.gserviceaccount.com"
+  "recon-service" = "recon-service@<project>.iam.gserviceaccount.com"
+  "target-system-mock" = "target-system-mock@<project>.iam.gserviceaccount.com"
+}
+target_system_url = "<service-url>"
+templates_bucket = "<project>-dataflow-templates"
+exit 0

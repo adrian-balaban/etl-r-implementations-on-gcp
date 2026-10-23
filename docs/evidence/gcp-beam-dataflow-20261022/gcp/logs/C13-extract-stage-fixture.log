@@ -1,0 +1,8 @@
+# C13 stage the fixture into the real landing bucket (extract app, PGP-encrypted), 2026-10-22T13:47:36Z
+input sha256: 86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c  (56 lines incl. header)
+$ java -jar apps/extract/target/extract.jar --input local/data/source/ACCOUNT.src --bucket <project>-landing --gcs-host https://storage.googleapis.com --run-id run-gcp-fixture-20261022 --gnupg-home local/keys --recipient <prototype key> --split 300
+extractor: run=run-gcp-fixture-20261022 records=55 dat_files=1 extraction_errors=0 -> gs://<project>-landing/extraction/run-gcp-fixture-20261022/
+gs://<project>-landing/extraction/run-gcp-fixture-20261022/:
+gs://<project>-landing/extraction/run-gcp-fixture-20261022/ACCOUNT.FLG
+gs://<project>-landing/extraction/run-gcp-fixture-20261022/ACCOUNT.tar.gz.pgp
+staged-at: 2026-10-22T13:47:40Z

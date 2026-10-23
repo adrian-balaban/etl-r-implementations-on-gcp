@@ -1,0 +1,5 @@
+{
+  "runId" : "run-gcp-200k-20261022",
+  "completedAt" : "2026-10-22T15:04:50.088741541Z",
+  "artefacts" : [ "ACCOUNT.CHS", "ACCOUNT.ERR", "ACCOUNT.RPT" ]
+}

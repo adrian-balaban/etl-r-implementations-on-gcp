@@ -1,0 +1,73 @@
+@startuml c2-containers
+
+!pragma layout smetana
+!include <C4/C4_Container>
+
+title Beam: one DAG runs every stage
+
+Person(MO, "Migration Operator", "")
+System_Ext(MF, "Source System", "")
+System_Ext(VC, "Target System", "")
+System_Ext(DS, "Downstream Consumers", "")
+
+System_Boundary(BOUNDARY, "Beam lane") {
+    Container(DAG, "Orchestrator", "Airflow on Composer", "Runs the stages; asserts the run balanced")
+    Container(CONTRACTS, "Contracts", "YAML, JSON Schema in Git", "The only thing a new project edits")
+    Container(EXT, "extract", "Java", "Writes .DAT .CHS .ERR .RPT, then .FLG")
+    Container(FP, "intake", "Beam, Python", "Parse door; writes account_src and run_ledger")
+    Container(EN, "enrich", "Beam, Python", "Joins reference data; adds columns only")
+    Container(JP, "produce", "Beam, Python", "Map and schema doors; emits account JSON")
+    Container(LOAD, "load", "Java", "Publishes to Kafka; settles on verdicts")
+    Container(RECON, "recon", "Java", "Rebuilds the equation; writes the report")
+    Container(DF, "curate", "Dataform on BigQuery", "account_src → account_curated")
+    Container(MOCK, "Target System mock", "Java", "Confirms or rejects each document")
+    ContainerDb(LAKE, "Object Store", "GCS", "Artefacts and JSON batches")
+    ContainerDb(BQ, "Warehouse", "BigQuery", "The evidence tables")
+    ContainerQueue(BUS, "Event Bus", "Kafka", "Documents, confirmations, rejections")
+    ContainerDb(SEC, "Secret Store", "Secret Manager", "PGP keys, tokens, endpoints")
+}
+
+Rel(MO, DAG, "triggers / monitors", "Airflow UI")
+Rel(MF, EXT, "TDS + artefacts", "PGP over SFTP")
+
+Rel(DAG, FP,    "launches", "KubernetesPodOperator")
+Rel(DAG, EN,    "launches")
+Rel(DAG, JP,    "launches")
+Rel(DAG, EXT,   "launches")
+Rel(DAG, LOAD,  "launches")
+Rel(DAG, RECON, "launches")
+Rel(DAG, DF,    "invokes compile+run", "Dataform")
+Rel(DAG, BQ,    "assert_run_balanced", "parameterized SQL")
+
+Rel_D(CONTRACTS, FP,  "layouts, mappings, schemas", "read at startup")
+Rel_D(CONTRACTS, EN,  "reference data")
+Rel_D(CONTRACTS, JP,  "JSON Schemas")
+Rel(CONTRACTS,   EXT, "artefact naming + BQ columns", "artefacts.json, read at startup")
+
+Rel(EXT,  LAKE, "writes TDS + .FLG/.CHS/.ERR/.RPT")
+Rel(LAKE, FP,   "reads decrypted TDS")
+Rel(FP,   BQ,   "writes rows + run_ledger", "load jobs / insertAll")
+Rel(FP,   LAKE, "writes artefacts")
+Rel(BQ,   EN,   "reads account_src")
+Rel(EN,   BQ,   "writes enriched rows")
+Rel(BQ,   JP,   "reads curated")
+Rel(JP,   LAKE, "writes account JSON")
+Rel(JP,   BUS,  "publishes")
+Rel(BUS,  DS,   "consumes")
+Rel(BUS,  RECON,"confirmations", "JSON/protobuf")
+Rel(LAKE, LOAD, "reads account JSON")
+Rel(LOAD, BUS,  "publishes account, key = dedupKey", "target-system-target")
+Rel(BUS,  VC,   "consumes account documents", "target-system-target")
+Rel(VC,   BUS,  "confirmation (created|duplicate) / rejection events", "JSON or protobuf")
+Rel(BUS,  LOAD, "settle: verdict per published key", "confirmations + rejections")
+Rel(BUS,  MOCK, "consumes account documents — local", "target-system-target")
+Rel(LOAD, LAKE, "writes .RPT")
+Rel(BQ,   RECON,"run_ledger + record_lineage + key-level joins", "BigQuery REST")
+Rel(RECON,LAKE, "writes reconciliation report")
+Rel(DF,   BQ,   "transforms in place", "SQLX")
+Rel_D(SEC, EXT, "PGP keys, credentials")
+Rel_D(SEC, FP,  "credentials")
+Rel_D(SEC, DF,  "Git token")
+
+SHOW_LEGEND()
+@enduml

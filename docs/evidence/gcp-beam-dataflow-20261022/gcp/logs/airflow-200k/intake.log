@@ -1,0 +1,28 @@
+2026-10-22T14:27:30.995681597Z  ::group::Pre task execution logs
+2026-10-22T14:27:31.543306771Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.intake manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:27:31.562691626Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.intake manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:27:31.562746410Z  Starting attempt 1 of 3
+2026-10-22T14:27:31.646191810Z  Executing <Task(KubernetesPodOperator): intake> on 2026-10-22 14:27:22+00:00
+2026-10-22T14:27:31.660128075Z  Started process 1367 to run task
+2026-10-22T14:27:31.662616891Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'intake', 'manual__2026-10-22T14:27:22+00:00', '--job-id', '18', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmpkz57nfd2']
+2026-10-22T14:27:31.663251076Z  Job 18: Subtask intake
+2026-10-22T14:27:31.802190237Z  Running <TaskInstance: etlr_beam_migration.intake manual__2026-10-22T14:27:22+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T14:27:32.096018214Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='intake' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T14:27:22+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T14:27:22+00:00'
+2026-10-22T14:27:32.097106298Z  ::endgroup::
+2026-10-22T14:27:32.151063878Z  Building pod intake-8f6rwman with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'intake', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T14:27:32.609379076Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T14:27:32.882046817Z  Found matching pod intake-8f6rwman with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'task_id': 'intake', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T14:27:32.882801610Z  `try_number` of task_instance: 1
+2026-10-22T14:27:32.882945603Z  `try_number` of pod: 1
+2026-10-22T14:27:32.907299691Z  Pod not yet started: intake-8f6rwman
+2026-10-22T14:32:32.779409738Z  [base] WARNING:apache_beam.options.pipeline_options:Bucket gs://<project>-dataflow-temp/tmp used as temp_location has soft-delete policy enabled. To avoid being billed for unnecessary storage costs, turn off the soft delete feature on buckets that your Dataflow jobs use for temporary and staging storage. For more information, see https://cloud.google.com/storage/docs/use-soft-delete#remove-soft-delete-policy.
+2026-10-22T14:32:33.787084615Z  [base] intake: {"accounted": 200005, "balances": true, "by_reason": {}, "imbalance": 0, "migrated": 200002, "not_migrated": 3, "rejected": 3, "src_read": 200005, "written": 200002}
+
+2026-10-22T14:32:33.852373443Z  Pod intake-8f6rwman has phase Running
+2026-10-22T14:32:35.904168863Z  Deleting pod: intake-8f6rwman
+2026-10-22T14:32:35.990481395Z  ::group::Post task execution logs
+2026-10-22T14:32:36.024859819Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=intake, run_id=manual__2026-10-22T14:27:22+00:00, execution_date=20261022T142722, start_date=20261022T142731, end_date=20261022T143236
+2026-10-22T14:32:36.115914086Z  Task exited with return code 0
+2026-10-22T14:32:36.188025653Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T14:32:36.192422862Z  ::endgroup::

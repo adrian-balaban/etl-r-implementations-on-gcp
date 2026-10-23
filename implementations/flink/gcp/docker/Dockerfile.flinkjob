@@ -1,0 +1,84 @@
+# Shared contracts/harness come from the monorepo's spec/ via a NAMED BUILD CONTEXT, not from this
+# directory (there they are symlinks, which a build context does not follow). Build with:
+#   podman build --build-context spec=../../spec -f gcp/docker/Dockerfile.flinkjob ... .   (from implementations/flink)
+# Without --build-context, `COPY --from=spec` is read as an image called "spec" and fails confusingly.
+
+# Flink job image for GCP — the JobManager/TaskManager image the
+# Flink Kubernetes Operator runs, submitting one of the four job classes as a
+# FlinkDeployment (IntakeJob / CurateEnrichJob / ProduceJob / DataStreamJob, selected by the
+# MIG_MAIN_CLASS build arg / the job's `args` at deploy time — see gcp/flink-deployments/).
+#
+# Same base as local-development-podman/flink-image/Dockerfile
+# (docker.io/library/flink:2.2.1-java17) — that is the whole point:
+# the job jars travel unmodified, so the image only needs to add
+# what's new for GCP — the GCS filesystem plugin.
+#
+# ── build ─────────────────────────────────────────────────────────────────────
+FROM docker.io/maven:3.9-eclipse-temurin-17 AS build
+
+# Defaulted, not bare: a bare `ARG MIG_MODULE` expands to the empty string when the caller
+# forgets --build-arg, and the failure that produces is `stat "/src": no such file or
+# directory` several layers later — which names neither the argument nor the module. The
+# SQL variant is the image this file exists to build (gcp/flink-deployments/* all run
+# mig.sql.*), so it is the right default rather than an arbitrary one.
+ARG MIG_MODULE=variant-flink-sql-batch-job
+WORKDIR /build
+
+# POMs first so the dependency layer caches across source changes. Every module pom is
+# needed even for one module's jar: the root reactor pom lists every module and Maven
+# refuses to read the reactor if a declared module is missing (same reasoning as the
+# beam-dataflow's Dockerfile.javaapp).
+COPY pom.xml ./
+COPY common/pom.xml ./common/pom.xml
+COPY gate/pom.xml ./gate/pom.xml
+COPY variant-flink-sql-batch-job/pom.xml ./variant-flink-sql-batch-job/pom.xml
+COPY variant-flink-datastream-batch-job/pom.xml ./variant-flink-datastream-batch-job/pom.xml
+COPY target-system-mock/pom.xml ./target-system-mock/pom.xml
+COPY recon/pom.xml ./recon/pom.xml
+COPY component-tests/pom.xml ./component-tests/pom.xml
+RUN mvn -B -q -pl "${MIG_MODULE}" -am dependency:go-offline -DskipTests
+
+# The contracts a job reads at startup (Mapping.load, TargetSchemaValidator) — not a
+# Maven resource, read from the filesystem at a repoRoot argument, so they travel as
+# plain files in the image rather than inside the jar.
+COPY --from=spec contracts ./contracts
+
+COPY common/src ./common/src
+COPY "${MIG_MODULE}/src" "./${MIG_MODULE}/src"
+
+# The shaded uber-jar and a plain (non-shaded, no dependencies bundled) jar with the
+# Maven version suffix both land in target/ — sorting by name picks the wrong one
+# (e.g. "variant-flink-sql-batch-job-0.1.0.jar" < "variant-flink-sql-batch-job.jar"
+# lexicographically). The shaded jar is always the largest, so pick by size.
+RUN mvn -B -q -pl "${MIG_MODULE}" -am package -DskipTests \
+ && ls -la "${MIG_MODULE}"/target/*.jar \
+ && cp "$(ls -S ${MIG_MODULE}/target/*.jar | grep -v original- | head -1)" /build/job.jar
+
+# ── runtime ───────────────────────────────────────────────────────────────────
+FROM docker.io/library/flink:2.2.1-java17
+
+USER root
+
+# gs:// support via flink-gs-fs-hadoop:2.2.1 (verified to exist on Maven Central
+# for this exact Flink version, so no downgrade is needed).
+# MUST go in plugins/, not lib/: Flink's plugin loading is a separate classpath from the
+# main one, and a filesystem factory registered on the wrong path is silently never
+# found (the job then fails on the first gs:// path with "no filesystem for scheme").
+RUN set -eux; \
+    GS_URL="https://repo1.maven.org/maven2/org/apache/flink/flink-gs-fs-hadoop/2.2.1/flink-gs-fs-hadoop-2.2.1.jar"; \
+    GS_JAR=/opt/flink/plugins/gs-fs-hadoop/flink-gs-fs-hadoop-2.2.1.jar; \
+    mkdir -p /opt/flink/plugins/gs-fs-hadoop; \
+    curl -fSL --retry 3 --retry-delay 2 --max-time 120 "$GS_URL" -o "$GS_JAR"
+
+# The job jar goes in usrlib, not lib — Flink's own recommended location for
+# user-supplied application code, kept separate from the distribution's own classpath.
+RUN mkdir -p /opt/flink/usrlib
+COPY --from=build /build/job.jar /opt/flink/usrlib/job.jar
+COPY --from=spec contracts /opt/flink/contracts
+
+USER flink
+
+# Args passed at FlinkDeployment submission time select the class and its own args
+# (inputFile/runId/jdbcUrl/... — see the four job classes' javadoc); this image is
+# generic across all four, matching how variant-flink-sql-batch-job.jar's shade-plugin
+# manifest already picks a default main class per module.

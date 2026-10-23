@@ -1,0 +1,8 @@
+# C20 stage the 200,000-account input (extract app, PGP, 4 data files), 2026-10-22T14:26:34Z
+input: 200005 data records, sha256 5f29f6219b30e7e82979e52716c5838335f64e9a30782a202d06c9e65168dc66
+$ java -jar apps/extract/target/extract.jar --input <200k ACCOUNT.src> --bucket <project>-landing --gcs-host https://storage.googleapis.com --run-id run-gcp-200k-20261022 --gnupg-home local/keys --recipient <prototype key> --split 50000
+extractor: run=run-gcp-200k-20261022 records=200005 dat_files=5 extraction_errors=0 -> gs://<project>-landing/extraction/run-gcp-200k-20261022/
+       258  2026-10-22T14:26:36Z  gs://<project>-landing/extraction/run-gcp-200k-20261022/ACCOUNT.FLG
+   3582949  2026-10-22T14:26:36Z  gs://<project>-landing/extraction/run-gcp-200k-20261022/ACCOUNT.tar.gz.pgp
+TOTAL: 2 objects, 3583207 bytes (3.42 MiB)
+staged-at: 2026-10-22T14:26:38Z

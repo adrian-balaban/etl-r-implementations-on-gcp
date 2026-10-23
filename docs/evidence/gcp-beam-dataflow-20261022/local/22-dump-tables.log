@@ -1,0 +1,8 @@
+# dump the seven tables for the run (BigQuery emulator), 2026-10-22T12:52:15Z
+  account_src          52 rows  (mig-local.etlr_extraction.account_src)
+  account_curated      52 rows  (mig-local.etlr_transformation.account_curated)
+  account_enriched     52 rows  (mig-local.etlr_transformation.account_enriched)
+  account_target       50 rows  (mig-local.etlr_transformation.account_target)
+  reject_log            5 rows  (mig-local.etlr_recon.reject_log)
+  record_lineage        5 rows  (mig-local.etlr_recon.record_lineage)
+  run_ledger            1 rows  (mig-local.etlr_recon.run_ledger)

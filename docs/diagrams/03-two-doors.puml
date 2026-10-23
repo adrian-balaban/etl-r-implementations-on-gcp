@@ -1,0 +1,21 @@
+@startuml 03-two-doors
+!pragma layout smetana
+title Two doors, no third
+start
+:source record;
+if (parse ok?) then (yes)
+  if (map ok?) then (yes)
+    if (schema valid?) then (yes)
+      :WRITTEN\n(migrated); <<#palegreen>>
+    else (no)
+      :REJECTED\nstage schema · SCHEMA_INVALID; <<#mistyrose>>
+    endif
+  else (no)
+    :REJECTED\nstage map · MAP_*; <<#mistyrose>>
+  endif
+else (no)
+  :REJECTED\nstage parse · PARSE_*; <<#mistyrose>>
+endif
+:src_read = written + rejected;
+stop
+@enduml

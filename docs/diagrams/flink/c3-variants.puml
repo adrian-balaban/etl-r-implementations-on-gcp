@@ -1,0 +1,63 @@
+@startuml c3-variants
+!pragma layout smetana
+!include <C4/C4_Component>
+
+title Flink: two variants, one answer
+ContainerDb(postgres, "Migration Database", "PostgreSQL 16", "etlr_extraction, etlr_transformation, etlr_recon")
+ContainerQueue(kafka, "Kafka", "Managed Kafka, Redpanda", "target-system-target")
+Container(gcs, "Landing Bucket", "GCS or local files", "work/<run_id>/ACCOUNT.src")
+Container(contracts, "contracts/", "Files read at startup", "TDS, mapping, reference data, schema")
+
+Container_Boundary(common, "common: the one two-door engine") {
+    Component(c_tds, "Tds.RecordParser", "Java", "Walks fields in TDS declaration order")
+    Component(c_keys, "Keys", "Java", "sha256 keys: raw:<hash>, account_key")
+    Component(c_doors, "Doors", "Java", "Stage and Reason enums, ported 1:1")
+    Component(c_router, "RecordRouter", "Java", "parse → map → schema; one outcome per record")
+    Component(c_map, "Mapping.Engine", "Java", "Status A|C|D → ACTIVE|CLOSED|DORMANT, else reject")
+    Component(c_schema, "TargetSchemaValidator", "Java", "Schema predicates → SCHEMA_INVALID")
+}
+
+Container_Boundary(sql, "SQL variant: deployed, three jobs in sequence") {
+    Component(intake, "IntakeJob + 10-intake.sql.template", "Flink Table API", "Parse door as SQL CASE; rejects and lineage")
+    Component(curate, "CurateEnrichJob + 20-curate-enrich.sql.template", "Flink Table API", "Normalises, then joins branches; no door")
+    Component(produce, "ProduceJob + 30-produce.sql.template", "Flink Table API", "Map door, then schema door; JSON built once")
+    Component(support, "SqlJobSupport", "Java", "Asserts BATCH mode; clears run_id rows for re-runs")
+}
+
+Container_Boundary(ds, "DataStream variant: parity oracle, not deployed") {
+    Component(dsjob, "DataStreamJob", "Flink DataStream API", "One pass: FileSource → RecordRouter; rejects as side outputs")
+    Component(dssink, "KafkaTargetSink", "RichSinkFunction", "Publishes the same target document")
+}
+
+Rel(intake, gcs, "Reads ACCOUNT.src, one row per line")
+Rel(intake, contracts, "TDS for headerLine()")
+Rel(intake, postgres, "account_src, reject_log(parse), record_lineage")
+
+Rel(curate, postgres, "Reads account_src for the run_id")
+Rel(curate, contracts, "branches.json")
+Rel(curate, postgres, "Writes account_curated, account_enriched")
+
+Rel(produce, postgres, "Reads account_enriched for the run_id")
+Rel(produce, contracts, "Schema rules rewritten in SQL, not a UDF: parity stays meaningful")
+Rel(produce, postgres, "account_target, reject_log(map|schema), record_lineage")
+Rel(produce, kafka, "Same StatementSet, key = account_key", "upsert-kafka")
+
+Rel(intake, support, "batchEnvironment / jdbcTable / deleteRunId")
+Rel(curate, support, "")
+Rel(produce, support, "")
+
+Rel(dsjob, gcs, "Reads ACCOUNT.src")
+Rel(dsjob, contracts, "Mapping.load, TargetSchemaValidator")
+Rel(dsjob, c_router, "Calls the engine directly")
+Rel(dsjob, postgres, "account_target, reject_log, record_lineage only")
+Rel(dsjob, dssink, "Survivors")
+Rel(dssink, kafka, "")
+
+Rel(c_router, c_tds, "")
+Rel(c_router, c_keys, "")
+Rel(c_router, c_doors, "")
+Rel(c_router, c_map, "")
+Rel(c_router, c_schema, "")
+
+SHOW_LEGEND()
+@enduml

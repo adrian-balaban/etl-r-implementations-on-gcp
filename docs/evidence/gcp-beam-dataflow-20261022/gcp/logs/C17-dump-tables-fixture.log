@@ -1,0 +1,9 @@
+# C17 dump the seven tables of the fixture run from real BigQuery, 2026-10-22T14:29:02Z
+(local/scripts/dump_tables.py stalled inside the repo's BigQuery wrapper on this machine; same cell format, straight through google-cloud-bigquery)
+  account_src            52 rows  (etlr_extraction.account_src)
+  account_curated        52 rows  (etlr_transformation.account_curated)
+  account_enriched       52 rows  (etlr_transformation.account_enriched)
+  account_target         50 rows  (etlr_transformation.account_target)
+  reject_log              5 rows  (etlr_recon.reject_log)
+  record_lineage          5 rows  (etlr_recon.record_lineage)
+  run_ledger              1 rows  (etlr_recon.run_ledger)

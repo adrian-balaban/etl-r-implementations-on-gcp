@@ -1,0 +1,12 @@
+# B8 mock counters (instance since the last recycle 15:04:30Z), 2026-10-22T15:08:39Z
+{
+    "received": 723390,
+    "accepted": 200000,
+    "duplicatesIgnored": 523390,
+    "injectedFailures": 0,
+    "confirmationsPublished": 723390,
+    "confirmationsFailed": 0,
+    "rejectionsPublished": 0,
+    "consumedFromTopic": 723390,
+    "distinctAccounts": 200000
+}

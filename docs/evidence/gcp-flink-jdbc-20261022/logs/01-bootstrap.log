@@ -1,0 +1,5 @@
+# bootstrap flink-jdbc against the existing state bucket (prefix envs/flink-jdbc), 2026-10-22T11:52:24Z
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+Plan: 1 to import, 16 to add, 1 to change, 0 to destroy.
+Apply complete! Resources: 1 imported, 16 added, 1 changed, 0 destroyed.

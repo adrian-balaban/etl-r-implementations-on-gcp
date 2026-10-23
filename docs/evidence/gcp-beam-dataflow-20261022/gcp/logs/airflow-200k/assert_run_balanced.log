@@ -1,0 +1,17 @@
+2026-10-22T15:05:38.236608358Z  ::group::Pre task execution logs
+2026-10-22T15:05:38.356373605Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.assert_run_balanced manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T15:05:38.454339508Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.assert_run_balanced manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T15:05:38.454505081Z  Starting attempt 1 of 3
+2026-10-22T15:05:38.560195779Z  Executing <Task(PythonOperator): assert_run_balanced> on 2026-10-22 14:27:22+00:00
+2026-10-22T15:05:38.648351422Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'assert_run_balanced', 'manual__2026-10-22T14:27:22+00:00', '--job-id', '30', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmp2pzs2_3e']
+2026-10-22T15:05:38.648592103Z  Job 30: Subtask assert_run_balanced
+2026-10-22T15:05:38.651559842Z  Started process 2268 to run task
+2026-10-22T15:05:38.853639318Z  Running <TaskInstance: etlr_beam_migration.assert_run_balanced manual__2026-10-22T14:27:22+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T15:05:39.749339975Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='assert_run_balanced' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T14:27:22+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T14:27:22+00:00'
+2026-10-22T15:05:39.751713740Z  ::endgroup::
+2026-10-22T15:05:46.958929352Z  Done. Returned value was: None
+2026-10-22T15:05:46.959493875Z  ::group::Post task execution logs
+2026-10-22T15:05:46.996419101Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=assert_run_balanced, run_id=manual__2026-10-22T14:27:22+00:00, execution_date=20261022T142722, start_date=20261022T150538, end_date=20261022T150546
+2026-10-22T15:05:47.174287994Z  Task exited with return code 0
+2026-10-22T15:05:47.346520327Z  0 downstream tasks scheduled from follow-on schedule check
+2026-10-22T15:05:47.351287648Z  ::endgroup::

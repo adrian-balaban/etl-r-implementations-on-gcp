@@ -1,0 +1,31 @@
+2026-10-22T14:03:14.181809393Z  ::group::Pre task execution logs
+2026-10-22T14:03:14.224124139Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.produce manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T14:03:14.244238995Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.produce manual__2026-10-22T13:51:40+00:00 [queued]>
+2026-10-22T14:03:14.244353800Z  Starting attempt 1 of 3
+2026-10-22T14:03:14.268466308Z  Executing <Task(KubernetesPodOperator): produce> on 2026-10-22 13:51:40+00:00
+2026-10-22T14:03:14.335217806Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'produce', 'manual__2026-10-22T13:51:40+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmph851qcyt']
+2026-10-22T14:03:14.335580138Z  Job 9: Subtask produce
+2026-10-22T14:03:14.335621768Z  Started process 776 to run task
+2026-10-22T14:03:14.445076573Z  Running <TaskInstance: etlr_beam_migration.produce manual__2026-10-22T13:51:40+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T14:03:14.775400320Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='produce' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T13:51:40+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T13:51:40+00:00'
+2026-10-22T14:03:14.776804527Z  ::endgroup::
+2026-10-22T14:03:14.837495508Z  Building pod produce-aasoi1mm with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'produce', 'run_id': 'manual__2026-10-22T1351400000-48db336dc', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T14:03:15.207235440Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T14:03:15.449205457Z  Found matching pod produce-aasoi1mm with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1351400000-48db336dc', 'task_id': 'produce', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T14:03:15.450292149Z  `try_number` of task_instance: 1
+2026-10-22T14:03:15.450437376Z  `try_number` of pod: 1
+2026-10-22T14:03:15.483016744Z  Pod not yet started: produce-aasoi1mm
+2026-10-22T14:07:48.545204019Z  [base] WARNING:apache_beam.options.pipeline_options:Bucket gs://<project>-dataflow-temp/tmp used as temp_location has soft-delete policy enabled. To avoid being billed for unnecessary storage costs, turn off the soft delete feature on buckets that your Dataflow jobs use for temporary and staging storage. For more information, see https://cloud.google.com/storage/docs/use-soft-delete#remove-soft-delete-policy.
+2026-10-22T14:07:49.549002062Z  [base] produce: {"batch_size": 200, "batches": 1, "rejected": 2, "sinks": {"sinks": [{"batches": 1, "messages": 50, "sink": "kafka", "topic": "target-system-target"}, {"batches": 1, "bucket": "<project>-json-out", "documents": 50, "files": ["json/run-gcp-fixture-20261022/ACCOUNT.00000.json"], "prefix": "json/run-gcp-fixture-20261022/", "sink": "gcs-json"}]}, "written": 50}
+
+2026-10-22T14:07:49.575343070Z  Pod produce-aasoi1mm log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T14:07:50.620794617Z  [base] produce: {"batch_size": 200, "batches": 1, "rejected": 2, "sinks": {"sinks": [{"batches": 1, "messages": 50, "sink": "kafka", "topic": "target-system-target"}, {"batches": 1, "bucket": "<project>-json-out", "documents": 50, "files": ["json/run-gcp-fixture-20261022/ACCOUNT.00000.json"], "prefix": "json/run-gcp-fixture-20261022/", "sink": "gcs-json"}]}, "written": 50}
+
+2026-10-22T14:07:50.687615466Z  Pod produce-aasoi1mm has phase Running
+2026-10-22T14:07:52.739050218Z  Deleting pod: produce-aasoi1mm
+2026-10-22T14:07:52.807642301Z  ::group::Post task execution logs
+2026-10-22T14:07:52.841940342Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=produce, run_id=manual__2026-10-22T13:51:40+00:00, execution_date=20261022T135140, start_date=20261022T140314, end_date=20261022T140752
+2026-10-22T14:07:52.899217126Z  Task exited with return code 0
+2026-10-22T14:07:52.968340628Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T14:07:52.972648642Z  ::endgroup::

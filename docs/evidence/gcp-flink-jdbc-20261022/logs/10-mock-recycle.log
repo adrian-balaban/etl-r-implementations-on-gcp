@@ -1,0 +1,7 @@
+# mock recycle: consumer died at first start (OAUTHBEARER auth failure), 2026-10-22T12:18:32Z
+$ gcloud run services update mig-flink-target-system-mock --region=europe-west1 --update-env-vars=RECYCLED_AT=<utc>
+Creating Revision...........................................................................................................................................................done
+Routing traffic.....done
+Service [mig-flink-target-system-mock] revision [mig-flink-target-system-mock-00002-zb2] has been deployed and is serving 100 percent of traffic.
+Service URL: <service-url>
+recycled-at: 2026-10-22T12:18:49Z

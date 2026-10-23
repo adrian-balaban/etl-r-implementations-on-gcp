@@ -1,0 +1,20 @@
+# Remote state for envs/dev — a PARTIAL backend configuration.
+#
+# Why this is an .example and not live: the bucket must exist before Terraform can store state in it,
+# and module.bootstrap is what creates it. On a fresh project the first apply therefore runs on local
+# state, and only then is state migrated. The block that used to live in main.tf hard-coded ONE
+# project's bucket, which made `terraform init` fail on every other project before it could
+# create anything.
+#
+# Leaving the bucket name out of the file is what makes it reusable across projects — it is supplied
+# at init time:
+#
+#   cp backend.tf.example backend.tf
+#   terraform init -migrate-state \
+#     -backend-config="bucket=<project>-tfstate" \
+#     -backend-config="prefix=envs/dev"
+#
+# (docs/runbook-gcp.md, step 2.)
+terraform {
+  backend "gcs" {}
+}

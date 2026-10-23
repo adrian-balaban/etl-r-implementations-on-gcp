@@ -1,0 +1,17 @@
+{
+  "lane" : "load",
+  "record" : "ACCOUNT",
+  "runId" : "run-gcp-fixture-20261022",
+  "reportVersion" : 2,
+  "sink" : "kafka",
+  "generatedAt" : "2026-10-22T14:17:53.810264060Z",
+  "jsonFilesRead" : 1,
+  "documentsRead" : 50,
+  "published" : 50,
+  "accepted" : 13,
+  "duplicatesIgnored" : 37,
+  "errors" : 0,
+  "unsettled" : 0,
+  "retriesPerformed" : 0,
+  "sourceFiles" : [ "json/run-gcp-fixture-20261022/ACCOUNT.00000.json" ]
+}

@@ -1,0 +1,52 @@
+@startuml 08-stage-mapping
+!pragma layout smetana
+title Same stages, three implementations
+left to right direction
+map extract {
+ Beam => apps/extract
+ Flink => harness/bundle.py
+ Flink-JDBC => etlr_source.account (typed)
+}
+map gate {
+ Beam => DAG task gate + intake
+ Flink => gate
+ Flink-JDBC => gate-jdbc
+}
+map intake {
+ Beam => pipelines/intake
+ Flink => IntakeJob
+ Flink-JDBC => JdbcIntakeJob
+}
+map curate {
+ Beam => Dataform (DAG curate_*)
+ Flink => CurateEnrichJob
+ Flink-JDBC => CurateEnrichJob
+}
+map enrich {
+ Beam => pipelines/enrich
+ Flink => CurateEnrichJob
+ Flink-JDBC => CurateEnrichJob
+}
+map produce {
+ Beam => pipelines/produce
+ Flink => ProduceJob · DataStreamJob
+ Flink-JDBC => ProduceJob
+}
+map load {
+ Beam => apps/load
+ Flink => Kafka sink in produce
+ Flink-JDBC => Kafka sink in produce
+}
+map recon {
+ Beam => apps/recon
+ Flink => recon
+ Flink-JDBC => recon-jdbc · recon
+}
+extract --> gate
+gate --> intake
+intake --> curate
+curate --> enrich
+enrich --> produce
+produce --> load
+load --> recon
+@enduml

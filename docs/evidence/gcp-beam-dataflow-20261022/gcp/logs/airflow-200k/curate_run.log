@@ -1,0 +1,38 @@
+2026-10-22T14:32:39.194577776Z  ::group::Pre task execution logs
+2026-10-22T14:32:39.237321680Z  Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etlr_beam_migration.curate_run manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:32:39.255308940Z  Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etlr_beam_migration.curate_run manual__2026-10-22T14:27:22+00:00 [queued]>
+2026-10-22T14:32:39.255352583Z  Starting attempt 1 of 3
+2026-10-22T14:32:39.280301292Z  Executing <Task(KubernetesPodOperator): curate_run> on 2026-10-22 14:27:22+00:00
+2026-10-22T14:32:39.336998988Z  Started process 1486 to run task
+2026-10-22T14:32:39.339310840Z  Running: ['airflow', 'tasks', 'run', 'etlr_beam_migration', 'curate_run', 'manual__2026-10-22T14:27:22+00:00', '--job-id', '20', '--raw', '--subdir', 'DAGS_FOLDER/etlr_beam.py', '--cfg-path', '/tmp/tmp2u5xcbwp']
+2026-10-22T14:32:39.339626174Z  Job 20: Subtask curate_run
+2026-10-22T14:32:39.450468749Z  Running <TaskInstance: etlr_beam_migration.curate_run manual__2026-10-22T14:27:22+00:00 [running]> on host airflow-worker-b2kr8
+2026-10-22T14:32:39.775930626Z  Exporting env vars: AIRFLOW_CTX_DAG_OWNER='our-team' AIRFLOW_CTX_DAG_ID='etlr_beam_migration' AIRFLOW_CTX_TASK_ID='curate_run' AIRFLOW_CTX_EXECUTION_DATE='2026-10-22T14:27:22+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-22T14:27:22+00:00'
+2026-10-22T14:32:39.777605935Z  ::endgroup::
+2026-10-22T14:32:39.805727783Z  Building pod dataform-run-b3klalxn with labels: {'dag_id': 'etlr_beam_migration', 'task_id': 'curate_run', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+2026-10-22T14:32:40.193392299Z  Google Cloud API Call Error (PermissionDenied): No access for Secret ID airflow-connections-kubernetes_default.
+                Did you add 'secretmanager.versions.access' permission?
+2026-10-22T14:32:40.455611877Z  Found matching pod dataform-run-b3klalxn with labels {'airflow_kpo_in_cluster': 'True', 'airflow_version': '2.9.3-composer', 'dag_id': 'etlr_beam_migration', 'kubernetes_pod_operator': 'True', 'run_id': 'manual__2026-10-22T1427220000-ad94c9ae9', 'task_id': 'curate_run', 'topology.kubernetes.io/region': 'europe-west1', 'topology.kubernetes.io/zone': 'europe-west1-d', 'try_number': '1'}
+2026-10-22T14:32:40.456320490Z  `try_number` of task_instance: 1
+2026-10-22T14:32:40.456971443Z  `try_number` of pod: 1
+2026-10-22T14:32:40.488698091Z  Pod not yet started: dataform-run-b3klalxn
+2026-10-22T14:32:45.510989681Z  Pod not yet started: dataform-run-b3klalxn
+2026-10-22T14:32:55.533576207Z  [base] dataform: compiling dataform (runId=run-gcp-200k-20261022)
+2026-10-22T14:32:55.534038408Z  [base]   1 declaration(s), 1 action(s)
+2026-10-22T14:32:55.534366116Z  [base]   → <project>.etlr_transformation.account_curated
+2026-10-22T14:32:55.535118069Z  [base]   ✓ <project>.etlr_transformation.account_curated: 200002 rows
+2026-10-22T14:32:56.533962507Z  [base] dataform complete.
+
+2026-10-22T14:32:56.562309362Z  Pod dataform-run-b3klalxn log read interrupted but container base still running. Logs generated in the last one second might get duplicated.
+2026-10-22T14:32:57.756842587Z  [base] dataform: compiling dataform (runId=run-gcp-200k-20261022)
+2026-10-22T14:32:57.759586136Z  [base]   1 declaration(s), 1 action(s)
+2026-10-22T14:32:57.759647917Z  [base]   → <project>.etlr_transformation.account_curated
+2026-10-22T14:32:57.760370148Z  [base]   ✓ <project>.etlr_transformation.account_curated: 200002 rows
+2026-10-22T14:32:57.951985290Z  [base] dataform complete.
+
+2026-10-22T14:32:59.244327033Z  Deleting pod: dataform-run-b3klalxn
+2026-10-22T14:32:59.488563207Z  ::group::Post task execution logs
+2026-10-22T14:32:59.703092411Z  Marking task as SUCCESS. dag_id=etlr_beam_migration, task_id=curate_run, run_id=manual__2026-10-22T14:27:22+00:00, execution_date=20261022T142722, start_date=20261022T143239, end_date=20261022T143259
+2026-10-22T14:33:00.034373944Z  Task exited with return code 0
+2026-10-22T14:33:00.260424795Z  1 downstream tasks scheduled from follow-on schedule check
+2026-10-22T14:33:00.336862642Z  ::endgroup::
