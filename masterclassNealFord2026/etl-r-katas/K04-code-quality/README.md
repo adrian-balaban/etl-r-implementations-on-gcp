@@ -1,7 +1,7 @@
 # K04. Calitate cod și fitness functions
 
 ## Scenariu (5 min)
-Echipa vrea să mențină calitatea codului AutoGrading însă nu știe să calculeze complexitatea ciclomatică, abstractness/instability sau distance de la main sequence. CI raportă metricile, dar e fitness function?
+Echipa vrea să mențină calitatea codului AutoGrading, însă nu știe să calculeze complexitatea ciclomatică, abstractness/instability sau distanța față de main sequence. CI raportează metricile, dar sunt o fitness function?
 
 ## Material sursă
 - `pipelines/common/tds.py` (RecordParser, complexitate reală)
@@ -13,12 +13,12 @@ Echipa vrea să mențină calitatea codului AutoGrading însă nu știe să calc
 
 ## Task-uri (10 min, runde individual-discussion-team)
 
-1. **Calculează complexitatea ciclomatică** pentru metodă `grade()` reală — esențială sau accidentală?
+1. **Calculează complexitatea ciclomatică** pentru metoda `grade()` reală — esențială sau accidentală?
 2. **Calculează A / I / D** (`D = |A + I − 1|`, prag 0.3) per componentă reală; desenează main-sequence.
 3. **ADL cu praguri**, cu `MAX_CC_GENERATED` mai strict pentru cod de agent.
-4. **Refactorizare** care mută componentă pe secvența principală.
+4. **Refactorizare** care mută componenta pe secvența principală.
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define code quality fitness functions

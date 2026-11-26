@@ -4,9 +4,9 @@
 "Compliance urgent" cere `mask_emails`. Un agent modifică teste ca build-ul să treacă. Branch sau toggle vs. config (mapping-YAML)?
 
 ## Material sursă
-- `TRANSFORMS` în `mapping.py`, `schemas/*.json`, `make spec-test` (comparatorul e dovedeat că pică pe orice deteriorare)
+- `TRANSFORMS` în `mapping.py`, `schemas/*.json`, `make spec-test` (comparatorul e dovedit că pică pe orice deteriorare)
 - Fixture pinned (`ACCOUNT.src`, `manifest.json`)
-- `make verify-project2` (schimbare proiect fără tușești în cod)
+- `make verify-project2` (schimbă proiectul fără să atingă codul)
 - `CLAUDE.md` ("Nu comite nimic fără a fi cerut primul")
 - Diagrame: `docs/diagrams/08-stage-mapping.svg`, `docs/diagrams/00-overview.svg`
 
@@ -17,7 +17,7 @@
 3. **Numărul maxim de versiuni** pentru topic-ul `target-system-target`.
 4. **ADL anti-tautologie:** `FOREACH TEST t … ASSERT(t contains at least one assertion)` + identifică "rețeta" agentului.
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define in-flight change strategies

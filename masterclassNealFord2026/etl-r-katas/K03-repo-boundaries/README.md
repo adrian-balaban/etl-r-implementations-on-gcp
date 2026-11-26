@@ -8,7 +8,7 @@ Un agent rugat să "refolosească parserul din flink în beam-dataflow" adaugă 
 - `spec/contracts/README.md` (`verify-project2`, `git diff --quiet -- pipelines apps`)
 - `spec/PIPELINE.md` (8 stațiuni fixe, echilibrul `src_read = written + rejected`)
 - `harness/generate.py` (generează inputurile și testele semnale)
-- `make spec-test` / `make conformance-all` (testele de conformă)
+- `make spec-test` / `make conformance-all` (testele de conformitate)
 - Diagrame: `docs/diagrams/00-overview.svg`, `docs/diagrams/08-stage-mapping.svg`
 
 ## Task-uri (10 min, runde individual-discussion-team)
@@ -18,7 +18,7 @@ Un agent rugat să "refolosească parserul din flink în beam-dataflow" adaugă 
 3. **Tabelul de partajat vs. duplicat pe cod real:** `compare.py`, `harness/generate.py`, mapping-ul — unde e volatilitatea?
 4. **`verify-project2` formalizat ca ADL aserțiune rulabilă.**
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define monorepo service boundaries

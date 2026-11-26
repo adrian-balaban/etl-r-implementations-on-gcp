@@ -1,7 +1,7 @@
 # K01. Arhitectură logică vs. implementare
 
 ## Scenariu (5 min)
-Un agent a generat structura de directoare a implementării `flink` din repo-ul ETL-R. Toate funcțiile rulează: `make conformance` returnează `68 / 68, staged`. Arhitectura logică coincide cu structura codului, dar e suficiente?
+Un agent a generat structura de directoare a implementării `flink` din repo-ul ETL-R. Toate funcțiile rulează: `make conformance` returnează `68 / 68, staged`. Arhitectura logică coincide cu structura codului, dar e suficientă?
 
 ## Material sursă
 - `implementations/flink/` (`gate/`, `recon/`, `sql/`, `variant-flink-sql-batch-job/`, `variant-flink-datastream-batch-job/`, `target-system-mock/`)
@@ -11,14 +11,14 @@ Un agent a generat structura de directoare a implementării `flink` din repo-ul 
 
 ## Task-uri (10 min, runde individual-discussion-team)
 
-1. **Citește directoarele ca arhitectură** — care domainuri, subdomainuri și component(e) descrie structura repo-ului?
-   - Identifică eventualele clasele orfane (Entity Trap: `sql/` numit după tabele, nu după comportament).
+1. **Citește directoarele ca arhitectură** — care domainuri, subdomainuri și componente descrie structura repo-ului?
+   - Identifică eventualele clase orfane (Entity Trap: `sql/` numit după tabele, nu după comportament).
 2. **Scrie ADL-ul de domainuri** pentru întregul repo (`spec/`, `implementations/<x>`, `harness`, `conformance`) + structura de directoare pe care o presupune.
-   - `ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES)` — ce prinde și ce rată.
+   - `ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES)` — ce prinde și ce ratează.
 3. **Cum ar simpla viața unui agent generând o implementare #4** care are acest ADL drept context?
    - Ce lipsă de cod ar avea nevoie?
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define ETL-R domains
@@ -33,7 +33,7 @@ ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES)
 
 ## Răspuns la task-uri (discuție echipă, 15 min)
 
-- **Task 1**: Repo-ul are 3 Service-uri top-level (flink, flink-jdbc, beam-dataflow) sub director `implementations/`. Există directoare specifice fiecarei implementări: `gate/`, `recon/`, `sql/`, `target-system-mock/` etc. Domainii logici sunt: Spec (fișierele specifice repo-ului), Harness (fișierele de generație a testelor), Conformance (oracol + comparație). Clasele orfane includ orice fișier Java/Python plasat la rădăcină a `implementations/...` sau `spec/`, nu într-o componentă definită explicit.
+- **Task 1**: Repo-ul are 3 Service-uri top-level (flink, flink-jdbc, beam-dataflow) sub director `implementations/`. Există directoare specifice fiecarei implementări: `gate/`, `recon/`, `sql/`, `target-system-mock/` etc. Domeniile logice sunt: Spec (fișierele specifice repo-ului), Harness (fișierele de generație a testelor), Conformance (oracol + comparație). Clasele orfane includ orice fișier Java/Python plasat la rădăcină a `implementations/...` sau `spec/`, nu într-o componentă definită explicit.
 
 - **Task 2**: ADL template complet pentru repo:
 ```
@@ -65,7 +65,7 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
 ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES)
 ```
 
-- **Task 3**: Agentul ar avea nevoie doar de `spec/`, `harness/` și `contracts/` pentru a reface structura. Codul real al fiecărei implementări (`variant-flink-sql-batch-job/`, `variant-flink-datastream-batch-job/`) ar rămâne izolat, nu ar fi necesar în ADL ci doar ca *implementation* detaliată.
+- **Task 3**: Agentul ar avea nevoie doar de `spec/`, `harness/` și `contracts/` pentru a reface structura. Codul real al fiecărei implementări (`variant-flink-sql-batch-job/`, `variant-flink-datastream-batch-job/`) ar rămâne izolat, nu ar fi necesar în ADL ci doar ca detaliu de implementare.
 
 ---
 *Generat în cadranul K01 — Arhitectură logică vs. implementare*

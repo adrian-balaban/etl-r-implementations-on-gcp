@@ -11,7 +11,7 @@
 
 **Clase orfane (Entity Trap):**
 
-- Orice fișier `.java`/`.py` plasat la rădăcină a `implementations/...` sau `spec/` fără ocomponent definită explicit în ADL
+- Orice fișier `.java`/`.py` plasat la rădăcină a `implementations/...` sau `spec/` fără un component definită explicit în ADL
 - Directoarele `sql/` (în Flink) sau `target-system-mock/` sunt numite după entitate de date, nu după comportament de componentă
 - `common/`, `config/` sau `component-tests/` fără proprietate Domeniu clară
 
@@ -72,4 +72,4 @@ Agentul ar avea nevoie doar de:
 - `harness/generate.py` - generatorul de inregistrări seeded (55 inregistrări cu 5 defecte în sarcinile de parse)
 - `spec/fixtures/ACCOUNT.src` - fisierul imutabil cu header + 55 de înregistrări (sha256: `86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c`)
 
-Codul real al fiecărei implementări rămâne izolat ca _implementation details_, nevoit doar la timpul de build/test local (`make generate | run | test | conformance | verify`).
+Codul real al fiecărei implementări rămâne izolat ca _implementation details_, necesar doar la timpul de build/test local (`make generate | run | test | conformance | verify`).

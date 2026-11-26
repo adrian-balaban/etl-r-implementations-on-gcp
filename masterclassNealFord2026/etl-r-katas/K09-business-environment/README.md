@@ -1,7 +1,7 @@
 # K09. Mediul de business și cost
 
 ## Scenariu (5 min)
-Banca vrea 20 de proiecte simultan și / sau 20 milioane de înregistrări pe run; o lege de residency apară într-o altă regiune. Cum rezonează fiecare implementare?
+Banca vrea 20 de proiecte simultan și / sau 20 milioane de înregistrări pe run; o lege de residency apare într-o altă regiune. Cum reacționează fiecare implementare?
 
 ## Material sursă
 - `docs/evidence/README.md` (numere reale: cost, timp, resurse)
@@ -12,11 +12,11 @@ Banca vrea 20 de proiecte simultan și / sau 20 milioane de înregistrări pe ru
 
 ## Task-uri (10 min, runde individual-discussion-team)
 
-1. **Cum rezonează fiecare implementare cu fiecare scenariu**; unde e riscul?
+1. **Cum reacționează fiecare implementare la fiecare scenariu**; unde e riscul?
 2. **Cost ADL pe 2 $-grade:** trece `beam-dataflow` la 20M (Composer $1.03 e deja fixed)?
-3. **Recomandare defensivă** (un Flink + un ADCI de streaming justificat?) + ADL de revenire (reconciliation FF) care monitorizează riscul.
+3. **Recomandare defensivă** (un Flink + o variantă de streaming justificată?) + ADL de revenire (reconciliation FF) care monitorizează riscul.
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define business environment and cost fitness functions

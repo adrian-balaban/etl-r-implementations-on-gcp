@@ -8,7 +8,7 @@
 | **Flink-jdbc** | ★ (cost) | ★★★★ (data consistency) | ★★★ (scalability) | Baza de date sursă dedicated + pipeline Postgres |
 | **Beam Dataflow** | ★ (cost ~2.5×) | ★★★★★ (fault tolerance) | ★★ (scalability) | Composer + BigQuery + Managed Kafka |
 
-**Concluzie:** Pentru deadline 6 luni + 200k students, **domain databases** câștigă pe balantă cost/consistentă/scalabilitate. Dedicated e costlu și necesită work de consistency; monolit e prea simplu pentru 200k concurrent connections.
+**Concluzie:** Pentru deadline 6 luni + 200k students, **domain databases** câștigă pe balanța cost/consistență/scalabilitate. Dedicated e costisitor și necesită muncă de consistență; monolitul e prea simplu pentru 200k conexiuni concurente.
 
 ## Task 2: ADL-ul topologiei (template complet)
 
@@ -44,23 +44,23 @@ ASSERT(once the message broker is drained, Customer Database and Ticketing Datab
 
 ## Task 3: Cine poate atinge reject_log / record_lineage
 
-| Acces | Cine are voie | Ce se întâmplă dacă se îngroază |
+| Acces | Cine are voie | Ce se întâmplă dacă se încalcă |
 |---|---|---|
-| **Write** | `loader-app` (la intrare) și `recon-service` (după run) | Dacă altceva scrie direct (de exemplu, Reporting Service), `reject_log` devine nenegovabil + audit-ul e compromis |
+| **Write** | `loader-app` (la intrare) și `recon-service` (după run) | Dacă altceva scrie direct (de exemplu, Reporting Service), `reject_log` devine neguvernabil + audit-ul e compromis |
 | **Read** | Toate serviciile care necesită confirmări / raportare | Dacă Reporting citește `reject_log` direct, nu respectă quantum boundaries; trebuie să folosească MCP tools |
 
 **Rezolvare:** Toate accesurile trebuie să fie declarate prin `ASSERT(...)`, nu accese directe. `reject_log` devine DLQ-ul sistemului cu reason-uri închise + cale umană (rectificarea sursei/mappingului).
 
 ## Task 4: `reject_log` ca DLQ complet
 
-**Ce lipsește din recipe completă "dead-letter + cale umană":**
+**Ce lipsește din rețeta completă "dead-letter + cale umană":**
 1. **Reason enumerat** – de exemplu, `PARSE_BAD_NUMERIC`, nu text liber
-2. **Călinea umană** – `record_lineage` tracează originea fiecărei înregistrări piazute în DLQ
+2. **Calea umană** – `record_lineage` tracează originea fiecărei înregistrări plasate în DLQ
 3. **Reconciliation fitness function** – `settle` contra confirmărilor, nu doar "lost count"
-4. **Idempotența pe account key** – "o inregistrare trimisă de două ori e stocată o singură dată"
+4. **Idempotența pe account key** – "o înregistrare trimisă de două ori e stocată o singură dată"
 
-**Receptă completă:**
+**Rețeta completă:**
 - `reject_log` cu coloane: `run_id`, `account_key`, `reason`, `detail`
 - `record_lineage` cu: `run_id`, `account_key`, `source_key` (raw:<hash>)
 - Fitness function: `ASSERT(when the answer queue is drained, every answer receipt in Test Database has a graded answer in Grading Database)`
-- Cale umană: dacă DLQ nu e gol după N minute, un operator revise erorile manual.
+- Cale umană: dacă DLQ nu e gol după N minute, un operator revizuiește erorile manual.

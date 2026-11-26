@@ -1,7 +1,7 @@
 # K14. Cuantificarea capabilităților
 
 ## Scenariu (5 min)
-Echipa dorește să măsureze capacitățile structurale ai架构-ului: simplitate, deployabilitate, scalabilitate, cost. Care e statusul fiecărei implementări?
+Echipa dorește să măsoare capacitățile structurale ale arhitecturii: simplitate, deployabilitate, scalabilitate, cost. Care e statusul fiecărei implementări?
 
 ## Material sursă
 - `docs/evidence/README.md` (numere reale: cost, timp, resurse)
@@ -14,10 +14,10 @@ Echipa dorește să măsureze capacitățile structurale ai架构-ului: simplita
 
 1. **Capability ADL:** Simplicity (# resurse Terraform: 71/81/75), Deployability (ramp-up), Scalability (200k la paralelism 1 → start-up domină), Cost.
 2. **Ce spun datele despre fit-ul fiecărei implementări pentru fiecare capabilitate?** Ce e trend și ce e un singur-run (Limits!).
-3. **Ce metrice temporale lipsesc în evidence pack-uri** ca să poți spune "readiness" (checklist §8: o singură măsuraretoare nu e dovadă).
+3. **Ce metrice temporale lipsesc în evidence pack-uri** ca să poți spune "readiness" (checklist §8: o singură măsurătoare nu e dovadă).
 4. **ADL composite:** Maintainability {main-sequence D < 0.3, complexitate < 4, resurse < 100}.
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define capability quantification for ETL-R

@@ -13,11 +13,11 @@
 ## Task-uri (10 min, runde individual-discussion-team)
 
 1. **Alege cele care susțin greutatea structurii**; respinge explicit restul cu motiv și unde aparțin (linter, check ingineresc).
-2. **Scrie-le în ADL năprins de cod** (repo-ul are deja balanța în README).
-3. **Care se scrie primul, în stilul LMAX?** (raspunsul: 1 — și repo-ul l-a scris pe primul loc).
+2. **Scrie-le în ADL înainte de cod** (repo-ul are deja balanța în README).
+3. **Care se scrie primul, în stilul LMAX?** (răspunsul: 1 — și repo-ul l-a scris pe primul loc).
 4. "Cost/run" pică în săptămâna 4 → nu-i bug; dispoziție: fix / revise / exemption cu owner și termen.
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define load-bearing fitness functions for ETL-R

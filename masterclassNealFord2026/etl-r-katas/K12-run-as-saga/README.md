@@ -13,5 +13,5 @@ Un run = 8 stațiuni peste 3-4 unități de deployment; nu poate să se piardă 
 
 1. **Cele 3 forțe:** Communication=asincron (topic-uri), Coordination=Orchestrated (Cloud Run job / Composer DAG — cine e orchestratorul la `flink` vs. `beam`?), Consistency=Eventual verificată (recon balance + settle) – argumentele pe cerințe.
 2. **"Atomic + choreography" — ce devine în realitate și de ce e neguvernabil.**
-3. **ADL:** `DEFINE SAGA Migration Run Saga` + contractojo strict pentru documentul țintă (JSON Schema — consumer-driven confirmations).
+3. **ADL:** `DEFINE SAGA Migration Run Saga` + contract strict pentru documentul țintă (JSON Schema — consumer-driven confirmations).
 4. **Scope de regenerare** = cuanta / job-ul, cu tabel de guardrails: behavior (conformance 68/68), static coupling (fără cuplaj nou), dynamic (tot asincron), contract (schema intact), capability (timp de run).

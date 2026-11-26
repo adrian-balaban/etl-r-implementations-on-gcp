@@ -3,7 +3,7 @@
 ## Task 1: Capability ADL
 
 **Simplicity** (# resurse Terraform, complexitate, cost):
-- **Flink:** 71 resurse (best), CC mig 4.6 (prajit în zona Orange dacă >5), cost $0.90 (best)
+- **Flink:** 71 resurse (best), CC mig 4.6 (în zona Orange dacă >5), cost $0.90 (best)
 - **Flink-jdbc:** 81 resurse, CC 4.6, cost $0.94
 - **Beam Dataflow:** 75 resurse, cost $2.33 (worst ~2.5× Flink)
 
@@ -13,8 +13,8 @@
 - **Beam Dataflow:** ramp-up 50 min 56 s (worst, Composer + Dataform), run 38 min 25 s
 
 **Scalability** (200k users, start-up dominant):
-- **Flink:** 3 job-uri, paralelism 1, pe un singur nod GKE 4-vCPU. Start-up dominate la 200k.
-- **Flink-jdbc:** asemenea GKE, dar load 200k rows în sursa Postgres se întâmplă înainte de run (4 min 20 s).
+- **Flink:** 3 job-uri, paralelism 1, pe un singur nod GKE 4-vCPU. Start-up-ul domină la 200k.
+- **Flink-jdbc:** similar ca GKE, dar încărcarea a 200k rows în sursa Postgres se face înainte de run (4 min 20 s).
 - **Beam Dataflow:** 3 job-uri Dataflow, un worker 1 vCPU fiecare, plus Dataform. Run 38 min 25 s, dar include o retry (fără retry ~28 min).
 
 **Cost:**
@@ -31,20 +31,20 @@
 ## Task 2: Ce spun datele despre fit-ul fiecărei implementări?
 
 **Tendințe (din evidence pack-uri, exact 1 run fiecare):**
-- **Flink:** Cost mic, timp de run mediu, resurse optimum, dar Kafka poate varia ramp-up cu ~10 min (cloud variance).
-- **Flink-jdbc:** Cost foarte similar cu Flink, timp de run cel mai rapid, resurse în mod ușurat peste medie, dar necesită 2 instanțe Cloud SQL (source + pipeline).
-- **Beam Dataflow:** Costul cel mai mare (~2.5× Flink), tot timpul de run și ramp-up cel mai lent, dar izolarea celor mai bună (fault tolerance ★★★★★) și nu are Kafka-varianța la fel de severă.
+- **Flink:** Cost mic, timp de run mediu, resurse optime, dar Kafka poate varia ramp-up-ul cu ~10 min (cloud variance).
+- **Flink-jdbc:** Cost foarte similar cu Flink, timp de run cel mai rapid, resurse puțin peste medie, dar necesită 2 instanțe Cloud SQL (source + pipeline).
+- **Beam Dataflow:** Costul cel mai mare (~2.5x Flink), atât timpul de run, cât și ramp-up-ul cele mai lente, dar izolarea e cea mai bună (fault tolerance ★★★★★) și nu are Kafka-varianța la fel de severă.
 
 **Ce e trend vs. un singur run (Limits!):**
-- Datele sunt pentru o singură rulă pe implementare, nu o serie statistică.
-- Checklist-ul §8 al cursului subliniază: "o singură măsuraretoare nu e dovadă de readiness".
-- Pentru a spune că un architecture e "gata", trebuie să verificăm trendurile lunare/lunare, nu doar un run.
+- Datele sunt pentru o singură rulare pe implementare, nu o serie statistică.
+- Checklist-ul §8 al cursului subliniază: "o singură măsurătoare nu e dovadă de readiness".
+- Pentru a spune că o arhitectură e "gata", trebuie să verificăm trendurile lunare, nu doar un run.
 
 **Metrice temporale lipsă în evidence:**
 - Nu avem metrice de "time-to-first-byte" pentru fiecare etapă separată (doar totalul).
 - Nu avem metrice de "CPU utilization" pe timpul run-ului.
 - Nu avem metrice de "memory pressure" sau "garbage collection pauses".
-- Lisă: connection waits per database pe hver run (doar la Flink-jdbc avem source + pipeline PostgreSQL).
+- Lipsește: connection waits per database la fiecare run (doar la Flink-jdbc avem source + pipeline PostgreSQL).
 
 ## Task 3: ADL composite: Maintainability
 
@@ -66,18 +66,18 @@ ASSERT(resources per component < 100)
 ```
 
 **Interpretarea:**
-- **Zone of Pain (D > 0.3):** Dacă D > 0.3, componenta e în zona de "pain" – orice schimbare e costantă și probabilă să provoce defections.
-- **Zone of Uselessness (A > 0.6, I > 0.75):** Dacă componenta e predońferend pe abstracte, este inutilă – nu behavior, doar architectură.
-- **Ideala:** D < 0.3, A între 0.2-0.6, I < 0.5 – componenta e pe main sequence, ușor de menținut și extins.
+- **Zone of Pain (D > 0.3):** Dacă D > 0.3, componenta e în zona de "pain" – orice schimbare e costisitoare și riscul de regresie e mare.
+- **Zone of Uselessness (A > 0.6, I > 0.75):** Dacă e predominant abstractă, e inutilă – fără behavior, doar arhitectură.
+- **Ideală:** D < 0.3, A între 0.2–0.6, I < 0.5 – componenta e pe main sequence, ușor de menținut și extins.
 
 ## Task 4: Aplicare pe ETL-R
 
-Pentru a evalua fiecărei implementări pe capacități:
-1. **Flink:** Poate trece testele de maintainability dacă refactorizăm `grade()` în interfețe (ca în task-urile derefacere K04). Costul e minim, dar ramp-up-ul Kafka e riscul principal.
-2. **Flink-jdbc:** Poate trece testele cu facilități optimale – CC-ul e similar cu Flink, dar nu are varianța Kafka. Costul e minim (+$0.04). Recommended pentru noi proiecte care au bază de date sursă Postgres.
-3. **Beam Dataflow:** Are provocări serioase pentru maintainability datorită overhead-ului Composer și Dataform. Costul ridicat ($2.33) face că nu e recomandat pentru termenii de 6 luni, deși e cel mai robust din cauza fault tolerance-ului.
+Pentru a evalua fiecare implementare pe capacități:
+1. **Flink:** Poate trece testele de maintainability dacă refactorizăm `grade()` în interfețe (ca în task-urile de refactorizare K04). Costul e minim, dar ramp-up-ul Kafka e riscul principal.
+2. **Flink-jdbc:** Poate trece testele cu efort minim – CC-ul e similar cu Flink, dar nu are varianța Kafka. Costul e minim (+$0.04). Recomandat pentru noi proiecte care au bază de date sursă Postgres.
+3. **Beam Dataflow:** Are provocări serioase pentru maintainability datorită overhead-ului Composer și Dataform. Costul ridicat ($2.33) face să nu fie recomandat pentru termene de 6 luni, deși e cel mai robust datorită fault tolerance-ului.
 
-**Recomandare:** Pentru noi proiecte cu deadline 6 luni și 200k students, **Flink-jdbc** dacă avem bază de date Postgres, sau **Flink** dacă lucram cu fișiere TDS. Beam e justificat doar pentru workload-uri mici sau when cost-ul nu e factorul principal.
+**Recomandare:** Pentru noi proiecte cu deadline 6 luni și 200k students, **Flink-jdbc** dacă avem bază de date Postgres, sau **Flink** dacă lucrăm cu fișiere TDS. Beam e justificat doar pentru workload-uri mici sau când costul nu e factorul principal.
 
 ---
 *Generat în cadranul K14 – Cuantificarea capabilităților*

@@ -1,7 +1,7 @@
 # K07. Topologia de date
 
 ## Scenariu (5 min)
-Fiecare implementare săsarește tabelul său de 7 tipuri în stocare echivalent: PostgreSQL schemas (Flink), datasets BigQuery (Beam), sau tables in Postgres schemas (Flink-jdbc). Care topologie e right?
+Fiecare implementare așază tabelul său de 7 tipuri în stocare echivalentă: PostgreSQL schemas (Flink), datasets BigQuery (Beam), sau tables în Postgres schemas (Flink-jdbc). Care topologie e corectă?
 
 ## Material sursă
 - `PIPELINE.md` (names shared: account_src, account_curated, account_enriched, account_target, reject_log, record_lineage, run_ledger)
@@ -15,9 +15,9 @@ Fiecare implementare săsarește tabelul său de 7 tipuri în stocare echivalent
 1. **Evaluează monolit / domain / dedicated** pentru fiecare implementare pe cost, simplitate, consistență, scalabilitate, fault tolerance, cuantă.
 2. **ADL-ul topologiei:** `DEFINE DATABASE`/`SCHEMA` + aserțiuni de acces, fără imbricare.
 3. **Cine poate atinge `reject_log`/`record_lineage`** + ce fac cu accesul `loader-app` vs. `recon-service`.
-4. `reject_log` echivalentul DLQ cu reason enumerat – ce lipsește din recipe completă "dead-letter + cale umană"?
+4. `reject_log` echivalentul DLQ cu reason enumerat – ce lipsește din rețeta completă "dead-letter + cale umană"?
 
-## Livrabil ADL (pore de start)
+## Livrabil ADL (punct de start)
 
 ```
 DESCRIPTION Define data topology for ETL-R

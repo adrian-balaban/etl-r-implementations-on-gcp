@@ -13,6 +13,6 @@ Un agent construiește `implementations/spark-dataproc/` din `spec/PIPELINE.md` 
 ## Task-uri (10 min, runde individual-discussion-team)
 
 1. **Scope generare = o cuantă, nu "refactor tot";** ADL `DEFINE AGENT Spark Builder` + aserțiuni "agenții nu pot adăuga dependențe cross-implementation sau conexiuni la baze ne-declare".
-2. **Verificarea deterministă e mere prioritară:** conformance/echilibru, nu LLM-judge; unde rămâne judecata deconsul (probe random, review uman — rata).
+2. **Verificarea deterministă e mereu prioritară:** conformance/echilibru, nu LLM-judge; unde rămâne judecata umană (probe random, review uman — rata).
 3. **`reject_log` = DLQ-ul sistemului:** reason-uri închise + cale umană (rectificarea sursei/mappingului); ultima milă care nu se poate automatiza.
 4. **MCP server la governance context-ul ETL-R:** `get_balance(run_id)`, `get_conformance()`, `get_cost_last_run()`; cine le rulează și cu ce cadență?
