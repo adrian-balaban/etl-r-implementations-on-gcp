@@ -17,7 +17,7 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
 
      DEFINE CAPABILITY Simplicity AS { resources < MAX_RESOURCES }
      DEFINE CAPABILITY Deployability AS { ramp-up < 30min, run < 60min }
-     DEFINE CAPABILITY Scalability AS { max_students <= 200000, submit_time < 500ms }
+     DEFINE CAPABILITY Scalability AS { records_per_run <= 200000, proven at parallelism 1: start-up dominates }
      DEFINE CAPABILITY Cost AS { cost_per_run <= 1.0 USD }
      DEFINE CAPABILITY Maintainability AS {
           average cyclomatic complexity of cls < MAX_CC,

@@ -2,53 +2,51 @@ DESCRIPTION The structure's weight: load-bearing walls, agents with a scope, tea
 CATEGORY Governance
 NAMESPACE EtlRGovernanceNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
-     DEFINE CONST MAX_STUDENTS AS 200000
-     DEFINE CONST MAX_SUBMIT_TIME AS 300ms
-     DEFINE CONST MAX_DB_CONNECTIONS AS 300
 
-# Load-bearing (K06): the first function is written before the code, in the LMAX style
-ASSERT(Answer Capture accepts MAX_STUDENTS concurrent submissions within MAX_SUBMIT_TIME) # [K06-1]
-ASSERT(no submitted answer is lost while Grading is unavailable) # [K06-2]
-ASSERT(Answer Database never exceeds MAX_DB_CONNECTIONS connections) # [K06-3]
-ASSERT(answer keys are unreachable from student-facing services) # [K06-4]
+# Load-bearing (K06): the balance is this repo's first-written function, LMAX style
+ASSERT(src_read = written + rejected at the end of every run) # [K06-1]
+# the stale mock login killed load mid-run; the queue kept every record (docs/evidence/)
+ASSERT(no source record is lost while the Target System is unavailable) # [K06-2]
+ASSERT(a 200k run fits on one GKE node: 3 batch jobs, parallelism 1, 4 vCPU) # [K06-3]
+# from artefacts.json: a consumer detects completeness without holding a decryption key
+ASSERT(the .FLG flag lands outside the encrypted bundle — completeness needs no key) # [K06-4]
 
-# The stacks come from the build, not from an ADL inventory (K16)
+# The stacks come from pom.xml and requirements.txt, not from an ADL inventory (K16)
 ASSERT(SBOM generated in build) # [K16-1]
 ASSERT(no technology inventory in ADL files) # [K16-2]
 ASSERT(communication protocols harvested from build SBOM) # [K16-3]
 
-# An agent's scope = one quantum; never "refactor everything" (K17)
-DEFINE AGENT Spark Builder AS spark-agent
-     DEFINE COMPONENT SparkSubmit AS spark-submit
-     DEFINE SERVICE SparkCluster AS spark-cluster
+# An agent's scope = one quantum; never "refactor everything" (K17).
+# K17's worked example, restated on this repo: an agent is asked to build one of the
+# three lanes — implementations/flink/, implementations/flink-jdbc/ or
+# implementations/beam-dataflow/ — from spec/ + this ADL
+DEFINE AGENT Lane Builder AS the code-generation agent
+     SCOPE: exactly one implementation; spec/ and spec/conformance/ stay read-only
+     bounded by CLAUDE.md: nothing pushed, nothing billable, commits only when asked
 ASSERT(agents cannot add cross-implementation dependencies) # [K17-1]
 ASSERT(agents cannot add undeclared database connections) # [K17-2]
 ASSERT(agent-generated changes stay within declared structural and operational boundaries) # [K17-3]
 
-# The teams: people and agents as members; Git history as the source (K18)
-DEFINE TEAM Platform AS Platform Team
-     ASSIGN DOMAIN spec/ contracts/
-     DEFINE PERSON Alice AS alice@company.com
-     DEFINE AGENT Tina AS agent-tina@company.com
-          SCOPE: spec/ only
-DEFINE TEAM Flink AS Stream-Aligned Team
-     ASSIGN DOMAIN implementations/flink/
-     DEFINE PERSON Bob AS bob@company.com
-     DEFINE AGENT Max AS agent-max@company.com
-          SCOPE: flink implementation only
-DEFINE TEAM Beam AS Stream-Aligned Team
+# The teams (K18): one maintainer wears every hat today — five commits, one author;
+# the map exists to read git history and to bound agent scope when more hands arrive
+DEFINE PERSON Adrian Balaban AS 50263077+adrian-balaban@users.noreply.github.com
+     ROLE: grammarian of the whole lane set — spec first, implementations second
+DEFINE AGENT Cline AS the coding agent
+     SCOPE: one quantum per task; spec/ and spec/conformance/ stay read-only
+DEFINE TEAM Platform AS the spec and conformance owner
+     ASSIGN DOMAIN spec/ spec/conformance/
+DEFINE TEAM Flink Lanes AS stream-aligned
+     ASSIGN DOMAIN implementations/flink/ implementations/flink-jdbc/
+     # the pinned sharing inside the family: mig.common, the Terraform modules, the reactor
+DEFINE TEAM Beam Lane AS stream-aligned
      ASSIGN DOMAIN implementations/beam-dataflow/
-     DEFINE PERSON Carol AS carol@company.com
-     DEFINE AGENT Zoe AS agent-zoe@company.com
-          SCOPE: beam implementation only
-DEFINE TEAM TargetSystem AS Target System Team
-     ASSIGN DOMAIN target-system-mock/
-     DEFINE PERSON Dave AS dave@company.com
-DEFINE SUPERUSER Team AS Super User Team
-     DEFINE PERSON Eve AS eve@company.com
-          ROLE: anywhere, especially emergencies
-DEFINE ALUMNI Team AS Alumni Team
-     DEFINE RETIRED_PERSON Frank AS frank@retired.com
+DEFINE TEAM Target System Mock AS stream-aligned
+     ASSIGN DOMAIN implementations/flink/target-system-mock/ implementations/beam-dataflow/apps/target-system-mock/
+DEFINE SUPERUSER Team AS the maintainer in emergencies
+     DEFINE PERSON Adrian Balaban AS 50263077+adrian-balaban@users.noreply.github.com
+          ROLE: any domain, especially teardown and rollback
+DEFINE ALUMNI Team AS the git history so far
+     # empty: nobody has retired yet (K18 Task 1: one pair of hands produces coherence)
 
 ASSERT(TEAM MEMBERS include PERSONS and AGENTS) # [K18-1]
 ASSERT(No commits from anyone other than TEAM MEMBERS) # [K18-2]

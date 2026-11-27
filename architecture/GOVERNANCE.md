@@ -8,6 +8,9 @@
 The K01–K18 katas exercise the Architecture as Code checklist on the repo's real material.
 The ADL scattered across the `answers.md` files is consolidated in `adl/`: one file per
 family, with a full header and tagged assertions. Exercise pseudo-syntax, not a real parser.
+Where the course's worked example leaks into an exercise (Test Session, students, sample
+teams), the consolidated `adl/` restates it on this repo's real structure — stages, Kafka
+topics, tables, files, the one real author; the kata folders keep the original exercise.
 
 ## 2. The tag scheme
 

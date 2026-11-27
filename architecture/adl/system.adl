@@ -1,22 +1,25 @@
-DESCRIPTION Dynamic coupling: every edge declared, synchronous or asynchronous (K11)
+DESCRIPTION Dynamic coupling: every runtime edge declared, synchronous or asynchronous (K11)
 CATEGORY Dynamic Coupling
 NAMESPACE EtlRSystemNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
-     DEFINE CONST max_user_load AS 200000
-     DEFINE CONST avg_response_time AS 300ms
-     # and yet: the course's slow service runs at 2000ms — a synchronous call
-     # would drag capabilities down to the weakest link (entanglement)
+     DEFINE CONST MAX_RECORDS AS 200000
+     DEFINE CONST RUNTIME_200K AS 7min
+     # the recorded 200k flink run: 6 min 55 s. A synchronous call from produce into
+     # the Target System would tie that wall-clock to the mock's availability — and
+     # the mock's stale Kafka login killed load after ~34 min (docs/evidence/): entanglement
 
-     DEFINE COMMUNICATION Test Session TO Gate AS synchronous
-     DEFINE COMMUNICATION produce TO load AS asynchronous VIA Kafka topic target-system-target
-     DEFINE COMMUNICATION Answer Capture TO Recon AS asynchronous
-     DEFINE COMMUNICATION enrichment TO target AS asynchronous USING reference/branches.json
+     # batch at heart: the orchestrator launches each stage job and waits for it
+     DEFINE COMMUNICATION Orchestrator TO Stage Jobs AS synchronous
+     # the only produce-to-load path is the topic, never a service call
+     DEFINE COMMUNICATION Load TO Target System Mock AS asynchronous VIA Kafka topic target-system-target
+     # confirmations flow back on their own topic; recon never reads the mock's store directly
+     DEFINE COMMUNICATION Target System Mock TO Recon AS asynchronous VIA Kafka topic target-system-confirmations
 
-# A read-only replica for the reference data: no synchronous call during the run
-DEFINE READONLYREPLICA branches AS branch-cache
-     refreshed between test windows
+# Reference data reaches enrich as a pinned contract file, not as a runtime call
+DEFINE READONLYREPLICA branches AS spec/contracts/reference/branches.json
+     joined at enrich; refreshed only through a contracts change
 
 ASSERT(Communication between services adheres to the defined declarations) # [K11-1]
-ASSERT(actual response time at max_user_load <= avg_response_time AT max_user_load for produce service) # [K11-2]
-ASSERT(settle targetRows confirmed matches written + rejected) # [K11-3]
+ASSERT(a 200k flink run completes within RUNTIME_200K, measured at 6 min 55 s) # [K11-2]
+ASSERT(settle confirms exactly the written rows: targetRows confirmed == written; 200000 of 200000 in the recorded run) # [K11-3]
 ASSERT(READONLYREPLICA is cached copy of reference data) # [K11-4]

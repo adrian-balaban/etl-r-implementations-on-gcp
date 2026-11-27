@@ -1,16 +1,21 @@
-DESCRIPTION The run as a saga: communication, coordination and consistency, chosen explicitly (K12)
+DESCRIPTION The migration run as a saga: communication, coordination and consistency, chosen explicitly (K12)
 CATEGORY Integration
 NAMESPACE EtlRWorkflowsNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     # one run = the eight stages of spec/PIPELINE.md:
+     # extract gate intake curate enrich produce load recon
      DEFINE SAGA Migration Run Saga AS
-          DEFINE COMMUNICATION Test Session TO Answer Capture AS asynchronous
-          DEFINE COMMUNICATION Answer Capture TO Auto Grading AS asynchronous
-          DEFINE COMMUNICATION Auto Grading TO Reporting AS asynchronous
+          # the runner launches and watches every stage job, in order
+          DEFINE COMMUNICATION Orchestrator TO Stage Jobs AS synchronous
+          # flink lanes: the gcp/orchestrator/run.sh Cloud Run job; beam: the Composer DAG
+          DEFINE COMMUNICATION Load TO Target System Mock AS asynchronous VIA Kafka topic target-system-target
+          DEFINE COMMUNICATION Target System Mock TO Recon AS asynchronous VIA Kafka topic target-system-confirmations
           DEFINE COORDINATION Orchestrated
           DEFINE CONSISTENCY Eventual
-     # the contract is strict on names, not on protocol: just the required fields
-     DEFINE CONTRACT graded-answer AS NAME-VALUE PAIRS
-          INCLUDING {student-id, test-id, question-num, answer, receipt-id}
+     # strict on the document schema, never on the wire protocol; idempotent on the account key
+     DEFINE CONTRACT target-account AS spec/contracts/schemas/target-account.schema.json
+          INCLUDING {accountId, customerId, productCode, currency, openedOn, status, balance, migration}
+          WITH idempotency ON account_key
 
 ASSERT(Communication between services matches the defined communication declarations) # [K12-1]
-ASSERT(Workflow is managed by the Test Session orchestrator) # [K12-2]
+ASSERT(The run is led by its own orchestrator: gcp/orchestrator in the flink lanes, the Composer DAG in beam-dataflow) # [K12-2]

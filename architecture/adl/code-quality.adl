@@ -5,12 +5,11 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      DEFINE CONST MAX_CC AS 10
      DEFINE CONST MAX_CC_GENERATED AS 5
      DEFINE CONST MAX_DISTANCE AS 0.3
-     DEFINE CONST AVG_RESPONSE_TIME AS 300ms
-     DEFINE CONST MAX_STUDENTS AS 200000
-     DEFINE CONST MAX_SUBMIT_TIME AS 300ms
 
-# Agent-generated code carries the stricter threshold; accidental complexity is
-# refactored onto the main sequence, never tolerated
+# K04's thresholds, aimed at the real pressure points: RecordParser in
+# implementations/beam-dataflow/pipelines/common/tds.py, the TRANSFORMS in
+# implementations/beam-dataflow/pipelines/common/mapping.py,
+# and the row-by-row comparator spec/conformance/compare.py
 FOREACH component : comp IN system
     FOREACH class : cls IN comp
         FOREACH method : m IN cls
@@ -23,4 +22,5 @@ FOREACH component : comp IN system
     ASSERT(average cyclomatic complexity of cls < MAX_CC) # [K04-3]
     ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K04-4]
 ENDFOREACH
-ASSERT(actual response time <= AVG_RESPONSE_TIME at MAX_STUDENTS) # [K04-5]
+# this repo's own bar, straight from the Makefile: "it must fail on damage, not just pass"
+ASSERT(the comparator's suite ships a passing fixture AND a damaged one per failure class) # [K04-5]
