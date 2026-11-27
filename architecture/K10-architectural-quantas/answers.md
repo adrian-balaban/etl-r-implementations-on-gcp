@@ -1,37 +1,37 @@
-# Răspunsuri K10: Cuante arhitecturale
+# K10 answers: Architectural quanta
 
-## Task 1: Enumeră punctele de cuplaj static pe implementare
+## Task 1: Enumerate the static coupling points per implementation
 
-| Punct de cuplaj | Flink (GKE+Kafka+Cloud SQL) | Flink-jdbc (2xCloud SQL + Kafka) | Beam Dataflow (Composer+BigQuery+Kafka) |
+| Coupling point | Flink (GKE+Kafka+Cloud SQL) | Flink-jdbc (2×Cloud SQL + Kafka) | Beam Dataflow (Composer+BigQuery+Kafka) |
 |---|---|---|---|
-| **VPC / subnet** | 1 VPC, 3 subneturi (bootstrap, GKE, Kafka) | 2 VPC (source + lane) + shared Kafka subnet | 1 VPC landing bucket + Kafka subnet |
-| **GKE Cluster** | 1 cluster 4-vCPU, 3 joburi în paralel | 1 cluster 4-vCPU (shared sau dedicat) | N/A (Dataflow managed, fără pod-uri GKE) |
-| **Cloud SQL (Postgres)** | 1 instance pipeline + 1 source | 2 instances (source + pipeline) | BigQuery (niciun SQL direct) |
-| **Managed Kafka** | 1 cluster, 3 vCPU / 3 GiB | 1 cluster, 3 vCPU / 3 GiB | 1 cluster, shared cu Target System mock |
-| **Cloud Run (mock)** | 1 revizie, 1 vCPU / 512 MiB | 1 revizie, 1 vCPU / 512 MiB | 1 revizie, 1 vCPU / 2 GiB |
-| **Composer / Dataform** | Niciunul | Niciunul | Composer 2 Small + Dataform models |
-| **Terraform state** | 1 bucket, count expressions | 1 bucket + 4 state rm extra la destroy | 1 bucket landing, state separat per project |
+| **VPC / subnet** | 1 VPC, 3 subnets (bootstrap, GKE, Kafka) | 2 VPCs (source + lane) + a shared Kafka subnet | 1 VPC landing bucket + a Kafka subnet |
+| **GKE cluster** | 1 cluster 4-vCPU, 3 jobs in parallel | 1 cluster 4-vCPU (shared or dedicated) | N/A (managed Dataflow, no GKE pods) |
+| **Cloud SQL (Postgres)** | 1 pipeline instance + 1 source | 2 instances (source + pipeline) | BigQuery (no direct SQL) |
+| **Managed Kafka** | 1 cluster, 3 vCPU / 3 GiB | 1 cluster, 3 vCPU / 3 GiB | 1 cluster, shared with the Target System mock |
+| **Cloud Run (mock)** | 1 revision, 1 vCPU / 512 MiB | 1 revision, 1 vCPU / 512 MiB | 1 revision, 1 vCPU / 2 GiB |
+| **Composer / Dataform** | none | none | Composer 2 Small + Dataform models |
+| **Terraform state** | 1 bucket, count expressions | 1 bucket + 4 extra state rm at destroy | 1 landing bucket, state split per project |
 
-**Total cuante static per implementare:**
-- **Flink:** ~7 puncte de cuplaj (VPC, GKE, 2 SQL, Kafka, Cloud Run, Terraform)
-- **Flink-jdbc:** ~9 puncte (VPC x2, GKE, 2 SQL x2, Kafka, Cloud Run x2, Terraform extra)
-- **Beam Dataflow:** ~5 puncte (VPC, Kafka shared, Cloud Run, Composer, Dataform)
+**Total static quanta per implementation:**
+- **Flink:** ~7 coupling points (VPC, GKE, 2× SQL, Kafka, Cloud Run, Terraform)
+- **Flink-jdbc:** ~9 points (2× VPC, GKE, 2× 2× SQL, Kafka, 2× Cloud Run, extra Terraform)
+- **Beam Dataflow:** ~5 points (VPC, shared Kafka, Cloud Run, Composer, Dataform)
 
-**Frontiera față de Target System:** Topic-urile Kafka (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) sunt contractul de interacțiune cu sistemul extern, nu fac parte din cuantele interne ale ETL-R.
+**The boundary against the Target System:** the Kafka topics (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) are the interaction contract with the external system, not part of ETL-R's internal quanta.
 
-## Task 2: Aplică Domain Broker
+## Task 2: Apply the Domain Broker
 
-**Domain Broker pattern:** un cluster Kafka per cuantă, deținut de cuanta respectivă.
+**The Domain Broker pattern:** one Kafka cluster per quantum, owned by that quantum.
 
 | Benefit | Cost |
 |---|---|
-| **Flink:** Izolare totală – fiecare cuantă Flink are Kafka propriu. Nu mai există picări din mock-ul partajat. | **Ramp-up:** +20 min la start (trebuie create 3 clustere Kafka). |
-| **Flink-jdbc:** Fiecare cuantă are source pipeline propriu. | **Cost:** +$0.02 pe run (o marjă mică la SKU-uri). |
-| **Beam Dataflow:** Poate partaja Kafka (ca și acum), sau puteți crea 3 clustere Kafka separate. | **Complexitate:** Configurarea multi-cluster Kafka nu e trivială pe Dataflow. |
+| **Flink:** total isolation — every Flink quantum gets its own Kafka. No more falls from the shared mock. | **Ramp-up:** +20 min at start (3 Kafka clusters must be created). |
+| **Flink-jdbc:** every quantum owns its source pipeline. | **Cost:** +$0.02 per run (a small margin on the SKUs). |
+| **Beam Dataflow:** can keep sharing Kafka (as today), or create 3 separate clusters. | **Complexity:** multi-cluster Kafka setup is not trivial on Dataflow. |
 
-**Scenariu:** Dacă login-ul mock-ului Target System pică în timpul unui run Flink, doar cuanta afectată pune run-ul jos. Cu Domain Broker, restul de 2 cuante Flink continuă să ruleze normal.
+**The scenario:** if the Target System mock's Kafka login dies during a Flink run, only the affected quantum takes the run down. With the Domain Broker, the other 2 Flink quanta keep running normally.
 
-## Task 3: ADL static-coupling
+## Task 3: The static-coupling ADL
 
 ```
 DESCRIPTION Define architectural quanta for ETL-R
@@ -51,17 +51,17 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
           DEFINE DATABASE account_target_db AS account_target
                WITHIN BigQuery datasets
           DEFINE BROKER Kafka Broker AS kafka-broker
-              WITHIN Beam Quantum, shared with Target System
+               WITHIN Beam Quantum, shared with the Target System
 ASSERT(Do not allow static coupling between quanta not specified here)
 ```
 
-**Sfat:** `ASSERT(Do not allow static coupling between quanta not specified here)` oprește agenții de la a genera `Kafka Broker written by Administration Quantum` dacă nu e declarat explicit.
+**The hint:** `ASSERT(Do not allow static coupling between quanta not specified here)` stops an agent from generating `Kafka Broker written by Administration Quantum` unless it is declared explicitly.
 
 ## Task 4: `ASSERT(Do not allow static coupling between quanta not specified here)`
 
-**Cum funcționează:**
-- Fitness function-ul rulează la fiecare pull request, verificând declarațiile `DEFINE QUANTUM` din ADL.
-- Dacă un agent generează o legătură ca `Kafka Broker WITHIN Administration Quantum`, aserțiunea va pică, pentru că `Administration Quantum` nu are Kafka Broker declarat în ADL.
-- Agentul trebuie să adauge `DEFINE BROKER Administration AS ... WITHIN Administration Quantum` sau să justifice de ce nu e nevoie de broker.
+**How it works:**
+- The fitness function runs on every pull request, checking the `DEFINE QUANTUM` declarations in the ADL.
+- If an agent generates a link like `Kafka Broker WITHIN Administration Quantum`, the assertion fails — `Administration Quantum` has no Kafka Broker declared in the ADL.
+- The agent must add `DEFINE BROKER Administration AS ... WITHIN Administration Quantum`, or justify why no broker is needed.
 
-**Rezultat:** Fiecare cuantă are broker-ul său explicit declarat, prevenind cuplajul accidental între cuante.
+**The result:** every quantum owns its explicitly declared broker, preventing accidental coupling between quanta.

@@ -1,18 +1,18 @@
-# K15. Schimbare constantă: stressori și reziduuri
+# K15. Constant change: stressors and residues
 
-## Scenariu (5 min)
-Matricea reală de stressori: S1 proiect nou (DEPOSIT), S2 GCP schimbă prețul sau degradează Managed Kafka, S3 20M înregistrări, S4 Target System API v2 la confirmations, S5 altă regiune/residency, S6 se cere o a 4-a implementare (Spark/Dataproc).
+## Scenario (5 min)
+The real stressor matrix: S1 a new project (DEPOSIT), S2 GCP changes prices or degrades Managed Kafka, S3 20M records, S4 a Target System API v2 for confirmations, S5 another region/residency, S6 a fourth implementation is requested (Spark/Dataproc).
 
-## Material sursă
-- `SECTIONS.md` (paginile 66–67 din masterclass)
+## Source material
+- `SECTIONS.md` (pages 66–67 of the masterclass)
 - `docs/evidence/README.md` (What went wrong, Limits)
-- `cost-estimate.md` (costuri reale)
-- `make conformance-all` (testează toate implementările)
-- Diagrame: `docs/diagrams/00-overview.svg`
+- `cost-estimate.md` (real costs)
+- `make conformance-all` (tests every implementation)
+- Diagrams: `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Completează matricea:** ce componente lovesc S1–S6 (spec, contracte, flink, flink-jdbc, beam, harness, recon).
-2. **Proiectează reziduuri:** contracts-as-config (există!), oracol pinned, stage-mapping abstract.
-3. **Prioritizează pe 3 teste:** zonă de business, # stressori acoperiți, probabilitate × impact.
-4. **Scrie una în ADL:** `ASSERT(adding a project modifies only spec/contracts/)` – păstrarea lui asigură că nici agenții nu o îndepărtează ușor.
+1. **Fill in the matrix:** which components S1–S6 strike (spec, contracts, flink, flink-jdbc, beam, harness, recon).
+2. **Design the residues:** contracts-as-config (it exists!), a pinned oracle, an abstract stage-mapping.
+3. **Prioritize on three tests:** the business area, the # of stressors covered, probability × impact.
+4. **Write one in ADL:** `ASSERT(adding a project modifies only spec/contracts/)` – keeping it ensures that not even agents remove it casually.

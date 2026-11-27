@@ -1,17 +1,17 @@
-# K12. Run-ul ca saga
+# K12. The run as a saga
 
-## Scenariu (5 min)
-Un run = 8 stațiuni peste 3-4 unități de deployment; nu poate să se piardă nimic; agenții vor regenera pipeline-uri anul viitor.
+## Scenario (5 min)
+One run = 8 stages across 3–4 deployment units; nothing may be lost; agents will regenerate these pipelines next year.
 
-## Material sursă
-- `spec/PIPELINE.md` (8 stațiuni fixe, echilibrul `src_read = written + rejected`)
-- `make conformance-all` (testează toate implementările vs. oracol)
-- `make-the-grade-pages-1432-1458/` (close-test workflow tasks)
-- Diagrame: `docs/diagrams/03-two-doors.svg`, `docs/diagrams/08-stage-mapping.svg`
+## Source material
+- `spec/PIPELINE.md` (eight fixed stages, the `src_read = written + rejected` balance)
+- `make conformance-all` (tests every implementation against the oracle)
+- `make-the-grade-pages-1432-1458/` (the close-test workflow tasks)
+- Diagrams: `docs/diagrams/03-two-doors.svg`, `docs/diagrams/08-stage-mapping.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Cele 3 forțe:** Communication=asincron (topic-uri), Coordination=Orchestrated (Cloud Run job / Composer DAG — cine e orchestratorul la `flink` vs. `beam`?), Consistency=Eventual verificată (recon balance + settle) – argumentele pe cerințe.
-2. **"Atomic + choreography" — ce devine în realitate și de ce e neguvernabil.**
-3. **ADL:** `DEFINE SAGA Migration Run Saga` + contract strict pentru documentul țintă (JSON Schema — consumer-driven confirmations).
-4. **Scope de regenerare** = cuanta / job-ul, cu tabel de guardrails: behavior (conformance 68/68), static coupling (fără cuplaj nou), dynamic (tot asincron), contract (schema intact), capability (timp de run).
+1. **The three forces:** Communication = asynchronous (topics), Coordination = orchestrated (the Cloud Run job / the Composer DAG — who is the orchestrator in `flink` vs. `beam`?), Consistency = eventual, verified (the recon balance + settle) – the arguments, per requirement.
+2. **"Atomic + choreography" — what it becomes in reality, and why it is ungovernable.**
+3. **The ADL:** `DEFINE SAGA Migration Run Saga` + a strict contract for the target document (JSON Schema — consumer-driven confirmations).
+4. **The regeneration scope** = the quantum / the job, with a guardrails table: behaviour (conformance 68/68), static coupling (no new coupling), dynamic (still asynchronous), contract (the schema intact), capability (run time).

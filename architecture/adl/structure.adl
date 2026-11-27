@@ -1,0 +1,54 @@
+DESCRIPTION The logical domains, the components, and the boundaries between implementations (K01, K03)
+CATEGORY Structural
+NAMESPACE EtlRStructureNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE SERVICE flink AS implementations/flink
+          DEFINE COMPONENT FlinkGate AS gate
+          DEFINE COMPONENT FlinkRecon AS recon
+          DEFINE COMPONENT FlinkSql AS sql
+          DEFINE COMPONENT FlinkTargetMock AS target-system-mock
+          DEFINE COMPONENT FlinkCommon AS common
+          DEFINE COMPONENT FlinkComponentTests AS component-tests
+     DEFINE SERVICE flink-jdbc AS implementations/flink-jdbc
+          DEFINE COMPONENT JdbcGate AS gate-jdbc
+          DEFINE COMPONENT JdbcSource AS intake-jdbc
+          DEFINE COMPONENT JdbcTarget AS target-system
+          DEFINE COMPONENT JdbcSql AS sql
+          DEFINE COMPONENT JdbcCommon AS common
+          DEFINE COMPONENT JdbcComponentTests AS component-tests-jdbc
+     DEFINE SERVICE beam-dataflow AS implementations/beam-dataflow
+          DEFINE COMPONENT BeamExtract AS dataflow_entrypoint.py
+          DEFINE COMPONENT BeamTransform AS pipelines
+          DEFINE COMPONENT BeamDataform AS dataform
+          DEFINE COMPONENT BeamComposer AS composer
+          DEFINE COMPONENT BeamHarness AS harness
+          DEFINE COMPONENT BeamTests AS tests
+     DEFINE DOMAIN Spec AS spec
+          DEFINE COMPONENT PipelineSpec AS PIPELINE.md
+          DEFINE COMPONENT Contracts AS contracts
+          DEFINE COMPONENT Fixtures AS fixtures
+     DEFINE DOMAIN Harness AS spec/harness
+          DEFINE COMPONENT Generate AS generate.py
+          DEFINE COMPONENT Bundle AS bundle.py
+          DEFINE COMPONENT LoadDb AS load_db.py
+     DEFINE DOMAIN Conformance AS spec/conformance
+          DEFINE COMPONENT Compare AS compare.py
+          DEFINE COMPONENT Oracle AS spec/fixtures/expected
+
+# The boundaries between implementations (K03): nothing shared except through spec/contracts
+ASSERT(flink HAS NO DEPENDENCY ON flink-jdbc, beam-dataflow) # [K03-1]
+ASSERT(flink-jdbc HAS NO DEPENDENCY ON flink, beam-dataflow) # [K03-2]
+ASSERT(beam-dataflow HAS NO DEPENDENCY ON flink, flink-jdbc) # [K03-3]
+# The repo's reality: flink-jdbc reuses from flink the Maven modules (common, recon, mock,
+# the SQL variant), mig.common and the Terraform modules — sharing pinned in tests/test_boundaries.py;
+# beam-dataflow stays strictly isolated. Details: GOVERNANCE.md §7.
+ASSERT(no cycles exist between services in ETL-R) # [K03-4]
+
+# Every class has an architectural home (K01); the files at an implementation's root
+# (Makefile, pom.xml, Dockerfile.*) remain the "orphan classes" left to count
+ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES) # [K01-1]
+
+# verify-project2, formalized (K03): a new project touches no implementation code
+ASSERT(git diff --quiet -- pipelines apps) # [K03-5]
+ASSERT(contracts/ unchanged modulo artefact names) # [K03-6]
+ASSERT(a new project adds exactly one .sqlx in ../dataform/definitions/) # [K03-7]

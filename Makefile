@@ -1,6 +1,7 @@
 # Root entry points. Each implementation keeps its own Makefile; these only delegate.
 #
 #   make spec-test          the comparator's own tests (it must fail on damage, not just pass)
+#   make adl-test           the katas' harness: ADL register lint, contract derivation, lane boundaries
 #   make conformance-flink  the Flink lane's SQL and DataStream variants on the oracle fixture (needs podman)
 #   make conformance-flink-jdbc  the flink-jdbc lane on the typed-source oracle (needs podman)
 #   make conformance-beam   the Beam lane on the oracle input           (needs `make bootstrap` once there)
@@ -11,10 +12,15 @@
 
 PYTEST ?= uv run --no-project --with pytest python -m pytest
 
-.PHONY: spec-test conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
+.PHONY: spec-test adl-test conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
 
 spec-test:
 	$(PYTEST) spec -q -p no:cacheprovider
+
+# The masterclass katas' harness (architecture/): ADL register lint, contract derivation,
+# implementation boundaries. Pure Python, no GCP, no podman.
+adl-test:
+	$(PYTEST) architecture/tests -q -p no:cacheprovider
 
 conformance-flink:
 	$(MAKE) -C implementations/flink conformance

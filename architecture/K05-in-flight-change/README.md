@@ -1,23 +1,23 @@
-# K05. Schimbare în zbor: transform nou
+# K05. Change in flight: a new transform
 
-## Scenariu (5 min)
-"Compliance urgent" cere `mask_emails`. Un agent modifică teste ca build-ul să treacă. Branch sau toggle vs. config (mapping-YAML)?
+## Scenario (5 min)
+"Urgent compliance" demands `mask_emails`. An agent starts modifying tests to make the build pass. Branch or toggle — or config (mapping-YAML)?
 
-## Material sursă
-- `TRANSFORMS` în `mapping.py`, `schemas/*.json`, `make spec-test` (comparatorul e dovedit că pică pe orice deteriorare)
-- Fixture pinned (`ACCOUNT.src`, `manifest.json`)
-- `make verify-project2` (schimbă proiectul fără să atingă codul)
-- `CLAUDE.md` ("Nu comite nimic fără a fi cerut primul")
-- Diagrame: `docs/diagrams/08-stage-mapping.svg`, `docs/diagrams/00-overview.svg`
+## Source material
+- `TRANSFORMS` in `mapping.py`, `schemas/*.json`, `make spec-test` (the comparator is proven to fail on any damage)
+- The pinned fixture (`ACCOUNT.src`, `manifest.json`)
+- `make verify-project2` (changes the project without touching code)
+- `CLAUDE.md` ("Never commit unless asked")
+- Diagrams: `docs/diagrams/08-stage-mapping.svg`, `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Branch vs. toggle vs. config** (mapping-YAML e deja config — când e nevoie de cod?): decide pentru cele 3 implementări.
-2. **Classifică contractele:** mapping.yaml strict sau permisiv, JSON Schema strict; probează protocolul doar cu argument.
-3. **Numărul maxim de versiuni** pentru topic-ul `target-system-target`.
-4. **ADL anti-tautologie:** `FOREACH TEST t … ASSERT(t contains at least one assertion)` + identifică "rețeta" agentului.
+1. **Branch vs. toggle vs. config** (mapping-YAML is already config — when do you actually need code?): decide for all 3 implementations.
+2. **Classify the contracts:** mapping.yaml strict or permissive, JSON Schema strict; argue the protocol only with an argument.
+3. **The maximum number of versions** for the `target-system-target` topic.
+4. **The anti-tautology ADL:** `FOREACH TEST t … ASSERT(t contains at least one assertion)` + identify the agent's "recipe".
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define in-flight change strategies

@@ -1,19 +1,19 @@
-# K10. Cuante arhitecturale pe implementare
+# K10. Architectural quanta per implementation
 
-## Scenariu (5 min)
-Câte cuante are fiecare implementare? Terraform provizionează tot (VPC, GKE, Cloud SQL, Managed Kafka, Cloud Run); infrastructura devine cuplaj static; Kafka e partajat cu mock-ul Target System.
+## Scenario (5 min)
+How many quanta does each implementation have? Terraform provisions everything (VPC, GKE, Cloud SQL, Managed Kafka, Cloud Run); infrastructure becomes static coupling; Kafka is shared with the Target System mock.
 
-## Material sursă
-- `docs/diagrams/<impl>/deployment-gcp.svg` – per implementation
-- `docs/diagrams/08-stage-mapping.svg` – stage mapping
-- `spec/PIPELINE.md` (8 stațiuni, contractul Kafka)
+## Source material
+- `docs/diagrams/<impl>/deployment-gcp.svg` — per implementation
+- `docs/diagrams/08-stage-mapping.svg` — the stage mapping
+- `spec/PIPELINE.md` (eight stages, the Kafka contract)
 - `docs/evidence/README.md` (resources: 71/81/75)
-- `make conformance-all` (testează toate implementările)
-- Diagrame: `docs/diagrams/flink/deployment-gcp.svg`, `docs/diagrams/beam-dataflow/deployment-gcp.svg`
+- `make conformance-all` (tests every implementation)
+- Diagrams: `docs/diagrams/flink/deployment-gcp.svg`, `docs/diagrams/beam-dataflow/deployment-gcp.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Enumeră pentru fiecare implementare punctele de cuplaj static** care leagă componentele; unde e frontiera față de "sistemul altei echipe" (Target System: topic-urile sunt contractul).
-2. **Aplică Domain Broker:** un cluster Kafka per cuantă – ce câștigi, ce pierzi (ramp-up, cost).
-3. **ADL static-coupling:** `DEFINE QUANTUM` + `WITHIN` + aserțiuni de acces per implementare.
-4. `ASSERT(Do not allow static coupling between quanta not specified here)` – oprește un agent de la generarea de cuplaj inter-cuantă.
+1. **Enumerate, per implementation, the static coupling points** that tie the components together; where is the boundary against "the other team's system" (the Target System: the topics are the contract)?
+2. **Apply the Domain Broker:** one Kafka cluster per quantum — what you gain, what you lose (ramp-up, cost).
+3. **The static-coupling ADL:** `DEFINE QUANTUM` + `WITHIN` + per-implementation access assertions.
+4. `ASSERT(Do not allow static coupling between quanta not specified here)` – stops an agent from generating inter-quantum coupling.

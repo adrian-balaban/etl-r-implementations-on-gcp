@@ -1,0 +1,22 @@
+DESCRIPTION Dynamic coupling: every edge declared, synchronous or asynchronous (K11)
+CATEGORY Dynamic Coupling
+NAMESPACE EtlRSystemNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE CONST max_user_load AS 200000
+     DEFINE CONST avg_response_time AS 300ms
+     # and yet: the course's slow service runs at 2000ms — a synchronous call
+     # would drag capabilities down to the weakest link (entanglement)
+
+     DEFINE COMMUNICATION Test Session TO Gate AS synchronous
+     DEFINE COMMUNICATION produce TO load AS asynchronous VIA Kafka topic target-system-target
+     DEFINE COMMUNICATION Answer Capture TO Recon AS asynchronous
+     DEFINE COMMUNICATION enrichment TO target AS asynchronous USING reference/branches.json
+
+# A read-only replica for the reference data: no synchronous call during the run
+DEFINE READONLYREPLICA branches AS branch-cache
+     refreshed between test windows
+
+ASSERT(Communication between services adheres to the defined declarations) # [K11-1]
+ASSERT(actual response time at max_user_load <= avg_response_time AT max_user_load for produce service) # [K11-2]
+ASSERT(settle targetRows confirmed matches written + rejected) # [K11-3]
+ASSERT(READONLYREPLICA is cached copy of reference data) # [K11-4]

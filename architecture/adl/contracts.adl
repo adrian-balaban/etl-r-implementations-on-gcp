@@ -1,0 +1,20 @@
+DESCRIPTION The contract between languages: Python at runtime, Java from the classpath (K02)
+CATEGORY Engineering Practices
+NAMESPACE EtlRContractsNS
+DEFINE LIBRARY Contracts AS spec/contracts
+     # from artefacts.json — the single source for both languages
+     DEFINE CONST ARTEFACT_DAT ".DAT"
+     DEFINE CONST ARTEFACT_CHS ".CHS"
+     DEFINE CONST ARTEFACT_DAT_NAME "{record}.{sequence}.DAT"
+     DEFINE CONST ARTEFACT_CHS_NAME "{record}.CHS"
+     DEFINE CONST RUN_ID "_run_id"
+     DEFINE CONST ACCOUNT_KEY "_account_key"
+     DEFINE CONST CONTENT_NAME "raw:" + sha256(raw line)[:16]
+     DEFINE CONST SOURCE_KEY ""
+     # share vs. duplicate is decided on volatility; shared churn has a limit
+     DEFINE CONST MAX_SHARED_CHANGES AS 2
+
+ASSERT(artefact names derive from Contracts) # [K02-1]
+ASSERT(byte-identic jar copy of artefacts.json) # [K02-2]
+ASSERT(ACCOUNT.src unchanged since sha256 pinned in fixtures/manifest.json) # [K02-3 K03-8]
+ASSERT(shared changes no more than MAX_SHARED_CHANGES times per month) # [K02-4]

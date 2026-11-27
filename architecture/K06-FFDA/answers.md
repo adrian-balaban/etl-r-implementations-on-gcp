@@ -1,25 +1,25 @@
-# Răspunsuri K06: FFDA - Fitness Function Driven Architecture
+# K06 answers: FFDA — Fitness Function Driven Architecture
 
-## Task 1: Alege load-bearing funcții
+## Task 1: Keep the load-bearing functions
 
-| Candidat | Verdict | Motiv |
+| Candidate | Verdict | Reason |
 |---|---|---|
-| **1. Answer Capture accepts 200,000 concurrent submissions within 300 ms** | **Load-bearing** | Protegează cerința de scalabilitate definită de business (200k students) |
-| **2. No submitted answer is lost, even while Grading is down** | **Load-bearing** | Protejează cerința "no data loss" – o consecință directă a cerințelor educaționale |
-| **3. The answer database never exceeds 300 connections** | **Load-bearing** | Capacitate rezervată de infrastructură (cost + performanță) |
-| **4. Answer keys are unreachable from student-facing services** | **Load-bearing** | Securitate + separarea domain-ului (Conway's Law) |
-| **5. Every class has a unit test** | **Reject** | Concern de unit-testing — nu e arhitectură; agenții nu au nevoie de așa ceva |
-| **6. Every method has cyclomatic complexity under 5** | **Reject** | Prea fragil la nivel de sistem; aplică ca metric gate pe pachetele generate de agent |
-| **7. The admin UI uses the approved color palette** | **Reject** | Linter sau check ingineresc: nu e arhitectură, e stil |
-| **8. Report PDFs generate in under 10 seconds** | **Not now** | Real, dar secundar; adăugați mai târziu dacă userii raportează lentoare |
-| **9. Every service logs in JSON** | **Reject** | Linter/style check: zgomot, nu e arhitectură |
-| **10. The test scheduling screen loads in under 1 second** | **Not now** | Real, dar secundar, pentru UX, nu e load-bearing |
+| **1. Answer Capture accepts 200,000 concurrent submissions within 300 ms** | **Load-bearing** | protects the scalability requirement the business defined (200k students) |
+| **2. No submitted answer is lost, even while Grading is down** | **Load-bearing** | protects the "no data loss" requirement — a direct consequence of the educational requirements |
+| **3. The answer database never exceeds 300 connections** | **Load-bearing** | infrastructure-reserved capacity (cost + performance) |
+| **4. Answer keys are unreachable from student-facing services** | **Load-bearing** | security + domain separation (Conway's Law) |
+| **5. Every class has a unit test** | **Reject** | a unit-testing concern — not architecture; agents do not need it |
+| **6. Every method has cyclomatic complexity under 5** | **Reject** | too brittle at system level; apply it as a metric gate on agent-generated packages |
+| **7. The admin UI uses the approved color palette** | **Reject** | a linter or engineering check: not architecture, style |
+| **8. Report PDFs generate in under 10 seconds** | **Not now** | real, but secondary; add it later if users report slowness |
+| **9. Every service logs in JSON** | **Reject** | a linter/style check: noise, not architecture |
+| **10. The test scheduling screen loads in under 1 second** | **Not now** | real, but secondary; UX, not load-bearing |
 
-**Regula de aur:** Păstrează doar elementele care susțin greutatea structurii (load-bearing), nu "tapetul". O acoperire completă cu funcții create de falsAlarm-uri îi învață pe oameni să ignore eșecurile.
+**The golden rule:** keep only what holds up the structure (load-bearing), not the wallpaper. Full coverage with false-alarm functions teaches people to ignore failures.
 
-## Task 2: Scrie-le în ADL înainte de cod
+## Task 2: Write them in ADL before the code
 
-Repo-ul ETL-R are deja balanța în `README.md` (numere reale măsurate pe GCP). Funcțiile load-bearing scrise în ADL:
+The ETL-R repo already has the balance in its `README.md` (real numbers measured on GCP). The load-bearing functions, written in ADL:
 
 ```
 DESCRIPTION Define load-bearing fitness functions for ETL-R
@@ -34,20 +34,20 @@ ASSERT(Answer Database never exceeds MAX_DB_CONNECTIONS connections)
 ASSERT(answer keys are unreachable from student-facing services)
 ```
 
-Acestea sunt primele 4 funcții scrise, **înainte de cod**, în stilul LMAX (first to pass).
+These are the first four functions, written **before the code**, in the LMAX style (the first one to pass).
 
-## Task 3: Care se scrie primul (stil LMAX)
+## Task 3: Which one gets written first (the LMAX style)
 
-**Răspunsul:** **Funcția 1** – "200,000-submission load test". Scrieți-o prima și așteptați să eșueze săptămâni întregi, până când echipa găsește un design care trece; tot restul e secundar.
+**The answer:** **function #1** — "the 200,000-submission load test". Write it first and let it fail for weeks, until the team finds a design that passes; everything else is secondary.
 
-De aceea, în repo-ul ETL-R, **balanța (`src_read = written + rejected`)** a fost prima funcție scrisă (poți vedea `make spec-test` care o validează rând-cu-rând).
+That is why, in the ETL-R repo, **the balance (`src_read = written + rejected`)** was the first function written (`make spec-test` validates it row by row).
 
-## Task 4: "Cost/run" pică în săptămâna 4 → nu-i bug
+## Task 4: "Cost/run" fails in week 4 → not a bug
 
-**Dispoziția (regula cursului):**
-- **Fix:** Dacă e o schimbare de design legitimă (de exemplu, optimizarea pipeline-ului pentru a reduce timpul de start-up)
-- **Revise:** Dacă e necesară o revizuire a topologiei (de exemplu, schimbarea numărului de worker-uri Dataflow)
-- **Exemption** cu owner și termen: "Cost/run pică deși avem feature X încă nefinalizat" → scutire explicită, niciodată ignorată, owner: "Platform Team", expiry: "next quarter review"
+**The disposition (the course rule):**
+- **Fix:** if it follows a legitimate design change (say, optimizing the pipeline to cut start-up time)
+- **Revise:** if the topology needs revisiting (say, changing the number of Dataflow workers)
+- **Exemption** with owner and deadline: "cost/run fails although feature X is still unfinished" → an explicit, never-ignored exemption, owner: "Platform Team", expiry: "next quarter review"
 
 ---
-*Generat în cadranul K06 – FFDA*
+*Generated in the K06 quadrant — FFDA*

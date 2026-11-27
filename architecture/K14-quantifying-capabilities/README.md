@@ -1,23 +1,23 @@
-# K14. Cuantificarea capabilităților
+# K14. Quantifying capabilities
 
-## Scenariu (5 min)
-Echipa dorește să măsoare capacitățile structurale ale arhitecturii: simplitate, deployabilitate, scalabilitate, cost. Care e statusul fiecărei implementări?
+## Scenario (5 min)
+The team wants to measure the architecture's structural capabilities: simplicity, deployability, scalability, cost. Where does each implementation stand?
 
-## Material sursă
-- `docs/evidence/README.md` (numere reale: cost, timp, resurse)
-- `cost-estimate.md` (cost-uri reale pe GCP: $0.90 / $0.94 / $2.33)
-- `make spec-test` / `make conformance-all` (testează toate implementările vs. oracol)
-- `make-the-grade-pages-811-827/` (FFDA template – load-bearing verdicts)
-- Diagrame: `docs/diagrams/08-stage-mapping.svg`
+## Source material
+- `docs/evidence/README.md` (real numbers: cost, time, resources)
+- `cost-estimate.md` (real costs on GCP: $0.90 / $0.94 / $2.33)
+- `make spec-test` / `make conformance-all` (test every implementation against the oracle)
+- `make-the-grade-pages-811-827/` (the FFDA template – load-bearing verdicts)
+- Diagrams: `docs/diagrams/08-stage-mapping.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Capability ADL:** Simplicity (# resurse Terraform: 71/81/75), Deployability (ramp-up), Scalability (200k la paralelism 1 → start-up domină), Cost.
-2. **Ce spun datele despre fit-ul fiecărei implementări pentru fiecare capabilitate?** Ce e trend și ce e un singur-run (Limits!).
-3. **Ce metrice temporale lipsesc în evidence pack-uri** ca să poți spune "readiness" (checklist §8: o singură măsurătoare nu e dovadă).
-4. **ADL composite:** Maintainability {main-sequence D < 0.3, complexitate < 4, resurse < 100}.
+1. **The capability ADL:** Simplicity (# Terraform resources: 71/81/75), Deployability (ramp-up), Scalability (200k at parallelism 1 → start-up dominates), Cost.
+2. **What the data says about each implementation's fit for each capability.** What is a trend and what is a single run (the Limits!).
+3. **Which temporal metrics are missing from the evidence packs** before you can say "ready" (checklist §8: a single measurement is not proof).
+4. **The composite ADL:** Maintainability {main-sequence D < 0.3, complexity < 4, resources < 100}.
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define capability quantification for ETL-R

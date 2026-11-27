@@ -1,0 +1,16 @@
+DESCRIPTION The run as a saga: communication, coordination and consistency, chosen explicitly (K12)
+CATEGORY Integration
+NAMESPACE EtlRWorkflowsNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE SAGA Migration Run Saga AS
+          DEFINE COMMUNICATION Test Session TO Answer Capture AS asynchronous
+          DEFINE COMMUNICATION Answer Capture TO Auto Grading AS asynchronous
+          DEFINE COMMUNICATION Auto Grading TO Reporting AS asynchronous
+          DEFINE COORDINATION Orchestrated
+          DEFINE CONSISTENCY Eventual
+     # the contract is strict on names, not on protocol: just the required fields
+     DEFINE CONTRACT graded-answer AS NAME-VALUE PAIRS
+          INCLUDING {student-id, test-id, question-num, answer, receipt-id}
+
+ASSERT(Communication between services matches the defined communication declarations) # [K12-1]
+ASSERT(Workflow is managed by the Test Session orchestrator) # [K12-2]

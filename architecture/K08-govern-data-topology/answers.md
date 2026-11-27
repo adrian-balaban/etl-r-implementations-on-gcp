@@ -1,8 +1,8 @@
-# Răspunsuri K08: Guvernarea topologiei
+# K08 answers: Governing the data topology
 
-## Task 1: Care aserțiune se rupe
+## Task 1: Which assertion breaks
 
-Agentul care "grăbește recon-ul" și își conectează serviciul de recon direct la `etlr_extraction` (în loc să execute recon specificată) va rupe aserțiunea:
+The agent that "speeds recon up" by connecting its recon service straight to `etlr_extraction` (instead of running the specified recon) breaks:
 
 ```
 ASSERT(Test Database is only accessed by Testing Domain Services)
@@ -11,51 +11,51 @@ ASSERT(Admin Database is only accessed by Administration Domain Services)
 ASSERT(Do not allow static coupling between quanta not specified here)
 ```
 
-**Care e testul pe care îl pică:**
-- **Static analysis (Terraform/IAM + manifests):** Inspectează configurațiile de conectivitate ale serviciului de recon. Dacă recon-service are o dependență la `etlr_extraction` în manifest-ul Kubernetes, această aserțiune se va rupe în pull request sau la build, chiar înainte de deploy.
-- **Dynamic analysis (Kafka flow):** Dacă recon consumă direct din topic-ul de intrare în loc să aștepte confirmările, flow-ul de date va diferi și `settle` nu va corela corect cu `written`+`rejected`.
-- **Platform analysis (Cloud SQL logs):** Log-urile Cloud SQL vor evidenția noi conexiuni nedeclarate de la recon-service la schema `account_source`, semnalând depășirea cuantelor.
+**Which test it fails:**
+- **Static analysis (Terraform/IAM + manifests):** inspects the recon service's connectivity configuration. If recon-service holds a dependency on `etlr_extraction` in its Kubernetes manifest, the assertion breaks in the pull request or at build time, before any deploy.
+- **Dynamic analysis (the Kafka flow):** if recon consumes straight from the input topic instead of awaiting the confirmations, the data flow will differ, and `settle` will no longer correlate with `written`+`rejected`.
+- **Platform analysis (Cloud SQL logs):** the Cloud SQL logs will surface new, undeclared connections from recon-service to the `account_source` schema — the quantum boundary has been crossed.
 
-**Care prinde primul?** Analiza statică – este cea mai rapidă și cea mai deterministică. Dacă TDM (Terraform Dependency Monitor) detectează o legătură neautorizată, fitness function-ul pică la nivelul pull request-ului, înainte de orice test de runtime.
+**Which one catches it first?** Static analysis — the fastest and the most deterministic. If the Terraform Dependency Monitor sees an unauthorized link, the fitness function fails at pull-request level, before any runtime test.
 
-## Task 2: Căi legitime fără încălcarea topologiei
+## Task 2: Legitimate paths that respect the topology
 
-**Calea 1: Replicare nume de date (data schema replication)**
-- Testing deține cache-uri read-only proprii cu numele din roster în Grading DB.
-- Raporturile rulează după fereastra de test, așa că un mic lag e inofensiv.
-- **Cost:** Date duplicate, dar supraviețuiește outage-urilor Testing.
+**Path 1: replicate the data (data schema replication)**
+- Testing owns read-only caches of the roster names in the Grading DB.
+- Reports run after the test window, so a small lag is harmless.
+- **Cost:** duplicated data, but then it survives Testing outages.
 
-**Calea 2: Data sidecar**
-- Testing deține un cache simplu și consistent al numelor din roster.
-- Dependența pe acest tip de cache supraviețuiește outage-urilor Testing.
-- **Cost:** O dependență pe cache, dar izolată de dependențele de bază.
+**Path 2: a data sidecar**
+- Testing holds a simple, consistent cache of the roster names.
+- The dependency on this sort of cache survives Testing outages.
+- **Cost:** one more cache dependency, but isolated from the database dependencies.
 
-**Calea 3: Data-based payload contract**
-- Answer Capture adaugă numele studentului fiecărui mesaj (numai pe cel mai ocupat path).
-- Mesaje mari pe bus, dar fără "extra calls or stores".
-- **Cost:** Mesaje mai mari pe cel mai ocupat path, dar izolat.
+**Path 3: a data-based payload contract**
+- Answer Capture adds each student's name to the message (only on the busiest path).
+- Bigger messages on the bus, but "no extra calls or stores".
+- **Cost:** larger messages on the busiest path, but contained.
 
-**Recomandare:** Replicarea numelor din roster în Grading DB, refresh-ată când roster-ul se schimbă. Raportările rulează după testing, așa că un lag mic e inofensiv.
+**Recommendation:** replicate the roster names into the Grading DB, refreshed when the roster changes. Reports run after testing, so a small lag is harmless.
 
-## Task 3: Funcția fitness de reconciliere
+## Task 3: The reconciliation fitness function
 
-**Ce se examinează și când:**
-| Analiza | Ce inspectează | Când capturează schimbarea |
+**What is examined, and when:**
+| Analysis | What it inspects | When it captures a change |
 |---|---|---|
-| **Static** | Terraform values + Helm config + manifest Kubernetes | În pull request sau la build, înainte de deployment |
-| **Dynamic** | Service-mesh / Hubble flows: conexiuni deschise la DB | Doar după ce schimbarea rulează (la runtime) |
-| **Platform** | Database-side connection logs, secrets-manager grants, DNS lookups | La runtime, din partea bazei de date |
+| **Static** | Terraform values + Helm config + the Kubernetes manifest | in the pull request or at build, before deployment |
+| **Dynamic** | service-mesh / Hubble flows: connections opened to the DB | only after the change runs (at runtime) |
+| **Platform** | database-side connection logs, secrets-manager grants, DNS lookups | at runtime, from the database's side |
 
-**MCP tool specific ETL-R:** `get_balance(run_id)` – rulează când o fereastră de test se încheie, compară balanța `src_read = written + rejected` și alertează dacă nu se echilibrează.
+**The ETL-R-specific MCP tool:** `get_balance(run_id)` — runs when a test window closes, checks the `src_read = written + rejected` balance and alerts if it does not settle.
 
-## Task 4: Crash între dequeue și persist
+## Task 4: A crash between dequeue and persist
 
-**Asynchronous Chain of Persistence:**
-1. **Synchronous send** – Answer Capture trimite mesajul pe Kafka topic `target-system-target` și așteaptă acknowledgmentul clientului (ack mode).
-2. **Client acknowledge mode** – Clientul (Test System) confirmă mesajul numai după ce a persistat confirmarea.
-3. **Last-participant support** – Dacă Grading e lent sau down, queue-ul protejează answer-urile prin persistare; nu se pierd niciodată.
+**The Asynchronous Chain of Persistence:**
+1. **Synchronous send** – Answer Capture publishes the message on the Kafka topic `target-system-target` and waits for the client's acknowledgement (ack mode).
+2. **Client acknowledge mode** – the client (the Test System) confirms the message only after persisting its confirmation.
+3. **Last-participant support** – if Grading is slow or down, the queue protects the answers by persisting them; none are ever lost.
 
-**Pattern prevăzut de ETL-R:**
-- `load` step publică la Kafka `target-system-target` cu idempotență pe account key.
-- `recon` step verifică ecuația `src_read = written + rejected` contra confirmărilor din `settle`.
-- Dacă `load` step pică (mock-ul picat), `recon` marchează run-ul ca `unsettled=N` + `RECONCILIATION FAILED`, dar nicio dată nu se pierde silențios – sunt în DLQ cu reason enumerat.
+**The pattern ETL-R implements:**
+- the `load` step publishes to the Kafka topic `target-system-target` with idempotency on the account key.
+- the `recon` step checks `src_read = written + rejected` against the confirmations in `settle`.
+- if the `load` step fails (the dead mock), `recon` marks the run `unsettled=N` + `RECONCILIATION FAILED`, but no data is ever lost silently — it sits in the DLQ with an enumerated reason.

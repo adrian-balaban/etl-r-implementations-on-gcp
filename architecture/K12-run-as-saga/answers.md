@@ -1,30 +1,30 @@
-# Răspunsuri K12: Run-ul ca saga
+# K12 answers: The run as a saga
 
-## Task 1: Cele 3 forțe
+## Task 1: The three forces
 
-| Forță | Definiție ADL | Argumente pe cerințe ETL-R |
+| Force | The ADL definition | The arguments on ETL-R's requirements |
 |---|---|---|
-| **Communication** | `DEFINE COMMUNICATION produce TO load AS asynchronous` `VIA Kafka topic target-system-target` | Topic-urile Kafka sunt durable; răspunsul nu e necesar imediat; answer-urile curg durabil; orice service poate consuma la propriul ritm. |
-| **Coordination** | `DEFINE COORDINATION Orchestrated` `DEFINE SAGA Migration Run Saga` | Cloud Run job-ul (sau Composer DAG-ul) e orchestratorul; știe când queue-ul e gol și deține gestionarea erorilor.
-| **Consistency** | `DEFINE CONSISTENCY Eventual` `ASSERT(settle targetRows confirmed matches written + rejected)` | "No answer lost" e durability, nu atomicity; grades și rapoartele pot întârzia câteva minute, dar toate sunt confirmate în final.
+| **Communication** | `DEFINE COMMUNICATION produce TO load AS asynchronous` `VIA Kafka topic target-system-target` | the Kafka topics are durable; no reply is needed immediately; answers flow durably; any service consumes at its own pace. |
+| **Coordination** | `DEFINE COORDINATION Orchestrated` `DEFINE SAGA Migration Run Saga` | the Cloud Run job (or the Composer DAG) is the orchestrator; it knows when the queue empties and owns error handling. |
+| **Consistency** | `DEFINE CONSISTENCY Eventual` `ASSERT(settle targetRows confirmed matches written + rejected)` | "no answer lost" is durability, not atomicity; grades and reports may trail by minutes, but all are confirmed in the end. |
 
-**Sinteză pe cerințe:**
-- **Communication** asigură că mesajele nu se pierd – topic-urile Kafka stau în buffer.
-- **Coordination** (Orchestrated) spune cine deține responsabilitatea opririi/rezolvării erorilor.
-- **Consistency** (Eventual) confirmă că "no lost answers" e o proprietate de durabilitate, nu atomicitate.
+**The synthesis, per requirement:**
+- **Communication** makes sure the messages are never lost — the Kafka topics buffer them.
+- **Coordination** (orchestrated) makes explicit who owns stopping and resolving errors.
+- **Consistency** (eventual) confirms that "no lost answers" is a durability property, not atomicity.
 
-## Task 2: "Atomic + choreography" devine ce?
+## Task 2: What "atomic + choreography" becomes
 
-**Ce devine în realitate:** Nu există un singleton care să stocheze starea tranzacției întregii 8 stațiuni. Fiecare service stochează partea sa (Flink: JobManager; Beam: Dataflow job state). Dacă vrei să vezi starea globală **trebuie să adaugi un service** care să o urmărească — acela e orchestratorul.
+**What it really is:** no singleton stores the transaction state of the whole 8 stages. Every service stores its own part (Flink: the JobManager; Beam: the Dataflow job state). To see the global state you must **add a service** that tracks it — and that service is the orchestrator.
 
-**De ce e neguvernabil?** Fără un orchestrator explicit:
-- Fiecare service are o porțiune a stării (ex: `produce` ține evidența a cât scrie, `load` ține evidența a cât a confirmat).
-- Nu există nicio entitate care să vadă starea totală (`src_read = written + rejected`).
-- Un teammate care vrea "atomic consistency" creează efectiv un **orchestrator sub alt nume** – adică o schimbare de topologie, nu o soluție la problemă.
+**Why it is ungovernable:** without an explicit orchestrator:
+- Every service holds a slice of the state (e.g. `produce` counts what it writes, `load` counts what it confirms).
+- No entity sees the total state (`src_read = written + rejected`).
+- A teammate who wants "atomic consistency" effectively creates an **orchestrator under another name** — a topology change, not a solution to the problem.
 
-**Rezultat:** "Atomic + choreography" devine Orchestrator pattern cu un service dedicat (Cloud Run job sau Composer DAG).
+**The result:** "atomic + choreography" becomes the Orchestrator pattern with a dedicated service (a Cloud Run job or a Composer DAG).
 
-## Task 3: ADL: `DEFINE SAGA Migration Run Saga`
+## Task 3: The ADL: `DEFINE SAGA Migration Run Saga`
 
 ```
 DESCRIPTION Define Migration Run Saga for ETL-R
@@ -42,20 +42,20 @@ ASSERT(Communication between services matches the defined communication declarat
 ASSERT(Workflow is managed by the Test Session orchestrator)
 ```
 
-**Contractul `graded-answer`:** Nume strict (NU protocol), numai câmpurile necesare ({student-id, test-id, question-num, answer, receipt-id}). Fiecare implementare le generează conform propriilor tehnologii, alegându-și protocolul (gRPC/REST/Kafka) – consumer-driven contract tests.
+**The `graded-answer` contract:** strict on names (NOT protocol), only the required fields ({student-id, test-id, question-num, answer, receipt-id}). Every implementation generates them with its own technology, picking the protocol (gRPC/REST/Kafka) – consumer-driven contract tests.
 
-## Task 4: Scope de regenerare = cuanta / job-ul
+## Task 4: The regeneration scope = the quantum / the job
 
-| Guardrail | Verificare |
+| Guardrail | The check |
 |---|---|
-| **Behavior** | Functional tests: grading results, edge cases, the answer contract (conformance 68/68) |
-| **Static coupling** | No new coupling to other quanta; Grading DB access unchanged |
-| **Dynamic coupling** | Still consumes answers asynchronously; no new synchronous calls |
+| **Behaviour** | functional tests: grading results, edge cases, the answer contract (conformance 68/68) |
+| **Static coupling** | no new coupling to other quanta; Grading DB access unchanged |
+| **Dynamic coupling** | still consumes answers asynchronously; no new synchronous calls |
 | **Contract** | graded-answer still accepts the required fields {student-id, test-id, question-num, answer, receipt-id} |
-| **Saga** | Still participates in Migration Run Saga under the orchestrator |
-| **Capability** | Still meets 5,000 users at 2s (sau 200,000 la Flink) |
+| **Saga** | still participates in the Migration Run Saga under the orchestrator |
+| **Capability** | still meets 5,000 users at 2s (or 200,000 for Flink) |
 
-**Rolul cuantei:** Scope-ul de regenerare e exact o cuantă. Dacă un agent modifică `spec/contracts/` (ex: adaugă un câmp nou la `graded-answer`), trebuie să treacă fitness function-urile de static coupling și de contract înainte ca build-ul să meargă.
+**The quantum's role:** the regeneration scope is exactly one quantum. If an agent changes `spec/contracts/` (say, adds a field to `graded-answer`), it must pass the static-coupling and contract fitness functions before the build goes through.
 
 ---
-*Generat în cadranul K12 – Run-ul ca saga*
+*Generated in the K12 quadrant — The run as a saga*

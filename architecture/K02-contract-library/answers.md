@@ -1,6 +1,6 @@
-# Răspunsuri K02: Contractul ca bibliotecă partajată
+# K02 answers: The contract as a shared library
 
-## Task 1: ADL cu `DEFINE LIBRARY Contracts AS spec/contracts`
+## Task 1: The ADL with `DEFINE LIBRARY Contracts AS spec/contracts`
 
 ```
 DESCRIPTION Define contract library shared between implementations
@@ -17,35 +17,36 @@ DEFINE LIBRARY Contracts AS spec/contracts
      ASSERT(artefact names derive from Contracts)
      ASSERT(byte-identic.jar copy of artefacts.json)
 ```
-Acesta este contractul centralizat pe care toate implementările îl citesc la runtime (Python) sau la build time (Java/Maven). `artefacts.json` conține numele standardizate pentru `.DAT`, `.CHS`, `.FLG`, `.RPT`, `.ERR` și coloanele partajate `_run_id`, `_account_key`. Interdicția `Do not hand-edit spec/fixtures/ACCOUNT.src` devine o aserțiune ADL: `ASSERT(ACCOUNT.src unchanged since sha256 pinned in fixtures/manifest.json)`.
-## Task 2: Plan de fitness function
+This is the centralized contract that all implementations read at runtime (Python) or at build time (Java/Maven). `artefacts.json` holds the standardized names for `.DAT`, `.CHS`, `.FLG`, `.RPT`, `.ERR` and the shared columns `_run_id`, `_account_key`. The "Do not hand-edit spec/fixtures/ACCOUNT.src" prohibition becomes an ADL assertion: `ASSERT(ACCOUNT.src unchanged since sha256 pinned in fixtures/manifest.json)`.
 
-**Caz care trece:**
-- Build-ul Java rulează `mvn dependency:copy-artefacts` care copiează `artefacts.json` din `spec/contracts/` în classpath
-- Testul verifică checksum-ul SHA-256 al copiei vs. sursa
-- `make verify-project2` trece fără erori (zero modificări în `pipelines/` sau `apps/`)
+## Task 2: The fitness-function plan
 
-**Caz care pică:**
-- Agentul editează `spec/fixtures/ACCOUNT.src` direct → checksum-urile diferă → `make spec-test` pică
-- `artefacts.json` modificat fără actualizarea consistentă a mapping-urilor → `make conformance` pică pe eroarea `SCHEMA_INVALID`
-- Testul Python citește `artefacts.json` din directorul greșit → nume de fișiere incorecte → `load` step pică cu `PARSE_MISSING_FIELD`
+**The passing case:**
+- The Java build runs `mvn dependency:copy-artefacts`, which copies `artefacts.json` out of `spec/contracts/` onto the classpath
+- The test checks the copy's SHA-256 checksum against the source
+- `make verify-project2` passes with zero changes in `pipelines/` or `apps/`
 
-Fitness function interpolată (din ADL): `DEFINE CONST MAX_SHARED_CHANGES = 2` + `ASSERT(shared changes no more than MAX_SHARED_CHANGES times per month)` rulabil pe CI.
+**The failing case:**
+- The agent edits `spec/fixtures/ACCOUNT.src` directly → the checksums differ → `make spec-test` fails
+- `artefacts.json` changed without consistently updating the mappings → `make conformance` fails on `SCHEMA_INVALID`
+- The Python test reads `artefacts.json` from the wrong directory → wrong file names → the `load` step fails with `PARSE_MISSING_FIELD`
 
-## Task 3: Capcana "IS DEPENDENT ON"
+Interpolated fitness function (from the ADL): `DEFINE CONST MAX_SHARED_CHANGES = 2` + `ASSERT(shared changes no more than MAX_SHARED_CHANGES times per month)`, runnable in CI.
 
-**Rezultatul greșit al agentului:**
-- Agentul generează o regulă ArchUnit: `ArchRule senderDependsOnModel = classes().that().resideInAPackage("..testing.question_service.sender..").should().dependOnClassesThat().resideInAPackage("..testing.test_model..");`
-- Acest lucru pică pentru că **IS DEPENDENT ON** este o **claim existențial**: "at least one class folosește B", nu "every class".
-- Dacă o singură clasă helper utilitară folosește test_model, check-ul trece, deși 99% din clase nu au nicio legătură cu modelul.
-- În realitate, `Question Sender` depinde de `Test Model` doar prin clasa specifică `Test Loader`, nu prin orice clasă din pachet.
+## Task 3: The "IS DEPENDENT ON" trap
 
-**Corectitudine:** `IS DEPENDENT ON` generatează `at least one class uses`, nu "every class". Pentru o verificare per-clasă, arhitectul ar trebui să ruleze o regulă custom de tip `per class` sau să folosească `HAS NO DEPENDENCY ON` pentru a lista explicit interdependențele.
+**The agent's wrong result:**
+- The agent generates an ArchUnit rule: `ArchRule senderDependsOnModel = classes().that().resideInAPackage("..testing.question_service.sender..").should().dependOnClassesThat().resideInAPackage("..testing.test_model..");`
+- This passes because **IS DEPENDENT ON** is an **existential claim**: "at least one class uses B", not "every class".
+- If a single utility helper class uses test_model, the check passes even though 99% of the classes have no connection to the model.
+- In reality, `Question Sender` depends on `Test Model` only through the specific class `Test Loader`, not through any class in the package.
 
-## Task 4: Unde rulează fitness function-ul
+**Correctness:** `IS DEPENDENT ON` generates "at least one class uses", not "every class". For a per-class check, the architect should run a custom per-class rule, or use `HAS NO DEPENDENCY ON` to list the interdependencies explicitly.
 
-- **CI/CD trigger**: La fiecare build/PR, rulează `make spec-test` și verifică byte-identitatea `artefacts.json`. Dacă pică, build-ul e blocat.
-- **MCP on-demand**: Un agent sau arhitectul poate rula unealta MCP `get_artefact_config()` pentru a compara arborele curent `artefacts.json` cu cel canonic stocat în governance context.
-- **Interactiv**: În timpul unui kata/workshop, agentul primește ADL-ul ca context și rulează manual verificarea `ASSERT(artefact names derive from Contracts)` împotriva arborelui real al fișierelor generate de build.
+## Task 4: Where the fitness function runs
 
-**Recomandare:** CI/CD triggered as the release gate, plus MCP tools for on-demand checks (așa cum e recomandat în `make-the-grade-pages-*/answers.md` pentru alte task-uri).
+- **CI/CD trigger:** on every build/PR it runs `make spec-test` and checks `artefacts.json`'s byte-identity. On failure, the build is blocked.
+- **MCP on-demand:** an agent or the architect can run the MCP tool `get_artefact_config()` to compare the current `artefacts.json` tree with the canonical one kept in the governance context.
+- **Interactively:** during a kata/workshop, the agent receives the ADL as context and checks `ASSERT(artefact names derive from Contracts)` manually against the real tree of build-generated files.
+
+**Recommendation:** CI/CD-triggered as the release gate, plus MCP tools for on-demand checks (as `make-the-grade-pages-*/answers.md` recommends for the other tasks).

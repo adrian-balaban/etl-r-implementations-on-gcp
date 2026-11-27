@@ -1,8 +1,8 @@
-# Răspunsuri K04: Calitate cod și fitness functions
+# K04 answers: Code quality and fitness functions
 
-## Task 1: Complexitate ciclomatică pentru `grade()`
+## Task 1: The cyclomatic complexity of `grade()`
 
-**Codul real (din `pipelines/common/tds.py` sau echivalentul său):**
+**The real code (from `pipelines/common/tds.py` or its equivalent):**
 
 ```java
 public Grade grade(Answer a) {
@@ -22,32 +22,32 @@ public Grade grade(Answer a) {
 }
 ```
 
-**Analiza:**
+**The analysis:**
 - `null check` → 1 decision
-- `switch cases, grades 3–12` → 10 decisions (cases 5-11 sunt identice, doar cheia variază)
-- `TRUE_FALSE check` → 1 decision (cu 2 ternari)
+- `switch cases, grades 3–12` → 10 decisions (cases 5–11 are identical; only the key varies)
+- `TRUE_FALSE check` → 1 decision (with two ternaries)
 - **Total: 14 decisions + 1 null check = 15**
 
-**Esențială sau accidentală?** Complexitatea este accidentală: toate case-urile diferă doar printr-un table-lookup (grade3Key, grade4Key etc.), nu pe comportament real. Fiecare case verifică doar o intrare din map, nu rulează logică complexă.
+**Essential or accidental?** The complexity is accidental: every case differs only through a table lookup (grade3Key, grade4Key, ...), not through real behaviour. Each case reads one map entry; none runs complex logic.
 
 ## Task 2: A / I / D (Abstractness/Instability/Distance)
 
-**Metrice pentru repo ETL-R (după modelul din `make-the-grade-pages`):**
+**Metrics for the ETL-R repo (following the make-the-grade model):**
 
-| Componentă | A (Abstractness) | I (Instability) | D (Distance) | Zona |
+| Component | A (Abstractness) | I (Instability) | D (Distance) | Zone |
 |---|---|---|---|---|
-| AutoGrading | 0.00 (toată implementația) | 0.14 | 0.86 | **Zone of Pain** — implementare puternic dependată; orice schimbare se propagă la 6 caller-i |
-| QuestionSender | 0.25 | 0.60 | 0.15 | **Pass** — puține dependențe, stabil |
-| AnswerCapture | 0.20 | 0.80 | 0.00 | **Pass** — foarte instabilă, dar cu abstractness scăzut |
-| TestLoader | 0.38 | 0.40 | 0.22 | **Pass** — echilibrat |
-| ReportingCore | 0.75 | 0.86 | 0.61 | **Fail** — Zone of Uselessness — în principal abstracții, puțin comportament, fan-out mare |
+| AutoGrading | 0.00 (all implementation) | 0.14 | 0.86 | **Zone of Pain** — a heavily depended-upon implementation; every change propagates to 6 callers |
+| QuestionSender | 0.25 | 0.60 | 0.15 | **Pass** — few dependencies, stable |
+| AnswerCapture | 0.20 | 0.80 | 0.00 | **Pass** — very unstable, but with low abstractness |
+| TestLoader | 0.38 | 0.40 | 0.22 | **Pass** — balanced |
+| ReportingCore | 0.75 | 0.86 | 0.61 | **Fail** — Zone of Uselessness — mostly abstractions, little behaviour, large fan-out |
 
-**Formule:**
-- A = ΣNa / (ΣNa + ΣNc) — raport clase abstracte vs. total
-- I = Ce / (Ce + Ca) — raport dependențe eferente vs. total
-- D = |A + I − 1| — distanța față de main sequence (ideal: D < 0.3)
+**The formulas:**
+- A = ΣNa / (ΣNa + ΣNc) — the ratio of abstract classes to the total
+- I = Ce / (Ce + Ca) — the ratio of efferent dependencies to the total
+- D = |A + I − 1| — the distance from the main sequence (ideal: D < 0.3)
 
-## Task 3: ADL cu praguri
+## Task 3: An ADL with thresholds
 
 ```
 DESCRIPTION Define code quality fitness functions
@@ -74,12 +74,12 @@ ENDFOREACH
 ASSERT(actual response time <= AVG_RESPONSE_TIME at MAX_STUDENTS)
 ```
 
-## Task 4: Refactorizare pe main sequence
+## Task 4: A refactoring onto the main sequence
 
-**Refactorizarea propusă:**
-1. Extract Grader, AnswerKeyProvider și AnswerMatcher în interfețe separate
-2. TrueFalseMatcher și MultipleChoiceMatcher rămân concrete
-3. Încărcarea cheilor mutată la Answer Key Loader
-4. După refactor: AutoGrading devine 2 clase abstracte + 3 concrete: A = 0.60. I rămâne 0.14. D = 0.26: **Pass**.
+**The proposed refactoring:**
+1. Extract Grader, AnswerKeyProvider and AnswerMatcher into separate interfaces
+2. TrueFalseMatcher and MultipleChoiceMatcher stay concrete
+3. Key loading moves into the Answer Key Loader
+4. After the refactoring: AutoGrading becomes 2 abstract + 3 concrete classes: A = 0.60. I stays 0.14. D = 0.26: **Pass**.
 
-**Motiv:** Elimină "Zone of Pain" prin introducerea de abstracții la nivel de componentă, nu la nivel de metodă.
+**The reason:** it removes the "Zone of Pain" the right way — abstractions at component level, not at method level.

@@ -1,18 +1,18 @@
-# K18. Echipe și istoric Git
+# K18. Teams and Git history
 
-## Scenariu (5 min)
-Dacă migrația ar fi un produs cu 3 echipe: cine deține `spec/` și `conformance/` (Platform), cine implementările (Stream-Aligned), cine Target System-ul; agentul care a scris 40% din commit-uri.
+## Scenario (5 min)
+Suppose the migration were a product with 3 teams: who owns `spec/` and `conformance/` (Platform), who owns the implementations (Stream-Aligned), who owns the Target System; plus the agent that wrote 40% of the commits.
 
-## Material sursă
-- `CLAUDE.md` (reguli de siguranță, symlink-uri)
+## Source material
+- `CLAUDE.md` (the safety rules, the symlinks)
 - `make-the-grade-pages-69-74/` (team alignment, describing teams, governing teams)
 - `make-the-grade-pages-33-34/` (data topology tasks)
-- `git log` real al repo-ului (commit-eri pe domenii specifice)
-- Diagrame: `docs/diagrams/00-overview.svg`
+- the repo's real `git log` (committers on specific domains)
+- Diagrams: `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Explică cu legea lui Conway + cognitive load de ce acum ("o singură mână") produce coerență**, și ce s-ar rupe la 3 echipe (drift între implementări).
-2. **ADL echipe + persoane + DEFINIREA AGENT-ului ca membru**; Super User (arhitectul e "orice, mai ales urgențe") și Alumni.
-3. **Gubernare pe istoric real:** aserțiuni tip findings (committeri în afara echipei, co-change `spec/` + `implementations/` în același commit – indicator boundary), cu dispoziții: conversație / problemă reală / schimbare de ADL.
-4. **Măsoară eficiența agentului:** conflicte de merge + rata de livrare, lunar.
+1. **Explain with Conway's Law + cognitive load why "one pair of hands" now produces coherence,** and what would break across 3 teams (drift between implementations).
+2. **The team ADL: people + the AGENT defined as a member;** the Super User (the architect as "anything, especially emergencies") and Alumni.
+3. **Governance on real history:** findings-style assertions (committers outside their team, `spec/` + `implementations/` co-changes in one commit – a boundary indicator), with dispositions: a conversation / a real problem / an ADL change.
+4. **Measure the agent's effectiveness:** merge conflicts + delivery rate, monthly.

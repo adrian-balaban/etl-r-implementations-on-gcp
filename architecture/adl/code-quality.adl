@@ -1,0 +1,26 @@
+DESCRIPTION Code quality as fitness functions, with thresholds per method and per component (K04)
+CATEGORY Engineering Practices
+NAMESPACE EtlRCodeQualityNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE CONST MAX_CC AS 10
+     DEFINE CONST MAX_CC_GENERATED AS 5
+     DEFINE CONST MAX_DISTANCE AS 0.3
+     DEFINE CONST AVG_RESPONSE_TIME AS 300ms
+     DEFINE CONST MAX_STUDENTS AS 200000
+     DEFINE CONST MAX_SUBMIT_TIME AS 300ms
+
+# Agent-generated code carries the stricter threshold; accidental complexity is
+# refactored onto the main sequence, never tolerated
+FOREACH component : comp IN system
+    FOREACH class : cls IN comp
+        FOREACH method : m IN cls
+            IF m IS AGENT-GENERATED
+                ASSERT(cyclomatic complexity of m < MAX_CC_GENERATED) # [K04-1]
+            ELSE
+                ASSERT(cyclomatic complexity of m < MAX_CC) # [K04-2]
+        END
+    END
+    ASSERT(average cyclomatic complexity of cls < MAX_CC) # [K04-3]
+    ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K04-4]
+ENDFOREACH
+ASSERT(actual response time <= AVG_RESPONSE_TIME at MAX_STUDENTS) # [K04-5]

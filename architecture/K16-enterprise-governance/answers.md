@@ -1,60 +1,60 @@
-# Răspunsuri K16: Guvernanță enterprise + context MCP
+# K16 answers: Enterprise governance + the MCP context
 
-## Task 1: Strategia Classic Prescriptive și costurile ei
+## Task 1: The Classic Prescriptive strategy and its costs
 
-**Strategia implicată:**
-- Departamentul IT al băncii impune un stack aprobat: Java 8 · Oracle · WebLogic, cu excepții de la comitet.
-- **Cost to Make the Grade:** strategia funcționează doar dacă software-ul e tratat ca overhead și competitorii fac la fel.
-- **Decision latency:** 7 exception requests wait on committee meetings.
-- **"Reduced complexity":** o opțiune marcată pentru echipa cea mai încărcată, care pune povara pe ceilalți (complexitate accidentală).
-- **"Low cost":** overengineering-ul e o povară continuă care costă mai mult decât licențele economisite.
-- **Dissatisfaction:** utilizatorii rămân cu experiențe învechite; echipele nu pot adopta unelte noi.
+**The strategy at play:**
+- The bank's IT department mandates an approved stack: Java 8 · Oracle · WebLogic, with committee-granted exceptions.
+- **Cost to Make the Grade:** the strategy works only where software is treated as overhead and the competitors do the same.
+- **Decision latency:** 7 exception requests waiting on committee meetings.
+- **"Reduced complexity":** one option, marked for the most loaded team — a burden pushed onto everyone else (accidental complexity).
+- **"Low cost":** the overengineering is a continuous burden costing more than the saved licences.
+- **Dissatisfaction:** the users stay on outdated experiences; the teams cannot adopt new tools.
 
-**Analiză clasică:** Strategia funcționează strict în contexte în care software-ul e tratat ca overhead și competitorii sunt identici. În schimb, pentru o migrație ca ETL-R cu 3 stive și 200k concurrent users, strategia e costisitoare în complexitate accidentală.
+**The classical analysis:** the strategy works strictly in contexts that treat software as overhead, with identical competitors. For a migration like ETL-R — 3 stacks and 200k concurrent users — it turns expensive through accidental complexity.
 
-## Task 2: Recomandare Distributed → Durable Interface
+## Task 2: The Distributed → Durable Interface recommendation
 
-**Ce rămâne guvernat central (integrare):**
-- **Identity, security, observability and logging through a mesh sidecar** – departe de responsabilitatea fiecărei echipe, gestionat de echipa de infrastructură.
-- **Integration contracts** – topic-urile Kafka (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) sunt interfața migrată, proprietatea centrală.
-- **SBOM-uri la build** – exposed la MCP server, nu inventory în ADL. Fiecare build produce SBOM, governance context-l face query.
+**What stays centrally governed (integration):**
+- **Identity, security, observability and logging through a mesh sidecar** – kept away from each team's responsibility, run by the infrastructure team.
+- **Integration contracts** – the Kafka topics (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) are the migrated interface, centrally owned.
+- **SBOMs at build time** – exposed at the MCP server, not kept as an ADL inventory. Every build produces the SBOM; the governance context queries it.
 
-**Strategia recomandată:**
-1. **Distribuție:** Fiecare echipă poate avea propriul stack tehnologic (Python/Java/etc), dar trebuie să respecte integration contracts.
-2. **Interfață durabilă:** Topic-urile Kafka + schema-urile JSON sunt stabile, definite central – nimic nu se schimbă fără coordonare.
-3. **Owner mapă:**
-   - **Infrastructure team:** identity, security, observability, mesh sidecar
-   - **Education systems group:** shared student data APIs (rosters)
-   - **Each team:** languages, databases, frameworks for their service + LLMs for essays
+**The recommended strategy:**
+1. **Distribution:** every team may keep its own tech stack (Python/Java/etc.), but must respect the integration contracts.
+2. **A durable interface:** the Kafka topics + the JSON schemas are stable, defined centrally – nothing changes without coordination.
+3. **The owner map:**
+   - **Infrastructure team:** identity, security, observability, the mesh sidecar
+   - **Education systems group:** the shared student data APIs (rosters)
+   - **Each team:** languages, databases, frameworks for their own service + LLMs for essays
 
-## Task 3: SBOM-uri la build vs. ADL inventory
+## Task 3: Build-time SBOMs vs. an ADL inventory
 
 **SBOM (Software Bill of Materials):**
-- Generat la fiecare build: `pom.xml` (Java/Maven), `requirements.txt` (Python), `go.mod` (Go).
-- Exposed la MCP server la governance context.
-- **Nu stoca în ADL:** ADL definește concepte arhitecturale și flow-uri de feedback, nu inventare de stive de tehnologie.
-- **Stivele se schimbă mai repede decât orice document:** harvest-from-build (la build) înlocuiește inventarul manual.
+- Generated at every build: `pom.xml` (Java/Maven), `requirements.txt` (Python), `go.mod` (Go).
+- Exposed at the MCP server as governance context.
+- **Do not store it in the ADL:** the ADL defines architectural concepts and feedback flows, not technology inventories.
+- **Stacks change faster than any document:** harvest-from-build (at build time) replaces the manual inventory.
 
-**Fitness function MCP example:**
+**The fitness-function MCP example:**
 ```
 ASSERT(SBOM generated in build)
 ASSERT(no technology inventory in ADL files)
 ASSERT(communication protocols harvested from build SBOM)
 ```
 
-## Task 4: Push sau pull la contractul Target System
+## Task 4: Push or pull for the Target System contract
 
-**Contextul actual:**
-- Topic-urile Kafka (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) sunt contractul cu sistemul external.
-- Cine deține contractul? În ETL-R, `spec/PIPELINE.md` definește contractul, dar implementările îl impun.
-- **Push vs Pull:**
-  - **Push:** Fiecare implementare trimite confirmările la reconciliation (actual flow). Responsabilitatea e la nivel de `load` step.
-  - **Pull:** Un consumer independent (recon service) extrage confirmările la nevoie. Mai flexibil, dar poate introduce întârziere.
+**The current context:**
+- The Kafka topics (`target-system-target`, `target-system-confirmations`, `target-system-rejections`) are the contract with the external system.
+- Who owns the contract? In ETL-R, `spec/PIPELINE.md` defines the contract; the implementations enforce it.
+- **Push vs. pull:**
+  - **Push:** every implementation sends the confirmations to reconciliation (today's flow). The responsibility sits at the `load` step.
+  - **Pull:** an independent consumer (the recon service) draws the confirmations on demand. More flexible, but it can introduce delay.
 
-**Care rulează verificare?**
-- `make conformance-all` rulează comparatorul vs. oracol pe toate implementările.
-- MCP tool `get_balance(run_id)` rulează periodic pentru a verifica integritatea cărții de confirmări.
-- **Recomandare:** Modelul hybrid – implementările trimit (push) la reconciliere, dar un auditor central (MCP) poate extrage (pull) dacă este nevoie pentru debugging.
+**Who runs the check?**
+- `make conformance-all` runs the comparator against the oracle over every implementation.
+- The MCP tool `get_balance(run_id)` runs periodically to check the confirmation book's integrity.
+- **Recommendation:** a hybrid model – the implementations push to reconciliation, but a central auditor (MCP) can pull when needed for debugging.
 
 ---
-*Generat în cadranul K16 – Guvernanță enterprise + context MCP*
+*Generated in the K16 quadrant — Enterprise governance + the MCP context*

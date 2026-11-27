@@ -1,52 +1,52 @@
-# Răspunsuri K14: Cuantificarea capabilităților
+# K14 answers: Quantifying capabilities
 
-## Task 1: Capability ADL
+## Task 1: The capability ADL
 
-**Simplicity** (# resurse Terraform, complexitate, cost):
-- **Flink:** 71 resurse (best), CC mig 4.6 (în zona Orange dacă >5), cost $0.90 (best)
-- **Flink-jdbc:** 81 resurse, CC 4.6, cost $0.94
-- **Beam Dataflow:** 75 resurse, cost $2.33 (worst ~2.5× Flink)
+**Simplicity** (# Terraform resources, complexity, cost):
+- **Flink:** 71 resources (best), migration CC 4.6 (orange zone if >5), cost $0.90 (best)
+- **Flink-jdbc:** 81 resources, CC 4.6, cost $0.94
+- **Beam Dataflow:** 75 resources, cost $2.33 (worst, ~2.5× Flink)
 
-**Deployability** (ramp-up + timp de run):
-- **Flink:** ramp-up 23 min 36 s (worst din cauza Kafka), run 6 min 55 s (best cu paralelism 1)
+**Deployability** (ramp-up + run time):
+- **Flink:** ramp-up 23 min 36 s (worst, because of Kafka), run 6 min 55 s (best, at parallelism 1)
 - **Flink-jdbc:** ramp-up 14 min 25 s (best), run 5 min 59 s (best)
 - **Beam Dataflow:** ramp-up 50 min 56 s (worst, Composer + Dataform), run 38 min 25 s
 
 **Scalability** (200k users, start-up dominant):
-- **Flink:** 3 job-uri, paralelism 1, pe un singur nod GKE 4-vCPU. Start-up-ul domină la 200k.
-- **Flink-jdbc:** similar ca GKE, dar încărcarea a 200k rows în sursa Postgres se face înainte de run (4 min 20 s).
-- **Beam Dataflow:** 3 job-uri Dataflow, un worker 1 vCPU fiecare, plus Dataform. Run 38 min 25 s, dar include o retry (fără retry ~28 min).
+- **Flink:** 3 jobs, parallelism 1, on one 4-vCPU GKE node. At 200k, start-up dominates.
+- **Flink-jdbc:** similar GKE, but loading the 200k rows into the source Postgres happens before the run (4 min 20 s).
+- **Beam Dataflow:** 3 Dataflow jobs, one 1-vCPU worker each, plus Dataform. Run 38 min 25 s, but that includes a retry (without it ~28 min).
 
 **Cost:**
 - **Flink:** $0.90 (resource count 71)
 - **Flink-jdbc:** $0.94 (resource count 81, +$0.04)
-- **Beam Dataflow:** $2.33 (resource count 75, dar Composer $1.03 fixat)
+- **Beam Dataflow:** $2.33 (resource count 75, but the Composer $1.03 is fixed)
 
-**Concluzie pe capacități:**
-- **Simplicity:** Flink câștigă (mai puține resurse, cost minim)
-- **Deployability:** Flink-jdbc câștigă (ramp-up cel mai scurt, run cel mai rapid)
-- **Scalability:** Flink și Flink-jdbc sunt echivalenți la start-up; Beam e mai lent din cauza overhead-ului Composer.
-- **Cost:** Flink e câștigătorul absolut ($0.90 vs $0.94 vs $2.33).
+**The capability conclusions:**
+- **Simplicity:** Flink wins (fewest resources, lowest cost)
+- **Deployability:** Flink-jdbc wins (shortest ramp-up, fastest run)
+- **Scalability:** Flink and Flink-jdbc are equivalent at start-up; Beam is slower because of the Composer overhead
+- **Cost:** Flink is the absolute winner ($0.90 vs. $0.94 vs. $2.33)
 
-## Task 2: Ce spun datele despre fit-ul fiecărei implementări?
+## Task 2: What the data says about each implementation's fit
 
-**Tendințe (din evidence pack-uri, exact 1 run fiecare):**
-- **Flink:** Cost mic, timp de run mediu, resurse optime, dar Kafka poate varia ramp-up-ul cu ~10 min (cloud variance).
-- **Flink-jdbc:** Cost foarte similar cu Flink, timp de run cel mai rapid, resurse puțin peste medie, dar necesită 2 instanțe Cloud SQL (source + pipeline).
-- **Beam Dataflow:** Costul cel mai mare (~2.5x Flink), atât timpul de run, cât și ramp-up-ul cele mai lente, dar izolarea e cea mai bună (fault tolerance ★★★★★) și nu are Kafka-varianța la fel de severă.
+**The trends (from the evidence packs, exactly one run each):**
+- **Flink:** low cost, average run time, optimal resources, but Kafka can add ~10 min of ramp-up variance (cloud variance).
+- **Flink-jdbc:** cost very close to Flink, the fastest run time, resources slightly above average, but it needs 2 Cloud SQL instances (source + pipeline).
+- **Beam Dataflow:** the highest cost (~2.5× Flink), the slowest run time and ramp-up, but the best isolation (fault tolerance ★★★★★) and no equally severe Kafka variance.
 
-**Ce e trend vs. un singur run (Limits!):**
-- Datele sunt pentru o singură rulare pe implementare, nu o serie statistică.
-- Checklist-ul §8 al cursului subliniază: "o singură măsurătoare nu e dovadă de readiness".
-- Pentru a spune că o arhitectură e "gata", trebuie să verificăm trendurile lunare, nu doar un run.
+**What is a trend vs. what is a single run (the Limits!):**
+- The data is one run per implementation, not a statistical series.
+- The course's checklist §8 underlines: "a single passing measurement is not evidence of readiness".
+- To call an architecture "ready" you need monthly trends, not one run.
 
-**Metrice temporale lipsă în evidence:**
-- Nu avem metrice de "time-to-first-byte" pentru fiecare etapă separată (doar totalul).
-- Nu avem metrice de "CPU utilization" pe timpul run-ului.
-- Nu avem metrice de "memory pressure" sau "garbage collection pauses".
-- Lipsește: connection waits per database la fiecare run (doar la Flink-jdbc avem source + pipeline PostgreSQL).
+**The temporal metrics missing from the evidence packs:**
+- No time-to-first-byte metrics per stage (only totals).
+- No CPU utilization metrics during the run.
+- No memory pressure or garbage collection pause metrics.
+- Missing: connection waits per database per run (only Flink-jdbc has source + pipeline PostgreSQL).
 
-## Task 3: ADL composite: Maintainability
+## Task 3: The composite ADL: Maintainability
 
 ```
 DEFINE CONST MAX_CC AS 10
@@ -65,19 +65,19 @@ ENDFOREACH
 ASSERT(resources per component < 100)
 ```
 
-**Interpretarea:**
-- **Zone of Pain (D > 0.3):** Dacă D > 0.3, componenta e în zona de "pain" – orice schimbare e costisitoare și riscul de regresie e mare.
-- **Zone of Uselessness (A > 0.6, I > 0.75):** Dacă e predominant abstractă, e inutilă – fără behavior, doar arhitectură.
-- **Ideală:** D < 0.3, A între 0.2–0.6, I < 0.5 – componenta e pe main sequence, ușor de menținut și extins.
+**The interpretation:**
+- **Zone of Pain (D > 0.3):** with D above 0.3 the component sits in the "pain" zone — every change is expensive and the regression risk is high.
+- **Zone of Uselessness (A > 0.6, I > 0.75):** predominantly abstract, it is useless — no behaviour, just architecture.
+- **The ideal:** D < 0.3, A between 0.2–0.6, I < 0.5 — the component sits on the main sequence, easy to maintain and extend.
 
-## Task 4: Aplicare pe ETL-R
+## Task 4: Applied to ETL-R
 
-Pentru a evalua fiecare implementare pe capacități:
-1. **Flink:** Poate trece testele de maintainability dacă refactorizăm `grade()` în interfețe (ca în task-urile de refactorizare K04). Costul e minim, dar ramp-up-ul Kafka e riscul principal.
-2. **Flink-jdbc:** Poate trece testele cu efort minim – CC-ul e similar cu Flink, dar nu are varianța Kafka. Costul e minim (+$0.04). Recomandat pentru noi proiecte care au bază de date sursă Postgres.
-3. **Beam Dataflow:** Are provocări serioase pentru maintainability datorită overhead-ului Composer și Dataform. Costul ridicat ($2.33) face să nu fie recomandat pentru termene de 6 luni, deși e cel mai robust datorită fault tolerance-ului.
+Scoring each implementation on the capabilities:
+1. **Flink:** can pass the maintainability tests if `grade()` is refactored into interfaces (as in K04's refactoring tasks). The cost is minimal, but the Kafka ramp-up is the main risk.
+2. **Flink-jdbc:** can pass with minimal effort — its CC is similar to Flink's, and it has no Kafka variance. The cost is minimal (+$0.04). Recommended for new projects with a Postgres source database.
+3. **Beam Dataflow:** has serious maintainability challenges because of the Composer and Dataform overhead. The high cost ($2.33) makes it unsuitable for 6-month deadlines, although it is the most robust through its fault tolerance.
 
-**Recomandare:** Pentru noi proiecte cu deadline 6 luni și 200k students, **Flink-jdbc** dacă avem bază de date Postgres, sau **Flink** dacă lucrăm cu fișiere TDS. Beam e justificat doar pentru workload-uri mici sau când costul nu e factorul principal.
+**Recommendation:** for new projects with a 6-month deadline and 200k students, **Flink-jdbc** if the source is a Postgres database, or **Flink** for TDS files. Beam is justified only for small workloads, or when cost is not the deciding factor.
 
 ---
-*Generat în cadranul K14 – Cuantificarea capabilităților*
+*Generated in the K14 quadrant — Quantifying capabilities*

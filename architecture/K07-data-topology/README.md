@@ -1,23 +1,23 @@
-# K07. Topologia de date
+# K07. The data topology
 
-## Scenariu (5 min)
-Fiecare implementare așază tabelul său de 7 tipuri în stocare echivalentă: PostgreSQL schemas (Flink), datasets BigQuery (Beam), sau tables în Postgres schemas (Flink-jdbc). Care topologie e corectă?
+## Scenario (5 min)
+Each implementation lays its table of 7 types into equivalent storage: PostgreSQL schemas (Flink), BigQuery datasets (Beam), or tables in Postgres schemas (Flink-jdbc). Which topology is the right one?
 
-## Material sursă
-- `PIPELINE.md` (names shared: account_src, account_curated, account_enriched, account_target, reject_log, record_lineage, run_ledger)
+## Source material
+- `PIPELINE.md` (shared names: account_src, account_curated, account_enriched, account_target, reject_log, record_lineage, run_ledger)
 - `docs/diagrams/flink/erd-postgres.svg`, `docs/diagrams/beam-dataflow/erd-bigquery.svg`
 - `docs/diagrams/08-stage-mapping.svg` (canonical stage → each implementation's artefact)
-- `spec/PIPELINE.md` (source system as database for flink-jdbc)
+- `spec/PIPELINE.md` (the source system as a database, for flink-jdbc)
 - `docs/evidence/README.md` (what the numbers say)
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Evaluează monolit / domain / dedicated** pentru fiecare implementare pe cost, simplitate, consistență, scalabilitate, fault tolerance, cuantă.
-2. **ADL-ul topologiei:** `DEFINE DATABASE`/`SCHEMA` + aserțiuni de acces, fără imbricare.
-3. **Cine poate atinge `reject_log`/`record_lineage`** + ce fac cu accesul `loader-app` vs. `recon-service`.
-4. `reject_log` echivalentul DLQ cu reason enumerat – ce lipsește din rețeta completă "dead-letter + cale umană"?
+1. **Evaluate monolith / domain / dedicated** for each implementation on cost, simplicity, consistency, scalability, fault tolerance, quantum.
+2. **The topology ADL:** `DEFINE DATABASE`/`SCHEMA` + access assertions, without nesting.
+3. **Who may touch `reject_log`/`record_lineage`** + what the `loader-app` vs. `recon-service` access does.
+4. `reject_log` as the DLQ equivalent with an enumerated reason — what is missing from the full "dead-letter + human path" recipe?
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define data topology for ETL-R
