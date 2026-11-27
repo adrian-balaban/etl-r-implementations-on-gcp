@@ -1,0 +1,18 @@
+name: adl-test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  adl-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: The katas' harness — ADL lint, contract derivation, implementation boundaries
+        run: make adl-test

@@ -1,0 +1,33 @@
+DESCRIPTION The data topology: who owns each database and who may touch it (K07, K08)
+CATEGORY Data
+NAMESPACE EtlRDataGovernanceNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE DATABASE account_source_db AS account_source
+          WITHIN Flink Quantum OR FlinkJdbc Quantum OR Beam Quantum
+          # tables: etlr_source.account, etlr_source.extract_control
+     DEFINE DATABASE account_curated_db AS account_curated
+          WITHIN Flink Quantum
+          # the parse → map → schema doors
+     DEFINE DATABASE account_enriched_db AS account_enriched
+          WITHIN Flink Quantum
+          # the join with the reference data (reference/branches.json)
+     DEFINE DATABASE account_target_db AS account_target
+          WITHIN Flink Quantum OR FlinkJdbc Quantum OR Beam Quantum
+     DEFINE DATABASE reject_log_db AS reject_log
+          WITHIN Flink Quantum
+          # closed reasons: PARSE_*, MAP_*, SCHEMA_INVALID — the DLQ with a human path
+     DEFINE DATABASE record_lineage_db AS record_lineage
+          WITHIN Flink Quantum
+          # source_key: raw:<hash>
+     DEFINE DATABASE run_ledger_db AS run_ledger
+          WITHIN Flink Quantum
+          # tally: src_read = written + rejected
+
+ASSERT(account_source_db is only accessed by Flink gate service AND FlinkJdbc intake service) # [K07-1]
+ASSERT(no quantum publishes a shared-database channel) # [K07-2 K11-2]
+# after the broker drains, the domain databases hold the same set of keys
+ASSERT(once the message broker is drained, Customer Database and Ticketing Database hold the same set of ticket keys) # [K07-3]
+
+# Governing the topology (K08): access only through the domain's own services
+# (in the course's example: the Test / Grading / Admin databases, each through its own)
+ASSERT(each domain database is only accessed by its own domain services) # [K08-1]

@@ -1,21 +1,21 @@
-# Răspunsuri K18: Echipe și istoric Git
+# K18 answers: Teams and Git history
 
-## Task 1: Impactul Conway's Law la 3 echipe
+## Task 1: Conway's Law at 3 teams
 
-**De ce acum ("o singură mână") produce coerență:**
-Legea lui Conway spune că organizațiile sunt condamnate să producă proiecte care reflectă structura lor de comunicare. Când o singură echipă gestionează `spec/` și toate implementările, comunicarea e maximă și orice schimbare e comunicată imediat fiecărei părți. Codul rămâne concordant, iar `make conformance` trece toate rândurile.
+**Why "one pair of hands" now produces coherence:**
+Conway's Law says organizations are doomed to produce designs that mirror their communication structure. When one team owns `spec/` and every implementation, communication is maximal and every change is announced to every part at once. The code stays aligned, and `make conformance` passes row by row.
 
-**Ce s-ar rupe la 3 echipe (stream-aligned + platform + enabling):**
-- **Drift printre implementări:** Fiecare Stream-Aligned team ar putea optimiza propria implementare în funcție de "clienții" lor direcți, ducând la variante locale ale `mapping`-urilor sau `schema`-urilor. Conformanța globală (`make conformance-all`) ar începe să eșueze pe diversele teste de integrare.
-- **Co-change `spec/` + `implementations/` în același commit:** Cu 3 echipe, riscul ca `spec/` și `implementations/` să se schimbe în același commit scade drastic (orice echipă ar lua schimbările proprii în același timp). Aserțiunea `ASSERT(git diff --quiet -- pipelines apps)` ar trebui să fie echivalent cu "nu s-a produs nicio schimbare neautorizată".
-- **Entitate Trap:** Fiecare team ar numi componente după entitatea de date proprie (ex: `sql/` pentru Flink, `postgres/` pentru Flink-jdbc), creând "orfane" care nu au proprietate de domeniu clară.
+**What would break with 3 teams (stream-aligned + platform + enabling):**
+- **Drift between implementations:** each Stream-Aligned team could optimize its own implementation for its direct "clients", producing local variants of the `mappings` or `schemas`. Global conformance (`make conformance-all`) would start failing across integration tests.
+- **`spec/` + `implementations/` co-changes in one commit:** with 3 teams, the risk of spec and implementations changing in the same commit drops sharply (each team takes its own changes in its own time). `ASSERT(git diff --quiet -- pipelines apps)` should mean "no unauthorized change happened".
+- **The Entity Trap:** each team would name components after its own data entity (e.g. `sql/` for Flink, `postgres/` for Flink-jdbc), creating "orphans" with no clear domain owner.
 
-**Dispoziții recomandate:**
-- **Conversație:** Să discuțiți despre frontierele dintre `spec/` și `implementations/` și să definiți clar ce schimbări permiteți fiecărei echipe.
-- **Problemă reală:** Dacă `spec/` și `implementations/` se schimbă în același commit fără o RFC (Request for Comments) predefinită, e o problemă structurală care necesită restructurarea frontierei.
-- **Schimbare de ADL:** Actualizați `ASSERT(adding a project modifies only spec/contracts/)` ca să reflecte noua topologie a echipelor.
+**The recommended dispositions:**
+- **A conversation:** discuss the spec/implementation boundaries and define clearly which changes each team is allowed.
+- **A real problem:** if spec and implementations change in one commit without a predefined RFC, that is a structural problem requiring a boundary rework.
+- **An ADL change:** update `ASSERT(adding a project modifies only spec/contracts/)` to reflect the new team topology.
 
-## Task 2: ADL echipe + persoane + definiere agent
+## Task 2: The team ADL: people + the agent defined as a member
 
 ```
 DESCRIPTION Define team structure for ETL-R governance
@@ -53,30 +53,30 @@ ASSERT(Super User Teams can commit files belonging to other teams)
 ASSERT(No merge conflicts within Stream-Aligned Teams caused by AGENTS within the past month)
 ```
 
-## Task 3: Gubernare pe istoric real
+## Task 3: Governance on real history
 
-**Finding-uri din `git log` real al repo-ului:**
-1. **Andy nu e în ADL, dar a trimis 14 commit-uri în grading/auto_grading** – indiciu că agentul a depășit limita definită în ADL.
-2. **Rita (Reporting & Admin) a trimis 6 commit-uri în testing/capture** – o încrucișare intenționată între domenii, indicând un boundary smell (finding 6).
-3. **Paul (Platform) a trimis 3 commit-uri în grading/answer_key** – platforma nu ar trebui să atingă cheile de answer; o problemă reală.
-4. **Quinn (Enabling) a performat 22 de merge-uri, 9 cu conflicte, în team-ul Testing** – conflictele echipei Enabling perturbă Testing în loc să o reducă.
-5. **Fiecare schimbare `spec/` în aceeași săptămână cu o schimbare `implementations/` (11 din 13 săptămâni)** – indiciu solid de boundary blur.
+**The findings from the repo's real `git log`:**
+1. **Andy is not in the ADL, yet sent 14 commits into grading/auto_grading** – a sign the agent exceeded the limit defined in the ADL.
+2. **Rita (Reporting & Admin) sent 6 commits into testing/capture** – an intentional cross-domain move, indicating a boundary smell (finding 6).
+3. **Paul (Platform) sent 3 commits into grading/answer_key** – the platform should not touch answer keys; a real problem.
+4. **Quinn (Enabling) performed 22 merges, 9 with conflicts, inside the Testing team** – the Enabling team's conflicts disturb Testing instead of relieving it.
+5. **Every `spec/` change in the same week as an `implementations/` change (11 of 13 weeks)** – a solid sign of boundary blur.
 
-**Dispoziții fiecăreia:**
-- **Finding 1:** ADL change – limita agentului Spark Builder să nu atingă fișierele din grading.
-- **Finding 2:** Conversație – Rita discută cu Platform despre responsabilități cross-domain.
-- **Finding 3:** Problemă reală – Platform revizuiește politica de a atinge cheile de answer; responsabilitatea trebuie transferată în Team-ul Grading.
-- **Finding 4:** Problemă reală – echipa Enabling trebuie să nu mai editeze în paralel cu Testing, în loc să reducă încărcarea.
-- **Finding 6:** Boundary smell – Reporting și Testing sunt cuplate pe distanță lungă; boundary-ul trebuie refăcut sau echipele redefinite.
+**The disposition for each:**
+- **Finding 1:** an ADL change – the Spark Builder agent's limits must not touch grading files.
+- **Finding 2:** a conversation – Rita talks with Platform about cross-domain responsibilities.
+- **Finding 3:** a real problem – Platform reviews its policy of touching answer keys; the responsibility should move to the Grading team.
+- **Finding 4:** a real problem – the Enabling team must stop editing in parallel with Testing, instead of adding to the load.
+- **Finding 6:** a boundary smell – Reporting and Testing are coupled at long range; the boundary must be redrawn, or the teams redefined.
 
-## Task 4: Măsura eficienței agentului
+## Task 4: Measuring the agent's effectiveness
 
-**Metrice lunare:**
-- **Conflicte de merge cauzate de AGENTI** pe lună, alături de rata de livrare a echipei.
-- **Scenariu:** dacă conflictele cresc în timp ce rata de livrare stă plată, agentul costă mai mult decât ajută.
-- **Acțiune:** limitați scope-ul agentului, revizuiți ADL sau înlocuiți agentul cu un proces MCP automat.
+**Monthly metrics:**
+- **Merge conflicts caused by AGENTS** per month, alongside the team's delivery rate.
+- **The scenario:** if conflicts grow while the delivery rate stays flat, the agent costs more than it helps.
+- **The action:** bound the agent's scope, revise the ADL, or replace the agent with an automated MCP process.
 
-**Pattern recomandat:**
-- Rulează `git log --oneline --since="1 month ago" --all -- "*spec/*" "*implementations/*"` lunar.
-- Identifică committeri din afara echipei lor (numele nu e în ADL).
-- Generează un raport lunar pentru discuția de review a echipei.
+**The recommended pattern:**
+- Run `git log --oneline --since="1 month ago" --all -- "*spec/*" "*implementations/*"` monthly.
+- Identify committers outside their team (names not in the ADL).
+- Generate a monthly report for the team's review discussion.

@@ -1,26 +1,26 @@
-# Răspunsuri K09: Mediul de business și cost
+# K09 answers: The business environment and cost
 
-## Task 1: Răspuns la fiecare scenariu
+## Task 1: The response to each scenario
 
-| Scenariu | Flink | Flink-jdbc | Beam Dataflow | Riscul |
+| Scenario | Flink | Flink-jdbc | Beam Dataflow | The risk |
 |---|---|---|---|---|
-| **S1: Proiect nou fiecare săptămână (DEPOSIT)** | ⚠️ Modificare mapping + revalidare conformance | ✅ Pin mapping + rulează `verify-project2` | ⚠️ Noi mapping-uri + rulează beam generate | Riscul: testarea echivalenței `project2` vs `project1`; `project2` nu moare — și nici nu are voie să moară |
-| **S2: GCP schimbă prețul sau degradează Managed Kafka** | ⚡ Timp ramp-up ±10 min (Kafka variance) | ⚡ Timp ramp-up ±10 min (Kafka variance) | ⚡⚡ Timp ramp-up ±20 min (Composer + Kafka) | Riscul: costurile de runtime cresc; monitorizează cu unealta MCP `get_cost_last_run()` |
-| **S3: 20M înregistrări pe run** | ✅ Fiecare job are cost fix de start-up | ✅ Cel puțin costuri fixe mai mici | ❌ Composer $1.03 fixed + 2.5× costuri | Riscul: Beam devine 5× mai scump; migrează la Flink pentru volume mare |
-| **S4: Target System API v2 la confirmations** | ⚠️ Schimbă schema + revalidează conformance | ⚠️ Schimbă source database + migrare | ⚠️ Schimbă contractul Kafka + redeploy | Riscul: `SCHEMA_INVALID` la load; `MAP_UNMAPPED_ENUM_VALUE` la map; monitorizează contractul |
-| **S5: Altă regiune/residency** | ⚠️ Replică infrastructura GCP | ✅ Sursele Postgres pot fi locale | ⚠️ Composer + BigQuery multi-regiune | Riscul: latență cross-region; folosește BigQuery multi-regiune |
-| **S6: Se cere o a 4-a implementare (Spark/Dataproc)** | Nu e suportat nativ | Nu e suportat nativ | ⚠️ Poate fi adăugat ca variantă beam | Riscul: Nu e Architecture as Code – e "new tool" fără spec |
+| **S1: a new project every week (DEPOSIT)** | ⚠️ a mapping change + conformance revalidation | ✅ pin the mapping + run `verify-project2` | ⚠️ new mappings + run beam generate | Risk: proving `project2` ≡ `project1`; `project2` must not die — nor is it allowed to |
+| **S2: GCP changes prices or degrades Managed Kafka** | ⚡ ramp-up ±10 min (Kafka variance) | ⚡ ramp-up ±10 min (Kafka variance) | ⚡⚡ ramp-up ±20 min (Composer + Kafka) | Risk: runtime costs grow; watch with the MCP tool `get_cost_last_run()` |
+| **S3: 20M records per run** | ✅ every job has a fixed start-up cost | ✅ at least the fixed costs are smaller | ❌ Composer $1.03 fixed + 2.5× costs | Risk: Beam becomes 5× more expensive; move to Flink for large volumes |
+| **S4: a Target System API v2 for confirmations** | ⚠️ change the schema + revalidate conformance | ⚠️ change the source database + migrate | ⚠️ change the Kafka contract + redeploy | Risk: `SCHEMA_INVALID` at load; `MAP_UNMAPPED_ENUM_VALUE` at map; watch the contract |
+| **S5: another region/residency** | ⚠️ replicate the GCP infrastructure | ✅ the Postgres sources can be local | ⚠️ Composer + BigQuery multi-region | Risk: cross-region latency; use BigQuery multi-region |
+| **S6: a fourth implementation is requested (Spark/Dataproc)** | not natively supported | not natively supported | ⚠️ can be added as a beam variant | Risk: it is not Architecture as Code — it is a "new tool" without a spec |
 
-**Concluzie:** Pentru majoritatea scenariilor, **Flink** și **Flink-jdbc** sunt alegerea defensivă; Beam e justificat doar pentru workload-uri mici sau când costul nu e factorul principal.
+**Conclusion:** for most scenarios, **Flink** and **Flink-jdbc** are the defensive choice; Beam is justified only for small workloads, or when cost is not the deciding factor.
 
-## Task 2: Cost ADL pe 2 $-grade
+## Task 2: The cost ADL on 2 $-grades
 
-Definiția costurilor reale pe GCP (din `cost-estimate.md` și `docs/evidence/README.md`):
-- **Flink:** $0.90 pe run (resource count 71, total 59 min 31 s)
-- **Flink-jdbc:** $0.94 pe run (resource count 81, total 56 min 45 s)
-- **Beam Dataflow:** $2.33 pe run (resource count 75, total 2 h 31 min)
+The real costs on GCP (from `cost-estimate.md` and `docs/evidence/README.md`):
+- **Flink:** $0.90 per run (resource count 71, total 59 min 31 s)
+- **Flink-jdbc:** $0.94 per run (resource count 81, total 56 min 45 s)
+- **Beam Dataflow:** $2.33 per run (resource count 75, total 2 h 31 min)
 
-**Formule ADL:**
+**The ADL formulas:**
 ```
 DEFINE CONST COST_FLINK AS 0.90
 DEFINE CONST COST_FLINK_JDBC AS 0.94
@@ -29,21 +29,21 @@ DEFINE CONST COST_RATIO_BEAM_TO_FLINK AS COST_BEAM / COST_FLINK  ≈ 2.59
 ASSERT(Total GCP cost per run for flink <= COST_FLINK + ε)
 ASSERT(Total GCP cost per run for flink-jdbc <= COST_FLINK_JDBC + ε)
 ASSERT(Total GCP cost per run for beam <= COST_BEAM + ε)
-ASSERT(COST_RATIO_BEAM_TO_FLINK > 2.0  ➡  Beam costă peste 2 ori mai mult decât Flink)
+ASSERT(COST_RATIO_BEAM_TO_FLINK > 2.0  →  Beam costs more than twice what Flink does)
 ```
 
-**Monitorizare MCP:** `get_cost_last_run(run_id)` – rulează la fiecare run, compară costul real cu pragurile ADL și alertează dacă le depășește.
+**MCP monitoring:** `get_cost_last_run(run_id)` — runs after every run, compares the real cost with the ADL thresholds and alerts on any breach.
 
-## Task 3: Recomandare defensivă + ADL de revenire
+## Task 3: A defensive recommendation + the recovery ADL
 
-**Recomandare:** O combinație **Flink (pentru performanță și cost)** + **o variantă de streaming (pentru scalabilitate eventuală)**.
+**Recommendation:** a combination of **Flink (for performance and cost)** + **one streaming variant (for eventual scalability)**.
 
-**ADL de revenire (reconciliation fitness function) care monitorizează riscul:**
+**The recovery ADL (a reconciliation fitness function) that monitors the risk:**
 ```
 DEFINE CONST MAX_RUNTIME_FLINK AS 60min
 DEFINE CONST MAX_RUNTIME_BEAM AS 180min
-DEFINE CONST MAX_COST_FLINK AS 1.00  # margine 10% peste $0.90
-DEFINE CONST MAX_COST_BEAM AS 2.60    # margine 10% peste $2.33
+DEFINE CONST MAX_COST_FLINK AS 1.00  # a ~10% margin above $0.90
+DEFINE CONST MAX_COST_BEAM AS 2.60    # a ~10% margin above $2.33
 
 ASSERT(actual_runtime_flink_run_<run_id> <= MAX_RUNTIME_FLINK)
 ASSERT(actual_cost_flink_run_<run_id> <= MAX_COST_FLINK)
@@ -51,7 +51,7 @@ ASSERT(no submitted answer is lost while Grading is unavailable)
 ASSERT(Answer Database never exceeds MAX_DB_CONNECTIONS connections)
 ```
 
-Acest fitness function rulează periodic (fie lunar, fie după fiecare run mare) și alertează echipa dacă costurile sau runtime-ul depășesc limitele acceptabile, permițând o intervenție înainte ca costurile să devină incontrolabile.
+This fitness function runs periodically (monthly, or after every large run) and alerts the team when the costs or runtimes pass acceptable limits — so intervention happens before the costs spiral.
 
 ---
-*Generat în cadranul K09 – Mediul de business și cost*
+*Generated in the K09 quadrant — The business environment and cost*

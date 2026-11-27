@@ -1,0 +1,57 @@
+DESCRIPTION The structure's weight: load-bearing walls, agents with a scope, teams as members (K06, K16, K17, K18)
+CATEGORY Governance
+NAMESPACE EtlRGovernanceNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE CONST MAX_STUDENTS AS 200000
+     DEFINE CONST MAX_SUBMIT_TIME AS 300ms
+     DEFINE CONST MAX_DB_CONNECTIONS AS 300
+
+# Load-bearing (K06): the first function is written before the code, in the LMAX style
+ASSERT(Answer Capture accepts MAX_STUDENTS concurrent submissions within MAX_SUBMIT_TIME) # [K06-1]
+ASSERT(no submitted answer is lost while Grading is unavailable) # [K06-2]
+ASSERT(Answer Database never exceeds MAX_DB_CONNECTIONS connections) # [K06-3]
+ASSERT(answer keys are unreachable from student-facing services) # [K06-4]
+
+# The stacks come from the build, not from an ADL inventory (K16)
+ASSERT(SBOM generated in build) # [K16-1]
+ASSERT(no technology inventory in ADL files) # [K16-2]
+ASSERT(communication protocols harvested from build SBOM) # [K16-3]
+
+# An agent's scope = one quantum; never "refactor everything" (K17)
+DEFINE AGENT Spark Builder AS spark-agent
+     DEFINE COMPONENT SparkSubmit AS spark-submit
+     DEFINE SERVICE SparkCluster AS spark-cluster
+ASSERT(agents cannot add cross-implementation dependencies) # [K17-1]
+ASSERT(agents cannot add undeclared database connections) # [K17-2]
+ASSERT(agent-generated changes stay within declared structural and operational boundaries) # [K17-3]
+
+# The teams: people and agents as members; Git history as the source (K18)
+DEFINE TEAM Platform AS Platform Team
+     ASSIGN DOMAIN spec/ contracts/
+     DEFINE PERSON Alice AS alice@company.com
+     DEFINE AGENT Tina AS agent-tina@company.com
+          SCOPE: spec/ only
+DEFINE TEAM Flink AS Stream-Aligned Team
+     ASSIGN DOMAIN implementations/flink/
+     DEFINE PERSON Bob AS bob@company.com
+     DEFINE AGENT Max AS agent-max@company.com
+          SCOPE: flink implementation only
+DEFINE TEAM Beam AS Stream-Aligned Team
+     ASSIGN DOMAIN implementations/beam-dataflow/
+     DEFINE PERSON Carol AS carol@company.com
+     DEFINE AGENT Zoe AS agent-zoe@company.com
+          SCOPE: beam implementation only
+DEFINE TEAM TargetSystem AS Target System Team
+     ASSIGN DOMAIN target-system-mock/
+     DEFINE PERSON Dave AS dave@company.com
+DEFINE SUPERUSER Team AS Super User Team
+     DEFINE PERSON Eve AS eve@company.com
+          ROLE: anywhere, especially emergencies
+DEFINE ALUMNI Team AS Alumni Team
+     DEFINE RETIRED_PERSON Frank AS frank@retired.com
+
+ASSERT(TEAM MEMBERS include PERSONS and AGENTS) # [K18-1]
+ASSERT(No commits from anyone other than TEAM MEMBERS) # [K18-2]
+ASSERT(TEAM MEMBERS in Stream-Aligned Teams cannot commit files outside their domains) # [K18-3]
+ASSERT(Super User Teams can commit files belonging to other teams) # [K18-4]
+ASSERT(No merge conflicts within Stream-Aligned Teams caused by AGENTS within the past month) # [K18-5]

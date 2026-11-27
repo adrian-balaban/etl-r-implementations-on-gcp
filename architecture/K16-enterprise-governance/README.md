@@ -1,18 +1,18 @@
-# K16. Guvernanță enterprise + context MCP
+# K16. Enterprise governance + the MCP context
 
-## Scenariu (5 min)
-Departamentul IT al băncii mandatează "un singur stack aprobat pentru toate migrările"; ETL-R vine cu 3 stive și evidence. Ce strategie e și ce rămâne guvernat central?
+## Scenario (5 min)
+The bank's IT department mandates "one approved stack for every migration"; ETL-R arrives with 3 stacks and evidence. What strategy is this, and what stays centrally governed?
 
-## Material sursă
-- `SECTIONS.md` (paginile 47–48 + 54–55 din masterclass)
+## Source material
+- `SECTIONS.md` (pages 47–48 + 54–55 of the masterclass)
 - `make-the-grade-pages-1587-1600/` (enterprise governance: technology and contracts)
 - `make-the-grade-pages-1490-1500/` (enterprise governance: what stays central)
-- `cost-estimate.md` (cost-uri reale pe GCP)
-- Diagrame: `docs/diagrams/00-overview.svg`
+- `cost-estimate.md` (real costs on GCP)
+- Diagrams: `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Ce strategie e (Classic Prescriptive) și ce costă; ce "beneficii" sunt de fapt accidental complexity.**
-2. **Recomandare Distributed → Durable Interface:** ce rămâne guvernat central (identități/observabilitate/integration contracts) și la ce nivel.
-3. **SBOM-uri la build (`pom.xml`, `requirements.txt`)** expuse la MCP – nu inventar în ADL.
-4. **Push sau pull la contractul cu Target System (Kafka confirmations); cine deține contractul și cine rulează verificarea.**
+1. **What strategy this is (Classic Prescriptive) and what it costs; which "benefits" are in fact accidental complexity.**
+2. **The Distributed → Durable Interface recommendation:** what stays centrally governed (identity/observability/integration contracts) and at which level.
+3. **SBOMs at build time (`pom.xml`, `requirements.txt`)** exposed over MCP – not an inventory in the ADL.
+4. **Push or pull for the Target System contract (Kafka confirmations); who owns the contract and who runs the check.**

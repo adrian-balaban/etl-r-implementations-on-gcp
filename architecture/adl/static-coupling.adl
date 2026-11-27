@@ -1,0 +1,20 @@
+DESCRIPTION The architectural quanta: every database and broker claimed by a quantum (K10)
+CATEGORY Static Coupling
+NAMESPACE EtlRStaticCouplingNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     # counted static coupling points: Flink ~7, Flink-jdbc ~9, Beam ~5
+     DEFINE QUANTUM Flink Quantum
+          DEFINE DATABASE account_source_db AS account_source
+          DEFINE DATABASE account_target_db AS account_target
+          DEFINE BROKER Kafka Broker AS kafka-broker
+     DEFINE QUANTUM FlinkJdbc Quantum
+          DEFINE DATABASE account_source_db AS account_source
+          DEFINE DATABASE etlr_source AS source tables
+          DEFINE BROKER Kafka Broker AS kafka-broker
+     DEFINE QUANTUM Beam Quantum
+          DEFINE DATABASE account_target_db AS account_target
+               WITHIN BigQuery datasets
+          DEFINE BROKER Kafka Broker AS kafka-broker
+               # shared with the Target System mock; the topics are the external contract
+
+ASSERT(Do not allow static coupling between quanta not specified here) # [K08-4 K10-1]

@@ -1,24 +1,24 @@
-# K04. Calitate cod și fitness functions
+# K04. Code quality and fitness functions
 
-## Scenariu (5 min)
-Echipa vrea să mențină calitatea codului AutoGrading, însă nu știe să calculeze complexitatea ciclomatică, abstractness/instability sau distanța față de main sequence. CI raportează metricile, dar sunt o fitness function?
+## Scenario (5 min)
+The team wants to keep the AutoGrading code quality high, but does not know how to compute cyclomatic complexity, abstractness/instability, or the distance from the main sequence. CI reports the metrics — but is that a fitness function?
 
-## Material sursă
-- `pipelines/common/tds.py` (RecordParser, complexitate reală)
-- `spec/conformance/compare.py` (comparatorul rând-cu-rând)
-- `make spec-test` / `make conformance-all` (testele de calitate)
-- `make-the-grade-pages-52-53/static-coupling.adl` (template ADL)
-- `cost-estimate.md` (cost-uri reale pe GCP)
-- Diagrame: `docs/diagrams/08-stage-mapping.svg`
+## Source material
+- `pipelines/common/tds.py` (RecordParser, real complexity)
+- `spec/conformance/compare.py` (the row-by-row comparator)
+- `make spec-test` / `make conformance-all` (the quality tests)
+- `make-the-grade-pages-52-53/static-coupling.adl` (an ADL template)
+- `cost-estimate.md` (real costs on GCP)
+- Diagrams: `docs/diagrams/08-stage-mapping.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Calculează complexitatea ciclomatică** pentru metoda `grade()` reală — esențială sau accidentală?
-2. **Calculează A / I / D** (`D = |A + I − 1|`, prag 0.3) per componentă reală; desenează main-sequence.
-3. **ADL cu praguri**, cu `MAX_CC_GENERATED` mai strict pentru cod de agent.
-4. **Refactorizare** care mută componenta pe secvența principală.
+1. **Compute the cyclomatic complexity** of the real `grade()` method — essential or accidental?
+2. **Compute A / I / D** (`D = |A + I − 1|`, threshold 0.3) per real component; draw the main sequence.
+3. **An ADL with thresholds**, with `MAX_CC_GENERATED` stricter for agent-generated code.
+4. **A refactoring** that moves the component onto the main sequence.
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define code quality fitness functions

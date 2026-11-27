@@ -1,23 +1,23 @@
-# K06. Architecture condusă de fitness functions (FFDA)
+# K06. Architecture driven by fitness functions (FFDA)
 
-## Scenariu (5 min)
-Înainte de orice cod, echipa a propus 10 candidați pentru ETL-R. Care se țin și care se respinge?
+## Scenario (5 min)
+Before any code, the team proposed 10 fitness-function candidates for ETL-R. Which ones hold up the structure, and which get rejected?
 
-## Material sursă
-- `docs/evidence/README.md` (numere reale: cost, timp, resurse)
-- `make spec-test` / `make conformance-all` (validare rând-cu-rând)
-- `cost-estimate.md` (cost-uri reale pe GCP)
-- `make-the-grade-pages-1705-1723/FFDA template` (load-bearing verdicts)
-- Diagrame: `docs/diagrams/08-stage-mapping.svg`
+## Source material
+- `docs/evidence/README.md` (real numbers: cost, time, resources)
+- `make spec-test` / `make conformance-all` (row-by-row validation)
+- `cost-estimate.md` (real costs on GCP)
+- the `make-the-grade-pages-1705-1723` FFDA template (load-bearing verdicts)
+- Diagrams: `docs/diagrams/08-stage-mapping.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Alege cele care susțin greutatea structurii**; respinge explicit restul cu motiv și unde aparțin (linter, check ingineresc).
-2. **Scrie-le în ADL înainte de cod** (repo-ul are deja balanța în README).
-3. **Care se scrie primul, în stilul LMAX?** (răspunsul: 1 — și repo-ul l-a scris pe primul loc).
-4. "Cost/run" pică în săptămâna 4 → nu-i bug; dispoziție: fix / revise / exemption cu owner și termen.
+1. **Keep the ones that hold up the structure;** reject the rest explicitly, with the reason and where each belongs (a linter, an engineering check).
+2. **Write them in ADL before the code** (the repo already has the balance in its README).
+3. **Which one gets written first, LMAX-style?** (the answer: #1 — and the repo wrote it first).
+4. "Cost/run" fails in week 4 → not a bug; the disposition: fix / revise / an exemption with owner and deadline.
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define load-bearing fitness functions for ETL-R

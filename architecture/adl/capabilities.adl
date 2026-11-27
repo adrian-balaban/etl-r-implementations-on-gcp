@@ -1,0 +1,42 @@
+DESCRIPTION Quantified capabilities and the measured cost envelope on GCP (K09, K14)
+CATEGORY Engineering Practices
+NAMESPACE EtlRCapabilitiesNS
+DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
+     DEFINE CONST MAX_RESOURCES AS 100
+     DEFINE CONST MAX_CC AS 10
+     DEFINE CONST MAX_DISTANCE AS 0.3
+
+     # one measured run per implementation: docs/evidence/, cost-estimate.md
+     DEFINE CONST COST_FLINK AS 0.90
+     DEFINE CONST COST_FLINK_JDBC AS 0.94
+     DEFINE CONST COST_BEAM AS 2.33
+     DEFINE CONST COST_RATIO_BEAM_TO_FLINK AS COST_BEAM / COST_FLINK
+     # recovery margins: ~10% above the measured costs; a single run is not a trend
+     DEFINE CONST MAX_RUNTIME_FLINK AS 60min
+     DEFINE CONST MAX_COST_FLINK AS 1.00
+
+     DEFINE CAPABILITY Simplicity AS { resources < MAX_RESOURCES }
+     DEFINE CAPABILITY Deployability AS { ramp-up < 30min, run < 60min }
+     DEFINE CAPABILITY Scalability AS { max_students <= 200000, submit_time < 500ms }
+     DEFINE CAPABILITY Cost AS { cost_per_run <= 1.0 USD }
+     DEFINE CAPABILITY Maintainability AS {
+          average cyclomatic complexity of cls < MAX_CC,
+          normalized distance from the main sequence for comp < MAX_DISTANCE,
+          resources < MAX_RESOURCES
+     }
+
+FOREACH component : comp IN system
+     ASSERT(capability Simplicity met FOR comp) # [K14-1]
+     ASSERT(capability Deployability met FOR comp) # [K14-2]
+     ASSERT(capability Scalability met FOR comp) # [K14-3]
+     ASSERT(capability Cost met FOR comp) # [K14-4]
+     ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K14-5]
+ENDFOREACH
+ASSERT(resources per component < MAX_RESOURCES) # [K14-6]
+
+ASSERT(Total GCP cost per run for flink <= COST_FLINK + ε) # [K09-1]
+ASSERT(Total GCP cost per run for flink-jdbc <= COST_FLINK_JDBC + ε) # [K09-2]
+ASSERT(Total GCP cost per run for beam <= COST_BEAM + ε) # [K09-3]
+ASSERT(COST_RATIO_BEAM_TO_FLINK > 2.0) # [K09-4]
+ASSERT(actual runtime of a flink run <= MAX_RUNTIME_FLINK) # [K09-5]
+ASSERT(actual cost of a flink run <= MAX_COST_FLINK) # [K09-6]

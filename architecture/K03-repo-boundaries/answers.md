@@ -1,6 +1,6 @@
-# Răspunsuri K03: Frontiere între implementări în monorepo
+# K03 answers: Boundaries between implementations in the monorepo
 
-## Task 1: ADL explicit vs. implicit
+## Task 1: Explicit vs. implicit ADL
 
 ```
 DESCRIPTION Define monorepo service boundaries
@@ -16,26 +16,26 @@ ASSERT(beam-dataflow HAS NO DEPENDENCY ON flink, flink-jdbc)
 ASSERT(no cycles exist between services in ETL-R)
 ```
 
-**Compară variantele:**
+**Compare the variants:**
 
-| Varianta | Sintaxă | Ce prinde | Ce ratează |
+| Variant | Syntax | What it catches | What it misses |
 |---|---|---|---|
-| **Explicit** | `ASSERT(flink HAS NO DEPENDENCY ON flink-jdbc, beam-dataflow)` | Orice nouă dependență inter-implementare adăugată de agent | Nu prinde altă dependență neanticipată (de exemplu, o dependență pe un nou service care nu este enumerat în listă) |
-| **Implicit** | `ASSERT({flink, flink-jdbc, beam-dataflow} HAVE NO DEPENDENCIES ON OTHER SERVICES)` | Orice dependență nouă, inclusiv cele neprevăzute | Prea strict: împiedică partajarea intenționată (de exemplu, `artefacts.json` partajat) |
+| **Explicit** | `ASSERT(flink HAS NO DEPENDENCY ON flink-jdbc, beam-dataflow)` | any new cross-implementation dependency the agent adds | an unanticipated dependency on a new service nobody listed |
+| **Implicit** | `ASSERT({flink, flink-jdbc, beam-dataflow} HAVE NO DEPENDENCIES ON OTHER SERVICES)` | any new dependency, including the unforeseen ones | too strict: it blocks intentional sharing (e.g. the shared `artefacts.json`) |
 
-**Care prinde agentul?** Testul `verify-project2` (care rulează `git diff --quiet -- pipelines apps`) prinde implicit, pentru că orice modificare în `pipelines/` sau `apps/` va pică build-ul. ADL explicit prinde doar dependențele enumerate.
+**Which one catches the agent?** The `verify-project2` test (running `git diff --quiet -- pipelines apps`) catches implicitly, because any change in `pipelines/` or `apps/` fails the build. The explicit ADL catches only the dependencies it lists.
 
-## Task 2: Pseudocodul regulii de ciclu
+## Task 2: The cycle rule's pseudocode
 
-```ada
+```
 FOREACH COMPONENT c IN system DO
     ASSERT(no cycles exist between c and other components)
 END
 ```
 
-**Ce se întâmplă:** Agentul adaugă auto-import pentru clase între pachete, creând un ciclu `A → B → C → A`. Regula de mai sus iterează prin fiecare componentă și verifică că nu există ciclu către alte componente. Dacă ciclul există, aserțiunea pică și fitness function-ul raportează un "structural violation".
+**What happens:** the agent adds auto-imports for classes across packages, creating the cycle `A → B → C → A`. The rule above walks every component and checks that no cycle leads back into the others. If a cycle exists, the assertion fails and the fitness function reports a "structural violation".
 
-**Fitness function rulabil (Python/pytest-example):**
+**A runnable fitness function (Python/pytest sketch):**
 ```python
 def test_no_component_cycles(import_helper):
     components = import_helper.get_all_components()
@@ -45,27 +45,27 @@ def test_no_component_cycles(import_helper):
             pytest.fail(f"Cycle detected involving component {c}")
 ```
 
-## Task 3: Tabelul de partajat vs. duplicat (real)
+## Task 3: The shared-vs-duplicated table (real)
 
-| Cod | Decizie | Motiv |
+| Code | Decision | Reason |
 |---|---|---|
-| **Session-token validation** | Share | 0 changes in 90 days, 3 consumatori: implementarea unică e criticală pentru securitate |
-| **Answer-key parser** | Share | Copii stabile; copii divergente pot evalua același răspuns diferit |
-| **Answer message schema** | Share ca contract, nu bibliotecă | Testing → Grading contract: versiuni, verificate cu contracte consumer-driven |
-| **Roster CSV import** | Duplicate | 9 schimbări în 90 de zile la 2 consumatori: duplicarea e mai ieftină decât churn-ul partajării |
-| **Report PDF formatting** | Duplicate | Cea mai volatilă celulă (23 schimbări): partajarea ar împinge churn-ul spre admin |
+| **Session-token validation** | Share | 0 changes in 90 days, 3 consumers: one implementation is critical for security |
+| **Answer-key parser** | Share | stable copies; diverging copies could grade the same answer differently |
+| **Answer message schema** | Share as a contract, not a library | the Testing → Grading contract: versioned, checked with consumer-driven contracts |
+| **Roster CSV import** | Duplicate | 9 changes in 90 days at 2 consumers: duplication is cheaper than the churn of sharing |
+| **Report PDF formatting** | Duplicate | the most volatile cell (23 changes): sharing would push the churn onto admin |
 
-**Concluzie:** Volatilitatea decide: "Duplication is preferable to coupling" e un spectru, nu o regulă.
+**Conclusion:** volatility decides — "duplication is preferable to coupling" is a spectrum, not a rule.
 
-## Task 4: `verify-project2` formalizat ca ADL aserțiune
+## Task 4: `verify-project2` formalized as ADL assertions
 
 ```
 ASSERT(git diff --quiet -- pipelines apps)
-ASSERT(contracts/ unchanged modulo artefact nume)
-ASSERT(NEW project adds exactly ONE .sqlx in ../dataform/definitions/)
+ASSERT(contracts/ unchanged modulo artefact names)
+ASSERT(a new project adds exactly one .sqlx in ../dataform/definitions/)
 ASSERT(no hand-edit of spec/fixtures/ACCOUNT.src)
 ```
-Acesta rulează ca fitness function la fiecare build, asigurând că noul proiect nu introduce atingeri în codul implementărilor existente.
+These run as a fitness function on every build, proving the new project does not touch the existing implementations' code.
 
 ---
-*Generat în cadranul K03 — Frontiere între implementări în monorepo*
+*Generated in the K03 quadrant — Boundaries between implementations in the monorepo*

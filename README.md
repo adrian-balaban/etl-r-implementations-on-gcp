@@ -113,7 +113,8 @@ More: [overview](docs/diagrams/00-overview.svg) ·
 [data model](docs/diagrams/09-data-model.svg) ·
 [deployment](docs/diagrams/11-deployment.svg) ·
 [extend, not rewrite](docs/diagrams/14-extend-not-rewrite.svg) ·
-[all diagrams](docs/diagrams/README.md)
+[all diagrams](docs/diagrams/README.md) ·
+[katas & ADL](architecture/) — the 2026 Neal Ford masterclass katas, with the consolidated ADL
 
 ## Prove it on GCP
 

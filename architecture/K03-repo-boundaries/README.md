@@ -1,24 +1,24 @@
-# K03. Frontiere între implementări în monorepo + ciclu interzis
+# K03. Boundaries between implementations in the monorepo + the forbidden cycle
 
-## Scenariu (5 min)
-Un agent rugat să "refolosească parserul din flink în beam-dataflow" adaugă dependențe între implementări; altul creează un ciclu de componente cu auto-import. Conform `CLAUDE.md`, editează lucrurile partajate doar în `spec/`.
+## Scenario (5 min)
+An agent asked to "reuse the parser from flink in beam-dataflow" adds dependencies between implementations; another creates a component cycle through auto-imports. Per `CLAUDE.md`, shared things are edited only in `spec/`.
 
-## Material sursă
-- `CLAUDE.md` ("Editează doar în `spec/` lucrurile partajate… symlink-uri", "Nothing billable runs on GCP without asking first")
+## Source material
+- `CLAUDE.md` ("Edit shared things in `spec/` only… symlinks", "Nothing billable runs on GCP without asking first")
 - `spec/contracts/README.md` (`verify-project2`, `git diff --quiet -- pipelines apps`)
-- `spec/PIPELINE.md` (8 stațiuni fixe, echilibrul `src_read = written + rejected`)
-- `harness/generate.py` (generează inputurile și testele semnale)
-- `make spec-test` / `make conformance-all` (testele de conformitate)
-- Diagrame: `docs/diagrams/00-overview.svg`, `docs/diagrams/08-stage-mapping.svg`
+- `spec/PIPELINE.md` (eight fixed stages, the `src_read = written + rejected` balance)
+- `harness/generate.py` (generates the inputs and the signal tests)
+- `make spec-test` / `make conformance-all` (the conformance tests)
+- Diagrams: `docs/diagrams/00-overview.svg`, `docs/diagrams/08-stage-mapping.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **ADL explicit (perechi interzise) vs. ADL implicit (`HAS NO DEPENDENCY ON other services`)** — care prinde agentul?
-2. **Pseudocodul regulii de ciclu:** `FOREACH COMPONENT c IN system DO ASSERT(no cycles exist between c and other components) END` → skill/fitness function la alegere.
-3. **Tabelul de partajat vs. duplicat pe cod real:** `compare.py`, `harness/generate.py`, mapping-ul — unde e volatilitatea?
-4. **`verify-project2` formalizat ca ADL aserțiune rulabilă.**
+1. **Explicit ADL (forbidden pairs) vs. implicit ADL (`HAS NO DEPENDENCY ON other services`)** — which one catches the agent?
+2. **The cycle rule's pseudocode:** `FOREACH COMPONENT c IN system DO ASSERT(no cycles exist between c and other components) END` → a skill/fitness function of your choice.
+3. **The shared-vs-duplicated table on real code:** `compare.py`, `harness/generate.py`, the mapping — where is the volatility?
+4. **`verify-project2` formalized as a runnable ADL assertion.**
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define monorepo service boundaries

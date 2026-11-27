@@ -1,21 +1,21 @@
-# Răspunsuri K01: Arhitectură logică vs. implementare
+# K01 answers: Logical vs. implementation architecture
 
-## Task 1: Citește directoarele ca arhitectură
+## Task 1: Read the directories as architecture
 
-**Domainuri identificate:**
+**Domains identified:**
 
-- `Spec` - conține `pipelines/`, `contracts/`, `fixtures/`, `harness/`
-- `Flink` - conține `implementations/flink/` cu subdirectoare: `gate/`, `recon/`, `sql/`, variantele `variant-flink-sql-batch-job/`, `variant-flink-datastream-batch-job/`, `target-system-mock/`
-- `FlinkJdbc` - conține `implementations/flink-jdbc/` cu subdirectoare: `gate-jdbc/`, `sql/`, `target-system-mock/`, `intake-jdbc/`
-- `BeamDataflow` - conține `implementations/beam-dataflow/` cu subdirectoare: `pipelines/`, `harness/`, `dataflow_entrypoint.py`, `composer/`, `dataform/`
+- `Spec` — holds `pipelines/`, `contracts/`, `fixtures/`, `harness/`
+- `Flink` — `implementations/flink/` with subdirectories: `gate/`, `recon/`, `sql/`, the variants `variant-flink-sql-batch-job/`, `variant-flink-datastream-batch-job/`, `target-system-mock/`
+- `FlinkJdbc` — `implementations/flink-jdbc/` with subdirectories: `gate-jdbc/`, `sql/`, `target-system-mock/`, `intake-jdbc/`
+- `BeamDataflow` — `implementations/beam-dataflow/` with subdirectories: `pipelines/`, `harness/`, `dataflow_entrypoint.py`, `composer/`, `dataform/`
 
-**Clase orfane (Entity Trap):**
+**Orphan classes (the Entity Trap):**
 
-- Orice fișier `.java`/`.py` plasat la rădăcină a `implementations/...` sau `spec/` fără un component definită explicit în ADL
-- Directoarele `sql/` (în Flink) sau `target-system-mock/` sunt numite după entitate de date, nu după comportament de componentă
-- `common/`, `config/` sau `component-tests/` fără proprietate Domeniu clară
+- Any `.java`/`.py` file placed at the root of `implementations/...` or `spec/`, without a component explicitly defined in the ADL
+- The `sql/` (in Flink) or `target-system-mock/` directories are named after a data entity, not after a component's behaviour
+- `common/`, `config/` or `component-tests/` without a clear Domain owner
 
-## Task 2: ADL-ul de domainuri pentru repo (template simplu)
+## Task 2: The domains ADL for the repo (simple template)
 
 ```
 DESCRIPTION Define ETL-R domains and services
@@ -48,12 +48,12 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
           DEFINE COMPONENT BeamHarness AS harness
           DEFINE COMPONENT BeamTests AS tests/
           DEFINE COMPONENT BeamMakefile AS Makefile
-          DEFINE COMPONENT BeamDockerfile Dockerfile.dataflow / Dockerfile.dataform
+          DEFINE COMPONENT BeamDockerfile AS Dockerfile.dataflow / Dockerfile.dataform
           DEFINE COMPONENT BeamLocalDevelopment AS local
-          DEFINE COMPONENT BeamGcp GCP
+          DEFINE COMPONENT BeamGcp AS GCP
           DEFINE COMPONENT BeamContainer AS composer / dataflow
           DEFINE COMPONENT BeamCI AS .github
-          DEFINE COMPONENT BeamMaven pom.xml
+          DEFINE COMPONENT BeamMaven AS pom.xml
      DEFINE DOMAIN Harness AS harness
           DEFINE COMPONENT Generate AS generate.py
           DEFINE COMPONENT Bundle AS bundle.py
@@ -63,13 +63,16 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
 ASSERT(CLASSES are only CONTAINED within COMPONENTS within SERVICES)
 ```
 
-## Task 3: Contextul agentului pentru implementare nouă
+## Task 3: The agent's context for a new implementation
 
-Agentul ar avea nevoie doar de:
+The agent would need only:
 
-- `spec/PIPELINE.md` - specificația funcțională (8 stațiuni, ecuatia de balanță, reason-urile enumerate)
-- `spec/contracts/` - contractul dintre limbaje (mapping-urile, schema-urile JSON, fixture-urile .def)
-- `harness/generate.py` - generatorul de inregistrări seeded (55 inregistrări cu 5 defecte în sarcinile de parse)
-- `spec/fixtures/ACCOUNT.src` - fisierul imutabil cu header + 55 de înregistrări (sha256: `86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c`)
+- `spec/PIPELINE.md` — the functional specification (eight stages, the balance equation, the enumerated reasons)
+- `spec/contracts/` — the contract between languages (the mappings, the JSON schemas, the `.def` fixtures)
+- `harness/generate.py` — the seeded record generator (55 records with 5 defects in the parse tasks)
+- `spec/fixtures/ACCOUNT.src` — the immutable file with header + 55 records (sha256: `86f76332f08e7c8c0a0a78a4366fb124151f3467fbb3a68a556fd6461604426c`)
 
-Codul real al fiecărei implementări rămâne izolat ca _implementation details_, necesar doar la timpul de build/test local (`make generate | run | test | conformance | verify`).
+Each implementation's real code stays isolated as _implementation details_, needed only at local build/test time (`make generate | run | test | conformance | verify`).
+
+---
+*Generated in the K01 quadrant — Logical vs. implementation architecture*

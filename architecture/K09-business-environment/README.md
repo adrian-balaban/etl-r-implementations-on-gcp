@@ -1,22 +1,22 @@
-# K09. Mediul de business și cost
+# K09. The business environment and cost
 
-## Scenariu (5 min)
-Banca vrea 20 de proiecte simultan și / sau 20 milioane de înregistrări pe run; o lege de residency apare într-o altă regiune. Cum reacționează fiecare implementare?
+## Scenario (5 min)
+The bank wants 20 simultaneous projects and/or 20 million records per run; a residency law appears in another region. How does each implementation react?
 
-## Material sursă
-- `docs/evidence/README.md` (numere reale: cost, timp, resurse)
-- `cost-estimate.md` (cost-uri reale pe GCP: $0.90 / $0.94 / $2.33)
-- `make spec-test` / `make conformance-all` (validare rând-cu-rând)
-- `SECTIONS.md` (paginile 62–63 din masterclass)
-- Diagrame: `docs/diagrams/00-overview.svg`
+## Source material
+- `docs/evidence/README.md` (real numbers: cost, time, resources)
+- `cost-estimate.md` (real costs on GCP: $0.90 / $0.94 / $2.33)
+- `make spec-test` / `make conformance-all` (row-by-row validation)
+- `SECTIONS.md` (pages 62–63 of the masterclass)
+- Diagrams: `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **Cum reacționează fiecare implementare la fiecare scenariu**; unde e riscul?
-2. **Cost ADL pe 2 $-grade:** trece `beam-dataflow` la 20M (Composer $1.03 e deja fixed)?
-3. **Recomandare defensivă** (un Flink + o variantă de streaming justificată?) + ADL de revenire (reconciliation FF) care monitorizează riscul.
+1. **How each implementation reacts to each scenario;** where is the risk?
+2. **A cost ADL on 2 $-grades:** does `beam-dataflow` scale to 20M (is the Composer $1.03 already a fixed cost)?
+3. **A defensive recommendation** (one Flink + a justified streaming variant?) + a recovery ADL (a reconciliation FF) that monitors the risk.
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define business environment and cost fitness functions

@@ -1,25 +1,25 @@
-# K02. Contractul ca bibliotecă partajată între limbaje
+# K02. The contract as a library shared between languages
 
-## Scenariu (5 min)
-Echipa vrea ca cele trei implementări (Flink, Flink-jdbc, Beam Dataflow) să nu deriveze în denumirile `.FLG/.CHS/.DAT` și ale coloanelor partajate. Conform `CLAUDE.md`, `verify-project2` rulează un alt proiect fără să atingă codul, doar editând fișierele din `spec/contracts/`.
+## Scenario (5 min)
+The team wants the three implementations (Flink, Flink-jdbc, Beam Dataflow) not to drift in the `.FLG/.CHS/.DAT` names and the shared columns. Per `CLAUDE.md`, `verify-project2` runs another project without touching code, by editing only files under `spec/contracts/`.
 
-## Material sursă
-- `spec/contracts/artefacts.json` ("contractul dintre limbaje": Python la runtime, Java din classpath)
-- Symlink-urile `contracts/` în fiecare implementare
-- Fixture-urile `ACCOUNT.src` + `manifest.json`
-- `harness/generate.py` (generează inputurile și teste)
-- `make spec-test` (comparatorul rând-cu-rând contra oracolului)
-- `verify-project2` (deschide proiectul "project2" fără să atingă codul)
-- Diagrame: `docs/diagrams/08-stage-mapping.svg`, `docs/diagrams/00-overview.svg`
+## Source material
+- `spec/contracts/artefacts.json` (the "contract between languages": Python at runtime, Java from the classpath)
+- The `contracts/` symlinks in each implementation
+- The `ACCOUNT.src` + `manifest.json` fixtures
+- `harness/generate.py` (generates the inputs and tests)
+- `make spec-test` (the row-by-row comparator against the oracle)
+- `verify-project2` (opens the "project2" project without touching code)
+- Diagrams: `docs/diagrams/08-stage-mapping.svg`, `docs/diagrams/00-overview.svg`
 
-## Task-uri (10 min, runde individual-discussion-team)
+## Tasks (10 min, individual-discussion-team rounds)
 
-1. **ADL cu `DEFINE LIBRARY Contracts AS spec/contracts`** + aserțiuni de acces (cine are voie, ce e interzis: `Do not hand-edit spec/fixtures/ACCOUNT.src`).
-2. **Creează un plan de fitness function** care dovedește byte-identitatea artefactelor (`artefacts.json` vs. copiile din jar) — interpolat și testat pe un caz care trece + unul care pică.
-3. **Capcana "IS DEPENDENT ON"** (claim existențial, nu per-clasă) — ce ar genera greșit un agent cu ArchUnit/pytest-arch.
-4. **Unde rulează**: CI, la schimbarea contractului sau MCP on-demand?
+1. **An ADL with `DEFINE LIBRARY Contracts AS spec/contracts`** + access assertions (who is allowed in, what is forbidden: `Do not hand-edit spec/fixtures/ACCOUNT.src`).
+2. **Design a fitness function** that proves the artefacts' byte-identity (`artefacts.json` vs. the copy inside the jar) — interpolated and tested on one passing case + one failing case.
+3. **The "IS DEPENDENT ON" trap** (an existential claim, not per-class) — what an agent with ArchUnit/pytest-arch would generate wrongly.
+4. **Where it runs**: CI, on every contract change, or MCP on-demand?
 
-## Livrabil ADL (punct de start)
+## ADL deliverable (starting point)
 
 ```
 DESCRIPTION Define contract library shared between implementations

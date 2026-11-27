@@ -1,47 +1,49 @@
-# Răspunsuri K15: Schimbare constantă: stressori și reziduuri
+# K15 answers: Constant change: stressors and residues
 
-## Task 1: Completează matricea de stressori
+## Task 1: Fill in the stressor matrix
 
-| Stressor | S1 (Proiect nou) | S2 (GCP price/Degradează Kafka) | S3 (20M înregistrări) | S4 (Target API v2) | S5 (Regiune/Residency) | S6 (4 implementare) |
+What each stressor strikes:
+
+| Struck by | S1 (a new project) | S2 (GCP price/degraded Kafka) | S3 (20M records) | S4 (Target API v2) | S5 (region/residency) | S6 (a 4th implementation) |
 |---|---|---|---|---|---|---|
-| **Spec / PIPELINE.md** | ✅ Noi mapping + revalidare conformance | ⚠️ Poate necesita update config | ✅ Poate necesita mici ajustări | ⚠️ Schimbă schema + revalidează | ⚠️ Poate necesita multi-region setup | ❌ Nu e compatibil cu spec existent |
-| **Contracte (artefacts.json, mappings)** | ✅ Noi mapping-uri | ✅ Poate necesita update config | ✅ Stabile (mapping volatil) | ✅ Schimbă contractul JSON Schema | ✅ Poate necesita configurare region-specific | ❌ Divergențe între implementări |
-| **Flink (SQL/DataStream)** | ⚠️ Necesită teste noi | ⚡ Varianța Kafka ±10 min | ✅ Scalabil la 200k | ⚠️ Schimbă schema target | ✅ Multi-region posibil | ❌ Nu e suportat nativ |
-| **Flink-jdbc** | ✅ Pin mapping + verify-project2 | ⚡ Varianța Kafka ±10 min | ✅ Rapid pe 200k (load pre-run) | ⚠️ Schimbă source DB | ✅ Poate migra Postgres local | ❌ Nu e suportat nativ |
-| **Beam Dataflow** | ⚠️ Noi mapping-uri + generate | ⚡⚡ Varianța ±20 min (Composer+Kafka) | ✅ Poate scala, dar costul 2.5× | ⚠️ Schimbă contractul Kafka | ✅ Multi-region BigQuery | ⚠️ Poate fi adăugat ca variantă |
-| **Harness / generate.py** | ✅ Fișiere noi seeded | ✅ Stabile | ✅ Identic (seeded) | ✅ Stabile | ✅ Stabile | ❌ Necesită rescrierea lui generate.py |
-| **Recon / balance** | ✅ Egal (55=50+5) | ✅ Egal | ✅ Egal (200k=200k+5) | ⚠️ Confirmations schimbă | ✅ Egal | ❌ Topologie diferită |
+| **Spec / PIPELINE.md** | ✅ new mappings + conformance revalidation | ⚠️ may need config updates | ✅ may need small adjustments | ⚠️ change the schema + revalidate | ⚠️ may need a multi-region setup | ❌ incompatible with the existing spec |
+| **Contracts (artefacts.json, mappings)** | ✅ new mappings | ✅ may need config updates | ✅ stable (the mapping is the volatile part) | ✅ change the JSON Schema contract | ✅ may need region-specific config | ❌ divergence between implementations |
+| **Flink (SQL/DataStream)** | ⚠️ needs new tests | ⚡ Kafka variance ±10 min | ✅ scales to 200k | ⚠️ change the target schema | ✅ multi-region possible | ❌ not natively supported |
+| **Flink-jdbc** | ✅ pin the mapping + verify-project2 | ⚡ Kafka variance ±10 min | ✅ fast at 200k (pre-run load) | ⚠️ change the source DB | ✅ can migrate to a local Postgres | ❌ not natively supported |
+| **Beam Dataflow** | ⚠️ new mappings + generate | ⚡⚡ variance ±20 min (Composer+Kafka) | ✅ can scale, but at 2.5× the cost | ⚠️ change the Kafka contract | ✅ BigQuery multi-region | ⚠️ can be added as a variant |
+| **Harness / generate.py** | ✅ new seeded files | ✅ stable | ✅ identical (seeded) | ✅ stable | ✅ stable | ❌ generate.py must be rewritten |
+| **Recon / balance** | ✅ equal (55=50+5) | ✅ equal | ✅ equal (200k=200k+5) | ⚠️ the confirmations change | ✅ equal | ❌ a different topology |
 
-**Analize:**
-- **S1** afectează spec și contracte – reziduul e `ASSERT(adding a project modifies only spec/contracts/)`.
-- **S2** afectează varianța Kafka – reziduul e MCP tool `get_cost_last_run()` + monitorizare a stării Kafka.
-- **S3** afectează scalabilitate – reziduul e fitness function cost/ runtime limite.
-- **S4** afectează schema – reziduul e ADL `ASSERT(JSON Schema validates target document structure)`.
-- **S5** afectează regiunea – reziduul e configurarea multi-region în ADL.
-- **S6** afectează topologia – reziduul e `ASSERT(Do not allow static coupling between quanta not specified here)`.
+**The analyses:**
+- **S1** strikes spec and contracts – the residue is `ASSERT(adding a project modifies only spec/contracts/)`.
+- **S2** strikes the Kafka variance – the residue is the MCP tool `get_cost_last_run()` + monitoring Kafka's health.
+- **S3** strikes scalability – the residue is the cost/runtime limit fitness functions.
+- **S4** strikes the schema – the residue is the ADL `ASSERT(JSON Schema validates target document structure)`.
+- **S5** strikes the region – the residue is the multi-region configuration in the ADL.
+- **S6** strikes the topology – the residue is `ASSERT(Do not allow static coupling between quanta not specified here)`.
 
-## Task 2: Proiectează reziduuri
+## Task 2: Design the residues
 
-**Reziduuri identificate:**
-1. **Contracts-as-config:** `artefacts.json` + mapping-urile YAML sunt configurarea centralizată – schimbările aici sunt sigure, nu code changes.
-2. **Oracle pinned:** `manifest.json` + `ACCOUNT.src` fixed SHA-256 – asigură că oracolul nu driftă.
-3. **Stage-mapping abstract:** `08-stage-mapping.svg` – definirea etapelor la nivel abstract, nu implementare-specific.
+**The identified residues:**
+1. **Contracts-as-config:** `artefacts.json` + the YAML mappings are the centralized configuration – changes here are safe, not code changes.
+2. **A pinned oracle:** `manifest.json` + `ACCOUNT.src` at a fixed SHA-256 – keeps the oracle from drifting.
+3. **An abstract stage mapping:** `08-stage-mapping.svg` – the stages are defined at an abstract level, not implementation-specifically.
 
-**Prioritate:**
-- **Business zone:** S1 și S4 sunt cele mai critice (schimbări care afectează conformance direct).
-- **# stressori acoperiți:** S1, S4, S6 acoperă 3/6 stressori "esențiali".
-- **Probability × impact:** S1 (proiect nou, near-certain), S4 (API change, likely), S2 (Kafka variance, possible but high impact).
+**The priority:**
+- **Business zone:** S1 and S4 are the most critical (changes that hit conformance directly).
+- **# stressors covered:** S1, S4, S6 cover 3/6 "essential" stressors.
+- **Probability × impact:** S1 (a new project, near-certain), S4 (an API change, likely), S2 (Kafka variance, possible but of high impact).
 
-## Task 3: ADL pentru modificarea proiectului
+## Task 3: The ADL for a project change
 
 ```
 ASSERT(adding a project modifies only spec/contracts/)
 ASSERT(manifest.json sha256 pinned: ACCOUNT.src unchanged)
-ASSERT(stage mapping abstract: 08-stage-mapping.svg unchanged modulo adiții vizuale)
+ASSERT(stage mapping abstract: 08-stage-mapping.svg unchanged modulo visual additions)
 ```
 
-**Sfat:** Fiecare schimbare nouă în `implementations/` care nu e declarată prin `spec/contracts/` va pică fitness function-ul `ASSERT(adding a project modifies only spec/contracts/)`, asigurând că agenții nu o ocolesc ușor.
+**The hint:** any new change in `implementations/` that is not declared through `spec/contracts/` fails the `ASSERT(adding a project modifies only spec/contracts/)` fitness function — agents cannot route around it easily.
 
-## Task 4: Regulă de aur a cursului
+## Task 4: The course's golden rule
 
-**Stressors** care afectează direct business capabilities trebuie mapați la aserțiuni ADL, iar **reziduurile** (contracts-as-config, oracle pinned, stage-mapping abstract) sunt preluate ca gardieni anticipați, nu ca reacții la fiecare schimbare.
+**Stressors** that hit business capabilities directly must be mapped to ADL assertions, and the **residues** (contracts-as-config, the pinned oracle, the abstract stage-mapping) are adopted as anticipatory guardians, not as reactions to every change.

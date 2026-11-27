@@ -1,38 +1,47 @@
-# ETL-R Katas — Masterclass Neal Ford 2026
+# Architecture as code — ETL-R katas, Neal Ford masterclass 2026
 
-17 exerciții de arhitectură (katas) construite pe repo-ul ETL-R: fiecare pornește de la un scenariu (5 min), citește material real din repo și se rezolvă în runde *individual–discussion–team* (10–15 min).
+Seventeen architecture katas built on the ETL-R repo: each starts from a scenario (5 min),
+reads real repo material, and is solved in *individual–discussion–team* rounds (10–15 min).
+The ADL from the answers is consolidated by family in `adl/`; the register lives in
+`GOVERNANCE.md`, the checklist mapping in `REVIEW.md`.
 
-## Cum folosești un kata
+## How to use a kata
 
-- `README.md` — exercițiul: scenariu, material sursă (fișiere reale din repo), task-uri și un „Livrabil ADL" de start
-- `answers.md` — soluțiile, inclusiv blocuri ADL (definiții și aserțiuni)
+- `README.md` — the exercise: scenario, source material (real repo files), tasks, and a starting "ADL deliverable"
+- `answers.md` — the solutions, including ADL blocks (definitions and assertions)
+- `adl/` — the ADL consolidated by family, with full headers and `[Kxx-n]`-tagged assertions
+- `GOVERNANCE.md` — the fitness-function register, the tag scheme, the failure dispositions
+- `REVIEW.md` — the katas against the Architecture as Code checklist sections
+- `diagrams/` — an index into `docs/diagrams/`
+- `tests/` + `make adl-test` — the CI harness: register lint, contract derivation [K02-1], lane boundaries [K03-1..3]
 
-## Lista kata-urilor
+## The katas
 
-| # | Kata | Tema |
+| # | Kata | Theme |
 |---|------|------|
-| [K01](K01-logical-vs-implementation/) | Arhitectură logică vs. implementare | Citirea repo-ului ca arhitectură; ADL-ul domeniilor; contextul unui agent pentru implementarea #4 |
-| [K02](K02-contract-library/) | Contractul ca bibliotecă partajată | `DEFINE LIBRARY Contracts`; fitness function pe byte-identitatea `artefacts.json`; capcana „IS DEPENDENT ON" |
-| [K03](K03-repo-boundaries/) | Frontiere între implementări în monorepo | ADL explicit vs. implicit; regula anti-ciclu; partajat vs. duplicat; `verify-project2` |
-| [K04](K04-code-quality/) | Calitatea codului și fitness functions | Complexitate ciclomatică; A / I / D pe main sequence; ADL cu praguri |
-| [K05](K05-in-flight-change/) | Schimbare în zbor | Branch vs. toggle vs. config (mapping-YAML); contracte strict/permeabil; ADL anti-tautologie |
-| [K06](K06-FFDA/) | FFDA — Fitness Function Driven Architecture | Verdicte load-bearing / reject / not-now; „ADL înainte de cod"; stilul LMAX; exemption cu owner și termen |
-| [K07](K07-data-topology/) | Topologia de date | Monolit / domain / dedicated; ADL-ul topologiei; `reject_log` ca DLQ complet |
-| [K08](K08-govern-data-topology/) | Guvernarea topologiei | Analize statică / dinamică / platformă; căi legitime fără încălcarea topologiei; MCP `get_balance(run_id)` |
-| [K09](K09-business-environment/) | Mediul de business și cost | Reacția la scenariile S1–S6; ADL de cost; recomandare defensivă + FF de revenire |
-| [K10](K10-architectural-quantas/) | Cuante arhitecturale | Puncte de cuplaj static per implementare; Domain Broker; `DEFINE QUANTUM` |
-| [K11](K11-dynamic-coupling/) | Dynamic coupling și entanglement | `DEFINE COMMUNICATION`; READONLYREPLICA pentru date de referință; ce pierzi fără Kafka |
-| [K12](K12-run-as-saga/) | Run-ul ca saga | Communication / Coordination / Consistency; „Atomic + choreography" devine orchestrator; guardrails de regenerare |
-| [K14](K14-quantifying-capabilities/) | Cuantificarea capabilităților | Simplicity / Deployability / Scalability / Cost; trend vs. un singur run; ADL composite Maintainability |
-| [K15](K15-constant-change/) | Schimbare constantă | Matricea de stressori S1–S6; reziduuri (contracts-as-config, oracol pinned); `ASSERT(adding a project modifies only spec/contracts/)` |
-| [K16](K16-enterprise-governance/) | Guvernanță enterprise + context MCP | Classic Prescriptive vs. Distributed → Durable Interface; SBOM la build, nu inventar în ADL; push vs. pull |
-| [K17](K17-agentic-ai/) | Agenți și judecată delegată | Scope-ul generării = o cuantă; verificare deterministă vs. LLM-judge; DLQ cu cale umană; unelte MCP |
-| [K18](K18-teams-git/) | Echipe și istoric Git | Conway's Law la 3 echipe; ADL de echipe + agenți ca membri; findings pe istoricul Git; eficiența agentului |
+| [K01](K01-logical-vs-implementation/) | Logical vs. implementation architecture | reading the repo as architecture; the domains ADL; an agent's context for a fourth implementation |
+| [K02](K02-contract-library/) | The contract as a shared library | `DEFINE LIBRARY Contracts`; a fitness function on `artefacts.json` byte-identity; the "IS DEPENDENT ON" trap |
+| [K03](K03-repo-boundaries/) | Boundaries between implementations in the monorepo | explicit vs. implicit ADL; the anti-cycle rule; shared vs. duplicated; `verify-project2` |
+| [K04](K04-code-quality/) | Code quality and fitness functions | cyclomatic complexity; A / I / D on the main sequence; an ADL with thresholds |
+| [K05](K05-in-flight-change/) | Change in flight | branch vs. toggle vs. config (mapping-YAML); strict vs. permissive contracts; the anti-tautology ADL |
+| [K06](K06-FFDA/) | FFDA — Fitness Function Driven Architecture | load-bearing / reject / not-now verdicts; "ADL before code"; the LMAX style; exemptions with owner and expiry |
+| [K07](K07-data-topology/) | The data topology | monolith / domain / dedicated; the topology ADL; `reject_log` as a complete DLQ |
+| [K08](K08-govern-data-topology/) | Governing the data topology | static / dynamic / platform analysis; legitimate paths that respect the topology; the MCP `get_balance(run_id)` |
+| [K09](K09-business-environment/) | The business environment and cost | each implementation's reaction to the S1–S6 scenarios; the cost ADL; a defensive recommendation + a recovery FF |
+| [K10](K10-architectural-quantas/) | Architectural quanta | static coupling points per implementation; the Domain Broker; `DEFINE QUANTUM` |
+| [K11](K11-dynamic-coupling/) | Dynamic coupling and entanglement | `DEFINE COMMUNICATION`; a READONLYREPLICA for reference data; what you lose without Kafka |
+| [K12](K12-run-as-saga/) | The run as a saga | Communication / Coordination / Consistency; "atomic + choreography" becomes an orchestrator; regeneration guardrails |
+| [K14](K14-quantifying-capabilities/) | Quantifying capabilities | Simplicity / Deployability / Scalability / Cost; trend vs. a single run; the composite Maintainability ADL |
+| [K15](K15-constant-change/) | Constant change | the S1–S6 stressor matrix; residues (contracts-as-config, a pinned oracle); `ASSERT(adding a project modifies only spec/contracts/)` |
+| [K16](K16-enterprise-governance/) | Enterprise governance + the MCP context | Classic Prescriptive vs. Distributed → Durable Interface; an SBOM at build time, not an ADL inventory; push vs. pull |
+| [K17](K17-agentic-ai/) | Agents and delegated judgment | the generation scope = one quantum; deterministic checks vs. an LLM judge; a DLQ with a human path; MCP tools |
+| [K18](K18-teams-git/) | Teams and Git history | Conway's Law at three teams; a team ADL with agents as members; findings on real Git history; agent effectiveness |
 
-*Notă: numerotarea urmează agenda masterclass-ului; K13 nu există în acest set.*
+*Note: the numbering follows the masterclass agenda; K13 does not exist in this set.*
 
-## Convenții
+## Conventions
 
-- Blocurile ADL sunt pseudo-sintaxă de exercițiu (`DEFINE` / `ASSERT`), nu un parser real.
-- Referințele `SECTIONS.md` și `make-the-grade-pages-*` trimit la materialul masterclass-ului; nu sunt incluse în repo.
-- Numerele de cost/timp/resurse provin din `docs/evidence/` și `cost-estimate.md` (măsurători reale pe GCP).
+- The ADL blocks are exercise pseudo-syntax (`DEFINE` / `ASSERT`), not a real parser. The consolidation in `adl/` carries `[Kxx-n]` tags that trace the source kata.
+- The folder structure follows the `architecture/` example from the total-recall project: `adl/` + `diagrams/` + `GOVERNANCE.md` + `REVIEW.md`.
+- References to `SECTIONS.md` and `make-the-grade-pages-*` point to the masterclass material; it is not part of the repo.
+- The cost/time/resource numbers come from `docs/evidence/` and `cost-estimate.md` (real measurements on GCP).
