@@ -6,18 +6,22 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      DEFINE QUANTUM Flink Quantum
           # one instance (mig-flink-pg), one database (mig); the etlr_* schemas live inside it
           DEFINE DATABASE account_source_db AS mig-flink-pg
+               DATABASE NAME mig
           DEFINE DATABASE account_target_db AS mig-flink-pg
+               DATABASE NAME mig
           DEFINE BROKER Kafka Broker AS kafka-broker
      DEFINE QUANTUM FlinkJdbc Quantum
           # its own source instance (mig-flink-jdbc-src) and lane instance (mig-flink-jdbc-lane)
           DEFINE DATABASE account_source_db AS mig-flink-jdbc-src
+               DATABASE NAME source
           DEFINE DATABASE account_target_db AS mig-flink-jdbc-lane
+               DATABASE NAME mig
           # the reader's schema, created by sql/source-init.sql
           DEFINE SCHEMA SourceSchema AS etlr_source
           DEFINE BROKER Kafka Broker AS kafka-broker
      DEFINE QUANTUM Beam Quantum
-          DEFINE DATABASE account_target_db AS account_target
-               WITHIN BigQuery datasets
+          DEFINE DATABASE account_target_db AS BigQuery datasets
+               # etlr_extraction, etlr_transformation, etlr_recon — the flink schema names, in BigQuery
           DEFINE BROKER Kafka Broker AS kafka-broker
                # shared with the Target System mock; the topics are the external contract
 
