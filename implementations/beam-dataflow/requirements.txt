@@ -1,7 +1,7 @@
 # Pinned to Python 3.11 (see Makefile) — Beam and Airflow do not support the host's 3.14.
 
 # Beam pipelines. [gcp] pulls the native BigQuery/GCS IO used by the `real` profile.
-apache-beam[gcp]>=2.60.0,<3.0
+apache-beam[gcp]>=2.78.0,<3.0
 
 # GCP clients — also used against the local emulators via endpoint overrides.
 google-cloud-storage>=2.18.0
