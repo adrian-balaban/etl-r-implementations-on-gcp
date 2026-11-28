@@ -104,10 +104,10 @@ A number reported without a gate is not a fitness function (checklist §7.1).
 
 | ID | Assertion | Check | Trigger |
 |---|---|---|---|
-| C14 | [K02-4] shared churn | `spec/contracts/` commits per month ≤ 2 | weekly |
-| C15 | [K15-1] a project adds only contracts | a new mapping's commit touches only `spec/contracts/` | PR |
-| C16 | [K18-2 K18-3] commit authority | authors in team ADL; files inside their domain | weekly |
-| C17 | [K18-5] agent conflicts | agent-trailer merges with conflicts, past month | monthly |
+| ✅ C14 | [K02-4] shared churn | `spec/contracts/` commits per month ≤ 2 | weekly |
+| ✅ C15 | [K15-1] a project adds only contracts | a new mapping's commit touches only `spec/contracts/` | PR |
+| ✅ C16 | [K18-2 K18-3] commit authority | authors in team ADL; files inside their domain | weekly |
+| ✅ C17 | [K18-5] agent conflicts | agent-trailer merges with conflicts, past month | monthly |
 
 C16 and C17 need agents visible in history. No commit carries an agent trailer today.
 Pick one convention, such as `Co-Authored-By`, and declare the real agents in `governance.adl`.
@@ -135,7 +135,7 @@ Mark each in the register, so no reader mistakes it for a gate.
 | ✅ G3 | add a `concurrency` group per ref | cancel stale runs on new pushes |
 | ✅ G4 | add `CODEOWNERS` from the team ADL | checklist §11; the team map gets teeth |
 | ✅ G5 | add Dependabot: actions, Maven, pip | pinned versions need update signals |
-| G6 | add a scheduled workflow for C14–C17 | history checks need a time frame |
+| ✅ G6 | add a scheduled workflow for C14–C17 | history checks need a time frame |
 | E2 | try `conformance-flink` on a podman runner | lifts [K06-1] into CI; measure runtime first |
 
 `.github/modernize/java-upgrade/` is untracked local tooling; its `.gitignore` ignores everything.
@@ -207,4 +207,9 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C13** — 2026-11-28 — `test_db_access.py`: non-test JDBC URLs must name a declared database (`DATABASE NAME` bindings added), and a project-wide `roles/cloudsql.admin|editor` needs an EXEMPTIONS row (the TTL sweeper has one)
 - **C9** — 2026-11-28 — `test_complexity.py`: `radon` + `lizard` with a ratchet — 30 measured hotspots pinned; a new function above `MAX_CC` or growth fails
 - **C10** — 2026-11-28 — `test_main_sequence.py`: A/I/D per Maven module with a ratchet — the 13 modules pinned (3 already past D=0.3); a new off-sequence module or growth fails
+- **C14** — 2026-11-28 — `test_history.py`: at most 2 commits in the 30-day window touch `spec/contracts/`
+- **C15** — 2026-11-28 — a commit that adds a mapping may touch nothing outside `spec/contracts/`
+- **C16** — 2026-11-28 — every author is a declared `DEFINE PERSON`/`DEFINE AGENT` in `governance.adl`
+- **C17** — 2026-11-28 — merge commits carrying an agent trailer must record a disposition (none today; the window is checked weekly)
+- **G6** — 2026-11-28 — `.github/workflows/history.yml` runs Mondays 06:00 UTC (`make history-check`, full-depth checkout); `adl-test` also checks out full depth for the window
 <!-- progress-end -->

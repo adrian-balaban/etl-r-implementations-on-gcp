@@ -20,7 +20,7 @@ register in [`GOVERNANCE.md`](GOVERNANCE.md) §3; this file is the verdict per c
 | §8 Evolvability (K05, K14, K15) | Partial | residues asserted (`architecture-style.adl`); `verify-project2` runs locally | Adrian Balaban | C15 — extend-not-rewrite as a PR check | phase 5 |
 | §9 Agentic AI (K17) | Partial | scope declared (`CLAUDE.md`, `governance.adl`); no agent-trailer convention yet | Adrian Balaban | pick `Co-Authored-By`, then C16/C17 | phase 5 |
 | §10 Fitness functions and governance (K06, K16) | Partial | one register row per assertion with owner, source, trigger, status (R1); an expired exemption fails the harness (R3) | Adrian Balaban | C9–C17 land the `proposed` rows | phases 4–5 |
-| §11 Teams and enterprise alignment (K16, K18) | Partial | the team ADL in `governance.adl` plus `.github/CODEOWNERS` (G4) | Adrian Balaban | C16/C17 read the history | phase 5 |
+| §11 Teams and enterprise alignment (K16, K18) | Partial | the team ADL in `governance.adl`, `.github/CODEOWNERS` (G4), and `tests/test_history.py` reading churn, mapping scope, authority and agent merges weekly | Adrian Balaban | the domain-scope leg bites once more members exist | next review |
 | §12 Minimum release gate | Partial | see below — 4 pass, 5 partial, 1 fails | Adrian Balaban | phases 4–5 | next review |
 
 ## The minimum release gate (checklist §12)
