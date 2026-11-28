@@ -223,4 +223,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **G6** — 2026-11-28 — `.github/workflows/history.yml` runs Mondays 06:00 UTC (`make history-check`, full-depth checkout); `adl-test` also checks out full depth for the window
 - **C11** — 2026-11-28 — `sbom.yml`: CycloneDX for the three Maven reactors plus `cyclonedx-py` on the Beam requirements; the gate is a non-empty artifact, uploaded
 - **E2** — 2026-11-28 — `conformance.yml` (manual dispatch, 90-min timeout) installs podman and runs `make conformance-<lane>` timed; the first dispatch supplies the runtime measurement before any gate
+- **G5+** — 2026-11-28 — Dependabot updates grouped: one PR per unit (actions, maven across the three lanes, pip) for security and minor+patch, majors alone; modelled on `total-recall/.github/dependabot.yml`
 <!-- progress-end -->
