@@ -38,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           uvx --from cyclonedx-bom==4.1.3 cyclonedx-py requirements \
-            -i implementations/beam-dataflow/requirements.txt -o sbom-python.json
+            implementations/beam-dataflow/requirements.txt -o sbom-python.json
           test -s sbom-python.json || { echo "empty Python SBOM"; exit 1; }
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
