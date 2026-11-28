@@ -10,7 +10,8 @@
 #
 # Nothing here touches GCP.
 
-PYTEST ?= uv run --no-project --with pytest python -m pytest
+# Pinned on purpose: an unpinned `--with pytest` floats the harness under CI (G2, CHECKS-PLAN).
+PYTEST ?= uv run --no-project --with pytest==9.2.0 python -m pytest
 
 .PHONY: spec-test adl-test conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
 
