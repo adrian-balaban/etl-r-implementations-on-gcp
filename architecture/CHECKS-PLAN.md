@@ -72,7 +72,7 @@ Today it makes flink and flink-jdbc point at each other, a cycle on paper.
 
 | ID | Assertion | Check | Trigger |
 |---|---|---|---|
-| C1 | ADL hygiene | unique tags; `AS path` resolves; constants defined once | PR |
+| ✅ C1 | ADL hygiene | unique tags; `AS path` resolves; constants defined once | PR |
 | C2 | [K03-4] no cycles | lane graph from paths and imports is acyclic | PR |
 | C3 | [K01-1] every file has a home | files outside components need an allowlist entry | PR |
 | C4 | [K02-2] one contract copy | lane `contracts`/`fixtures` are symlinks into `spec/` | PR |
@@ -186,4 +186,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **D9** — 2026-11-28 — the stale commit count dropped from `governance.adl`
 - **D10** — 2026-11-28 — `GOVERNANCE.md` and `REVIEW.md` baselines moved to `7ec2db6`
 - **D11** — 2026-11-28 — `secrets/main.tf` description reworded; the flink→flink-jdbc pin dropped (the lane graph is acyclic on paper again)
+- **C1** — 2026-11-28 — `test_adl_hygiene.py`: tags unique, `AS` bindings resolve, constants have one home (three passing and three failing cases)
 <!-- progress-end -->
