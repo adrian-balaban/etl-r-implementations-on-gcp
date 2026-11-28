@@ -77,7 +77,7 @@ Today it makes flink and flink-jdbc point at each other, a cycle on paper.
 | ✅ C3 | [K01-1] every file has a home | files outside components need an allowlist entry | PR |
 | ✅ C4 | [K02-2] one contract copy | lane `contracts`/`fixtures` are symlinks into `spec/` | PR |
 | ✅ C5 | [K06-4] `.FLG` outside the bundle | `bundle.py` output: flag present, not encrypted | PR |
-| C6 | [K05-4 K05-5] no empty tests | each Python and JUnit test asserts something non-constant | PR |
+| ✅ C6 | [K05-4 K05-5] no empty tests | each Python and JUnit test asserts something non-constant | PR |
 | C7 | [K16-2] no inventory in ADL | forbid version numbers and stray `USING` | PR |
 | C8 | [K04-5] damage cases exist | each comparator failure class has a damaged fixture | PR |
 
@@ -191,4 +191,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C3** — 2026-11-28 — `test_structure.py`: every lane-root entry is a declared component or a reasoned allowlist entry (`apps`, the two flink variants, shared infra dirs)
 - **C4** — 2026-11-28 — `test_structure.py`: each lane's `contracts`/`fixtures` is a symlink into `spec/`; a real directory fails
 - **C5** — 2026-11-28 — `test_bundle.py`: a real `bundle.py` run puts `ACCOUNT.FLG` beside the archive, never inside; `--no-flg` makes the check fire
+- **C6** — 2026-11-28 — `test_test_quality.py`: Python AST (no empty/tautological asserts; `pytest.raises` counts) and JUnit (`@Test` body needs assert/verify/fail/check); one delegated guard named with its reason
 <!-- progress-end -->
