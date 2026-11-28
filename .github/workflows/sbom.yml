@@ -29,8 +29,16 @@ jobs:
             pom="implementations/$lane/pom.xml"
             [ -f "$pom" ] || continue
             echo "::group::$lane"
-            mvn -B -q -f "$pom" org.cyclonedx:cyclonedx-maven-plugin:2.8.0:makeAggregateBom \
-              -DoutputFormat=json -DoutputName="sbom-$lane"
+            # Maven Central rate-limits (HTTP 429) under load; retry with backoff, bounded.
+            for attempt in 1 2 3; do
+              if mvn -B -q -f "$pom" org.cyclonedx:cyclonedx-maven-plugin:2.8.0:makeAggregateBom \
+                   -DoutputFormat=json -DoutputName="sbom-$lane"; then
+                break
+              fi
+              [ "$attempt" = 3 ] && { echo "Maven Central kept failing for $lane"; exit 1; }
+              echo "attempt $attempt failed for $lane; retrying in $((attempt * 20))s"
+              sleep $((attempt * 20))
+            done
             test -s "implementations/$lane/target/sbom-$lane.json" || { echo "empty SBOM for $lane"; exit 1; }
             echo "::endgroup::"
           done
