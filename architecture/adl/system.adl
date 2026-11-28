@@ -20,6 +20,8 @@ DEFINE READONLYREPLICA branches AS spec/contracts/reference/branches.json
      joined at enrich; refreshed only through a contracts change
 
 ASSERT(Communication between services adheres to the defined declarations) # [K11-1]
-ASSERT(a 200k flink run completes within RUNTIME_200K, measured at 6 min 55 s) # [K11-2]
+# [K11-2] stays on the assertion it was written for: "no quantum publishes a shared-database
+# channel" (data-governance.adl). The runtime target is asserted once, beside the other
+# capability thresholds: capabilities.adl [K09-5].
 ASSERT(settle confirms exactly the written rows: targetRows confirmed == written; 200000 of 200000 in the recorded run) # [K11-3]
 ASSERT(READONLYREPLICA is cached copy of reference data) # [K11-4]

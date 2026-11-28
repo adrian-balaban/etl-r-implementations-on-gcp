@@ -48,8 +48,8 @@ Each defect was verified on the baseline. Defective rules make defective checks.
 
 | ID | File | Defect | Fix |
 |---|---|---|---|
-| D1 | `data-governance.adl`, `system.adl` | `[K11-2]` tags two different assertions | retag one; C1 lints uniqueness |
-| D2 | `data-governance.adl` | [K07-3] names Customer and Ticketing Database | restate on `account_target` and confirmations |
+| ✅ D1 | `data-governance.adl`, `system.adl` | `[K11-2]` tags two different assertions | retag one; C1 lints uniqueness |
+| ✅ D2 | `data-governance.adl` | [K07-3] names Customer and Ticketing Database | restate on `account_target` and confirmations |
 | D3 | `data-governance.adl`, `static-coupling.adl` | source-DB accessors disagree across three places | align with each lane's real reader |
 | D4 | `static-coupling.adl` | one `account_source_db` name in two quanta | bind per lane, or declare the sharing |
 | D5 | `static-coupling.adl` | `etlr_source AS source tables` binds to prose | bind to a real schema name |
@@ -170,3 +170,11 @@ E2 also needs `make conformance-all` locally first.
 A failed assertion is feedback, not automatically a bug (`GOVERNANCE.md` §4).
 Each failure gets one disposition: fix the code, revise ADL and test together, or exempt.
 An exemption names an owner, rationale, scope and expiry.
+
+## 8. Progress
+
+Append-only log, one line per landed point; the ✅ marks the tables above.
+
+- **D1** — 2026-11-28 — `[K11-2]` tags one assertion: the RUNTIME_200K copy left `system.adl` (K11-2 stays on the shared-database channel; the runtime lives at `[K09-5]`)
+- **D2** — 2026-11-28 — `[K07-3]` restated on `account_target` and the confirmations topic
+<!-- progress-end -->

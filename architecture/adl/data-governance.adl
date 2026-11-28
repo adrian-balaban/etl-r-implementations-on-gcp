@@ -26,7 +26,7 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
 ASSERT(account_source_db is only accessed by Flink gate service AND FlinkJdbc intake service) # [K07-1]
 ASSERT(no quantum publishes a shared-database channel) # [K07-2 K11-2]
 # after the broker drains, the domain databases hold the same set of keys
-ASSERT(once the message broker is drained, Customer Database and Ticketing Database hold the same set of ticket keys) # [K07-3]
+ASSERT(once the message broker is drained, account_target and the confirmations topic hold the same set of account keys) # [K07-3]
 
 # Governing the topology (K08): access only through the domain's own services
 # (in the course's example: the Test / Grading / Admin databases, each through its own)
