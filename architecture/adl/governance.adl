@@ -27,7 +27,7 @@ ASSERT(agents cannot add cross-implementation dependencies) # [K17-1]
 ASSERT(agents cannot add undeclared database connections) # [K17-2]
 ASSERT(agent-generated changes stay within declared structural and operational boundaries) # [K17-3]
 
-# The teams (K18): one maintainer wears every hat today — five commits, one author;
+# The teams (K18): one maintainer wears every hat today;
 # the map exists to read git history and to bound agent scope when more hands arrive
 DEFINE PERSON Adrian Balaban AS 50263077+adrian-balaban@users.noreply.github.com
      ROLE: grammarian of the whole lane set — spec first, implementations second

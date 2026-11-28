@@ -1,6 +1,6 @@
 # Review — the katas against the Architecture as Code checklist
 
-**Repo:** `etl-r-implementations-on-gcp` · **Baseline:** `main` @ `bfe7563` (2026-11-27) · **Owner:** Adrian Balaban
+**Repo:** `etl-r-implementations-on-gcp` · **Baseline:** `main` @ `7ec2db6` (2026-11-27) · **Owner:** Adrian Balaban
 **Checklist:** `ARCHITECTURE_AS_CODE_CHECKLIST.md` from the masterclass material (outside the repo).
 
 Framing: the K01–K18 series exercises the checklist against the repo's real material. This

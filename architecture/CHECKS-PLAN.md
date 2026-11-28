@@ -56,9 +56,9 @@ Each defect was verified on the baseline. Defective rules make defective checks.
 | ✅ D6 | `architecture-style.adl` | `TargetSchema` path lacks `spec/contracts/` | fix the path; C1 lints bindings |
 | ✅ D7 | `system.adl`, `workflows.adl` | the three edges are declared twice | keep them in `system.adl` only |
 | ✅ D8 | `capabilities.adl` | redefines `MAX_CC`, `MAX_DISTANCE`; [K14-5] repeats [K04-4] | keep thresholds in `code-quality.adl` |
-| D9 | `governance.adl` | "five commits" is stale; history holds six | drop the count |
-| D10 | `GOVERNANCE.md`, `REVIEW.md` | baseline says `bfe7563` | update at each review |
-| D11 | `tests/test_boundaries.py` | flink pins a reference to flink-jdbc | reword `secrets/main.tf:35`; drop the pin |
+| ✅ D9 | `governance.adl` | "five commits" is stale; history holds six | drop the count |
+| ✅ D10 | `GOVERNANCE.md`, `REVIEW.md` | baseline says `bfe7563` | update at each review |
+| ✅ D11 | `tests/test_boundaries.py` | flink pins a reference to flink-jdbc | reword `secrets/main.tf:35`; drop the pin |
 
 D3 in detail: `data-governance.adl` grants Beam the source DB through `WITHIN`.
 [K07-1] lists only two accessors. `static-coupling.adl` gives Beam no source DB at all.
@@ -183,4 +183,7 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **D6** — 2026-11-28 — `TargetSchema` resolves: `spec/contracts/schemas/target-account.schema.json`
 - **D7** — 2026-11-28 — the three edges live only in `system.adl`; the saga references them instead of restating
 - **D8** — 2026-11-28 — `MAX_CC`/`MAX_DISTANCE` have one home (`code-quality.adl`); `[K14-5]` merged into `[K04-4]`
+- **D9** — 2026-11-28 — the stale commit count dropped from `governance.adl`
+- **D10** — 2026-11-28 — `GOVERNANCE.md` and `REVIEW.md` baselines moved to `7ec2db6`
+- **D11** — 2026-11-28 — `secrets/main.tf` description reworded; the flink→flink-jdbc pin dropped (the lane graph is acyclic on paper again)
 <!-- progress-end -->
