@@ -46,7 +46,7 @@
       (2026-08-23, recon on the DAG). 4.x uses Subject.current() instead. This project
       compiles and runs on JDK 25, so the client has to be a JDK-25-clean one.
     -->
-    <kafka.version>4.2.1</kafka.version>
+    <kafka.version>4.4.0</kafka.version>
     <slf4j.version>1.7.36</slf4j.version>
     <junit.version>6.1.3</junit.version>
   </properties>
