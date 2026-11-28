@@ -129,3 +129,20 @@ def test_admin_rule_fires_without_an_exemption(tmp_path):
     ]
     exempted = "| C13 — `flink/terraform/modules/sweeper` | A | B | 2027-01-01 |\n"
     assert db_access_problems(root, exemptions_text=exempted) == []
+
+
+def test_scanner_survives_a_workspace_path_containing_work(tmp_path):
+    """CI checks out under /home/runner/work/...; the URL scan must still see the lane
+    (before the fix it silently scanned nothing and the rule always passed)."""
+    root = tmp_path / "work" / "etl-r"
+    (root / "architecture" / "adl").mkdir(parents=True)
+    (root / "architecture" / "adl" / "static-coupling.adl").write_text(
+        "DEFINE QUANTUM Flink Quantum\n     DEFINE DATABASE d AS mig-flink-pg\n          DATABASE NAME mig\n",
+        encoding="utf-8",
+    )
+    harness = root / "implementations" / "flink" / "harness"
+    harness.mkdir(parents=True)
+    (harness / "run.sh").write_text('URL="jdbc:postgresql://localhost:5432/undeclared"\n', encoding="utf-8")
+    assert db_access_problems(root, exemptions_text="") == [
+        "flink: JDBC URL database 'undeclared' is not declared for Flink Quantum"
+    ]
