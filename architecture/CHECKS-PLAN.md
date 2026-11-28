@@ -145,7 +145,7 @@ It needs no change. It matters to K17 only if its JSONL becomes the agent-audit 
 
 | ID | Change | Checklist |
 |---|---|---|
-| R1 | one row per assertion: owner, source, trigger, status | §10.5 |
+| ✅ R1 | one row per assertion: owner, source, trigger, status | §10.5 |
 | R2 | an `EXEMPTIONS.md`: owner, rationale, scope, expiry | §10.9 |
 | R3 | lint: an expired exemption fails `adl-test` | §10.9, §12.10 |
 | R4 | turn `REVIEW.md` into a review record with verdicts | the record template |
@@ -194,4 +194,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C6** — 2026-11-28 — `test_test_quality.py`: Python AST (no empty/tautological asserts; `pytest.raises` counts) and JUnit (`@Test` body needs assert/verify/fail/check); one delegated guard named with its reason
 - **C7** — 2026-11-28 — `test_adl_inventory.py`: no technology+version pairs and no unreasoned `USING` in `adl/`
 - **C8** — 2026-11-28 — `test_damage_cases.py`: the nine comparator failure classes are pinned; each must still exist and drive the `dump` fixture
+- **R1** — 2026-11-28 — `GOVERNANCE.md` §3 is one row per assertion (tag, owner, source, trigger, status); the lint in `test_adl_lint.py` fails when a tag loses its row
 <!-- progress-end -->

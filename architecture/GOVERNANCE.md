@@ -20,18 +20,55 @@ topics, tables, files, the one real author; the kata folders keep the original e
 
 ## 3. The fitness-function register
 
-| ADL file | Katas | What it protects | Source material | Verified today via | Remediation on failure |
-|---|---|---|---|---|---|
-| `structure.adl` | K01, K03 | the boundaries between implementations; every class's home | `CLAUDE.md`, `spec/contracts/README.md` | `adl-test` (pinned boundaries); `verify-project2`; `git diff --quiet` | fix the code, or the ADL and its test together |
-| `contracts.adl` | K02 | the contract between languages, byte-identical | `spec/contracts/artefacts.json` | `make spec-test` + `adl-test` ([K02-1] derivation) | fix the contract or the code; never the fixture |
-| `code-quality.adl` | K04 | complexity under threshold; main sequence | `spec/conformance/compare.py` | `make spec-test` | refactor onto the main sequence |
-| `architecture-style.adl` | K05, K15 | new transforms through config; the S1–S6 residues | `spec/contracts/mappings/`, `schemas/` | `make verify-project2`; `make conformance-all` | a new project touches only `spec/contracts/` |
-| `data-governance.adl` | K07, K08 | database access; a DLQ with a human path | `spec/PIPELINE.md`, `docs/evidence/` | conformance; the MCP `get_balance(run_id)` | declare the access or change the topology |
-| `static-coupling.adl` | K10 | every broker owned by its quantum | `terraform/` per implementation | static Terraform/IAM analysis | declare the quantum or drop the link |
-| `system.adl` | K11 | every sync/async edge declared | `spec/PIPELINE.md`, `docs/evidence/` | the Kafka flow (dynamic) | declare the edge or remove the call |
-| `workflows.adl` | K12 | the orchestrated run; eventual consistency | `docs/diagrams/03-two-doors.svg` | `make conformance-all` (balance + settle) | nothing lost silently; a DLQ with a reason |
-| `capabilities.adl` | K09, K14 | cost and capabilities, on trend | `docs/evidence/`, `cost-estimate.md` | the MCP `get_cost_last_run(run_id)`, monthly | under the threshold, or an exemption with owner and expiry |
-| `governance.adl` | K06, K16, K17, K18 | load-bearing walls; agents, teams, SBOM | `CLAUDE.md`, `git log` | CI gates; a monthly audit | the dispositions in §4 and §5 |
+One row per assertion. Status: `CI` (a harness in `adl-test`/`spec-test`), `scheduled` (a
+history workflow), `local` (podman/conformance), `manual` (a billable GCP run), `exercise`
+(declared, not checkable in this repo), `proposed` (a row in `CHECKS-PLAN.md` waiting to land).
+Families: `structure.adl` (K01, K03) · `contracts.adl` (K02, K03) · `code-quality.adl` (K04, K14) ·
+`architecture-style.adl` (K05, K15) · `data-governance.adl` (K07, K08) · `static-coupling.adl` (K10) ·
+`system.adl` (K11) · `workflows.adl` (K12) · `capabilities.adl` (K09, K14) · `governance.adl` (K06, K16, K17, K18).
+The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
+
+| Tag(s) | Owner | Source — where it is checked / what it protects | Trigger | Status |
+|---|---|---|---|---|
+| K03-1, K03-2, K03-3 | Adrian Balaban | `tests/test_boundaries.py` — lanes reference no sibling | PR | CI |
+| K03-4 | Adrian Balaban | `tests/test_structure.py` — the lane graph is acyclic | PR | CI |
+| K01-1 | Adrian Balaban | `tests/test_structure.py` — every lane-root entry has a home | PR | CI |
+| K03-5, K03-6, K03-7 | Adrian Balaban | `verify-project2` (beam lane) — a new project touches only contracts | local | local |
+| K02-1 | Adrian Balaban | `tests/test_contracts.py` — names derive from `artefacts.json` | PR | CI |
+| K02-2 | Adrian Balaban | lane Maven suites (copy-artefacts sha) + `tests/test_structure.py` C4 | local | local |
+| K02-3, K03-8 | Adrian Balaban | `spec-test`: `test_fixture_is_the_pinned_one` — the pinned `ACCOUNT.src` | PR | CI |
+| K02-4 | Adrian Balaban | C14 (`CHECKS-PLAN.md`) — shared churn per month | weekly | scheduled |
+| K04-1, K04-2, K04-3 | Adrian Balaban | C9 — `radon`/Lizard complexity under `MAX_CC` (report mode first) | PR | proposed |
+| K04-4, K14-5 | Adrian Balaban | C10 — A/I/D distance from the main sequence | PR | proposed |
+| K04-5 | Adrian Balaban | `spec-test` comparator suite + `tests/test_damage_cases.py` | PR | CI |
+| K05-1 | Adrian Balaban | the mapping loader's strict/permissive parsing, exercised by the lanes | local | local |
+| K05-2 | Adrian Balaban | `TargetSchemaValidator` in the beam lane suite | local | local |
+| K05-3 | Adrian Balaban | no versioned endpoints exist in this repo | — | exercise |
+| K05-4, K05-5 | Adrian Balaban | `tests/test_test_quality.py` — no empty or tautological tests | PR | CI |
+| K15-1 | Adrian Balaban | `verify-project2` — a project adds only contracts | local | local |
+| K15-2 | Adrian Balaban | `spec-test` — the `ACCOUNT.src` sha256 pin in `manifest.json` | PR | CI |
+| K15-3 | Adrian Balaban | `docs/diagrams/08-stage-mapping.svg`, reviewed per project | — | exercise |
+| K07-1, K08-1 | Adrian Balaban | C13 — JDBC URLs and IAM bindings against the declared accessors | PR | proposed |
+| K07-2, K11-2 | Adrian Balaban | runtime tracing of the channels on a live run | — | exercise |
+| K07-3 | Adrian Balaban | `make conformance-all` — settle after the broker drains | local | local |
+| K08-4, K10-1 | Adrian Balaban | C12 — every Terraform broker and database claimed by its quantum | PR | proposed |
+| K11-1 | Adrian Balaban | runtime tracing — declared edges match observed calls | — | exercise |
+| K11-3 | Adrian Balaban | `make conformance-all` — settle confirms every written row | local | local |
+| K11-4 | Adrian Balaban | `make conformance-all` — the branches join against the pinned replica | local | local |
+| K12-1 | Adrian Balaban | runtime tracing — the saga's calls match the declarations | — | exercise |
+| K12-2 | Adrian Balaban | `make conformance-all` drives the real orchestrator | local | local |
+| K09-1, K09-2, K09-3, K09-4, K09-5, K09-6 | Adrian Balaban | `docs/evidence/` per GCP run; the MCP `get_cost_last_run(run_id)` | per run | manual |
+| K14-1, K14-2, K14-3, K14-4, K14-6 | Adrian Balaban | the capability ADL against the evidence; trend over runs | per run | manual |
+| K06-1 | Adrian Balaban | `make conformance-all` — `src_read = written + rejected` | local | local |
+| K06-2 | Adrian Balaban | `docs/evidence/` — the mock-outage run lost no queued record | per run | manual |
+| K06-3 | Adrian Balaban | `docs/evidence/` — the 200k run on one 4-vCPU GKE node | per run | manual |
+| K06-4 | Adrian Balaban | `tests/test_bundle.py` — the `.FLG` outside the archive | PR | CI |
+| K16-1, K16-3 | Adrian Balaban | C11 — CycloneDX SBOM at build time | PR | proposed |
+| K16-2 | Adrian Balaban | `tests/test_adl_inventory.py` — no technology inventory | PR | CI |
+| K17-1, K17-2, K17-3 | Adrian Balaban | agent scope: `CLAUDE.md` + the boundaries; C16/C17 read the trailers | weekly | proposed |
+| K18-1 | Adrian Balaban | this register's team ADL; C16 reads the member list | weekly | scheduled |
+| K18-2, K18-3, K18-4 | Adrian Balaban | C16 — authors in the team ADL, files inside their domain | weekly | scheduled |
+| K18-5 | Adrian Balaban | C17 — agent-trailer merges with conflicts | monthly | scheduled |
 
 ## 4. Dispositions for a failed assertion (K06)
 
