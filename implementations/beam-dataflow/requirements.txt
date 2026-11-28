@@ -14,7 +14,7 @@ confluent-kafka>=2.5.0
 # TDS paths are resolved by a small dotted-path resolver in pipelines/common/tds.py
 # rather than a general JSONPath engine — it runs per field per record on the hot path.
 PyYAML>=6.0
-jsonschema>=4.23.0
+jsonschema>=4.26.0
 
 # Extraction lane
 python-gnupg>=0.5.2
