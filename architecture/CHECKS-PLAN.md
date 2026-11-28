@@ -146,8 +146,8 @@ It needs no change. It matters to K17 only if its JSONL becomes the agent-audit 
 | ID | Change | Checklist |
 |---|---|---|
 | ✅ R1 | one row per assertion: owner, source, trigger, status | §10.5 |
-| R2 | an `EXEMPTIONS.md`: owner, rationale, scope, expiry | §10.9 |
-| R3 | lint: an expired exemption fails `adl-test` | §10.9, §12.10 |
+| ✅ R2 | an `EXEMPTIONS.md`: owner, rationale, scope, expiry | §10.9 |
+| ✅ R3 | lint: an expired exemption fails `adl-test` | §10.9, §12.10 |
 | R4 | turn `REVIEW.md` into a review record with verdicts | the record template |
 
 R1 status values: `CI`, `local`, `scheduled`, `manual`, `exercise`, `proposed`.
@@ -200,4 +200,6 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **G2** — 2026-11-28 — the root `Makefile` pins `pytest==9.2.0`; Dependabot (G5) keeps it fresh
 - **G4** — 2026-11-28 — `.github/CODEOWNERS` mirrors the `governance.adl` team map (platform, the two Flink lanes, the Beam lane, the mock)
 - **G5** — 2026-11-28 — `.github/dependabot.yml` watches actions, the three Maven lanes and the Beam pip requirements; the Makefile pytest pin stays manual
+- **R2** — 2026-11-28 — `EXEMPTIONS.md` carries owner, rationale, scope and expiry; the one live row is C6's delegated JUnit guard
+- **R3** — 2026-11-28 — `tests/test_exemptions.py` fails `adl-test` on an expired row, with its own failing case
 <!-- progress-end -->
