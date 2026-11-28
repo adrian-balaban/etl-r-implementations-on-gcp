@@ -131,7 +131,7 @@ Mark each in the register, so no reader mistakes it for a gate.
 | ID | Change | Why |
 |---|---|---|
 | ✅ G1 | pin actions to commit SHAs | `checkout@v4` and `setup-uv@v5` are mutable tags |
-| G2 | pin pytest in the root `Makefile` | `--with pytest` floats; CI is not reproducible |
+| ✅ G2 | pin pytest in the root `Makefile` | `--with pytest` floats; CI is not reproducible |
 | ✅ G3 | add a `concurrency` group per ref | cancel stale runs on new pushes |
 | G4 | add `CODEOWNERS` from the team ADL | checklist §11; the team map gets teeth |
 | G5 | add Dependabot: actions, Maven, pip | pinned versions need update signals |
@@ -197,4 +197,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **R1** — 2026-11-28 — `GOVERNANCE.md` §3 is one row per assertion (tag, owner, source, trigger, status); the lint in `test_adl_lint.py` fails when a tag loses its row
 - **G1** — 2026-11-28 — both workflows pin `actions/checkout` v4.4.0 and `astral-sh/setup-uv` v5.4.2 by commit SHA
 - **G3** — 2026-11-28 — a per-ref `concurrency` group cancels stale runs in both workflows
+- **G2** — 2026-11-28 — the root `Makefile` pins `pytest==9.2.0`; Dependabot (G5) keeps it fresh
 <!-- progress-end -->
