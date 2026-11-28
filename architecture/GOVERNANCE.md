@@ -45,13 +45,13 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 | K05-2 | Adrian Balaban | `TargetSchemaValidator` in the beam lane suite | local | local |
 | K05-3 | Adrian Balaban | no versioned endpoints exist in this repo | — | exercise |
 | K05-4, K05-5 | Adrian Balaban | `tests/test_test_quality.py` — no empty or tautological tests | PR | CI |
-| K15-1 | Adrian Balaban | `verify-project2` — a project adds only contracts | local | local |
+| K15-1 | Adrian Balaban | `tests/test_history.py` (C15) in CI; `verify-project2` locally | PR | CI |
 | K15-2 | Adrian Balaban | `spec-test` — the `ACCOUNT.src` sha256 pin in `manifest.json` | PR | CI |
 | K15-3 | Adrian Balaban | `docs/diagrams/08-stage-mapping.svg`, reviewed per project | — | exercise |
-| K07-1, K08-1 | Adrian Balaban | C13 — JDBC URLs and IAM bindings against the declared accessors | PR | proposed |
+| K07-1, K08-1 | Adrian Balaban | `tests/test_db_access.py` — declared database names and the IAM exemption | PR | CI |
 | K07-2, K11-2 | Adrian Balaban | runtime tracing of the channels on a live run | — | exercise |
 | K07-3 | Adrian Balaban | `make conformance-all` — settle after the broker drains | local | local |
-| K08-4, K10-1 | Adrian Balaban | C12 — every Terraform broker and database claimed by its quantum | PR | proposed |
+| K08-4, K10-1 | Adrian Balaban | `tests/test_quanta.py` — every Terraform store claimed by its quantum | PR | CI |
 | K11-1 | Adrian Balaban | runtime tracing — declared edges match observed calls | — | exercise |
 | K11-3 | Adrian Balaban | `make conformance-all` — settle confirms every written row | local | local |
 | K11-4 | Adrian Balaban | `make conformance-all` — the branches join against the pinned replica | local | local |
@@ -63,7 +63,7 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 | K06-2 | Adrian Balaban | `docs/evidence/` — the mock-outage run lost no queued record | per run | manual |
 | K06-3 | Adrian Balaban | `docs/evidence/` — the 200k run on one 4-vCPU GKE node | per run | manual |
 | K06-4 | Adrian Balaban | `tests/test_bundle.py` — the `.FLG` outside the archive | PR | CI |
-| K16-1, K16-3 | Adrian Balaban | C11 — CycloneDX SBOM at build time | PR | proposed |
+| K16-1, K16-3 | Adrian Balaban | `sbom.yml` — CycloneDX BOMs per lane, non-empty | PR | CI |
 | K16-2 | Adrian Balaban | `tests/test_adl_inventory.py` — no technology inventory | PR | CI |
 | K17-1, K17-2, K17-3 | Adrian Balaban | agent scope: `CLAUDE.md` + the boundaries; C16/C17 read the trailers | weekly | proposed |
 | K18-1 | Adrian Balaban | `tests/test_history.py` — the member list as declared | weekly | scheduled |
@@ -95,13 +95,25 @@ Proposed by the katas; not implemented tools yet.
 
 ## 7. What runs from CI today
 
-Two workflows: `spec-test.yml` → `make spec-test` (the comparator, the load harness, the
-derived fixtures) and `adl-test.yml` → `make adl-test` — three pure-Python harnesses in
-`architecture/tests/` (no GCP, no podman):
+Five workflows: `spec-test.yml` → `make spec-test` (the comparator); `adl-test.yml` → `make adl-test`
+— the harnesses in `architecture/tests/` (no GCP, no podman); `history.yml` → `make history-check`,
+weekly; `sbom.yml` → the CycloneDX BOMs; and the manual `conformance.yml` (E2, timed):
 
 | Harness (`adl-test`) | What it underwrites | What it does not cover |
 |---|---|---|
 | `test_adl_lint.py` | every family: full header, ≥1 ASSERT, [Kxx-n] tags ↔ the K01–K18 folders; GOVERNANCE and README list everything | semantics beyond form |
+| `test_adl_hygiene.py` | unique tags, resolvable `AS` bindings, one home per constant | intent behind a binding |
+| `test_adl_inventory.py` | no technology+version pairs, no unreasoned `USING` | whether the stack is current |
+| `test_structure.py` | [K01-1 K03-4 K02-2] cycles, lane-root homes, contract copies | Maven GAV coordinates |
+| `test_test_quality.py` | no empty or tautological Python/JUnit tests | test value beyond an assertion |
+| `test_bundle.py` | [K06-4] the `.FLG` outside the archive | the encrypted path |
+| `test_complexity.py` | the `radon`+Lizard ratchet (30 pinned hotspots) | essential vs accidental complexity |
+| `test_main_sequence.py` | the A/I/D ratchet per Maven module | distance inside a module |
+| `test_damage_cases.py` | [K04-5] every comparator failure class still has its damage case | the comparator's coverage of new classes |
+| `test_quanta.py` | [K08-4 K10-1] every Terraform store claimed by its quantum | runtime edges |
+| `test_db_access.py` | [K07-1 K08-1] declared database names; the IAM exemption | instance-level grants |
+| `test_exemptions.py` | an expired row in `EXEMPTIONS.md` fails | whether the exemption is still needed |
+| `test_history.py` | [K02-4 K15-1 K18-*] churn, mapping scope, authority, agent merges (weekly, `history.yml`) | conflicts git cannot record |
 | `test_contracts.py` | `contracts.adl` [K02-1]: the constants equal `artefacts.json`; runtime derivation through `artefacts.py`; the shapes in the oracle | the Java jar copy — in the lanes' suites, locally |
 | `test_boundaries.py` | `structure.adl` [K03-1..3]: cross-lane paths and imports pinned; symlinks only to spec/ | Maven GAV, Markdown, relation semantics |
 

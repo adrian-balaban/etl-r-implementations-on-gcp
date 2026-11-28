@@ -18,19 +18,19 @@ Verdicts per checklist section, on evidence.
 | § | Section | Verdict | Why |
 |---|---|---|---|
 | 1 | Business drivers | Partial | cost and runtime measured once; no trend |
-| 2 | Structure | Partial | boundaries enforced; no cycle or orphan check |
-| 3 | ADL and docs | Partial | form linted; bindings and duplicate tags unchecked |
+| 2 | Structure | Pass | boundaries, cycles, homes and contract copies enforced in `adl-test` |
+| 3 | ADL and docs | Pass | form, unique tags, resolvable bindings, single constants, one register row per tag |
 | 4 | Data and durability | Partial | balance runs locally; access rules unchecked |
-| 5 | Quanta | Gap | quanta declared; no Terraform or IAM analysis |
-| 6 | Workflows, contracts | Partial | schema exists; no churn check |
-| 7 | Code quality | Gap | thresholds declared; no complexity tool runs |
+| 5 | Quanta | Partial | `test_quanta.py` checks every Terraform store against its quantum; runtime edges stay an exercise |
+| 6 | Workflows, contracts | Partial | the schema contract, damage cases and churn window checked; saga failure handling is modelled, not traced |
+| 7 | Code quality | Partial | `radon`+Lizard and A/I/D ratchets in `adl-test`, 30 hotspots and 3 off-sequence modules pinned |
 | 8 | Evolvability | Partial | `verify-project2` exists; local only |
 | 9 | Agentic AI | Partial | scope declared; agent commits not identifiable |
 | 10 | Fitness functions | Partial | pass and fail cases; no owner or trigger |
-| 11 | Teams | Gap | team ADL declared; no history check, no CODEOWNERS |
+| 11 | Teams | Partial | `.github/CODEOWNERS` plus the weekly history window; the domain-scope leg waits for more members |
 | 12 | Release gate | Partial | gates 3 and 8 hold; others local or proposed |
 
-## 2. Five checks already run
+## 2. What CI runs today
 
 | Assertion | Enforced by |
 |---|---|
@@ -39,8 +39,17 @@ Verdicts per checklist section, on evidence.
 | [K02-1] artefact names derive from `artefacts.json` | `adl-test.yml` → `test_contracts.py` |
 | [K02-3] the pinned `ACCOUNT.src` sha256 | `spec-test.yml` → `spec/conformance/test_compare.py` |
 | [K04-5] the comparator fails on damage | `spec-test.yml` → `make spec-test` |
+| ADL hygiene: unique tags, resolvable bindings, single constants; no inventory | `adl-test.yml` → `test_adl_hygiene.py`, `test_adl_inventory.py` |
+| [K01-1 K03-4 K02-2] cycles, lane-root homes, one contract copy | `adl-test.yml` → `test_structure.py` |
+| [K05-4 K05-5] no empty tests (Python and JUnit) | `adl-test.yml` → `test_test_quality.py` |
+| [K06-4] the `.FLG` outside the bundle | `adl-test.yml` → `test_bundle.py` |
+| [K04-1..4 K04-5] complexity and main-sequence ratchets; the damage classes | `adl-test.yml` → `test_complexity.py`, `test_main_sequence.py`, `test_damage_cases.py` |
+| [K07-1 K08-1 K08-4 K10-1] DB access and quanta | `adl-test.yml` → `test_db_access.py`, `test_quanta.py` |
+| [K02-4 K15-1 K18-2 K18-3 K18-5] the history window | `history.yml` (weekly) → `test_history.py` |
+| every tag has a register row; an expired exemption fails | `adl-test.yml` → `test_adl_lint.py`, `test_exemptions.py` |
+| [K16-1 K16-3] an SBOM per lane | `sbom.yml` (CycloneDX) |
 
-`GOVERNANCE.md` §3 does not yet cite the [K02-3] row; R1 fixes that.
+R1 landed: `GOVERNANCE.md` §3 cites [K02-3] and every other tag.
 
 ## 3. Fix the ADL first
 
