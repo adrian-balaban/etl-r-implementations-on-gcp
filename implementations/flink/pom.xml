@@ -38,7 +38,7 @@
     <postgresql.version>42.7.15</postgresql.version>
 
     <jackson.version>2.23.0</jackson.version>
-    <snakeyaml.version>2.2</snakeyaml.version>
+    <snakeyaml.version>2.7</snakeyaml.version>
     <kafka-clients.version>3.8.1</kafka-clients.version>
     <commons-compress.version>1.28.0</commons-compress.version>
     <bouncycastle.version>1.78.1</bouncycastle.version>
