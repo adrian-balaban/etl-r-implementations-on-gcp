@@ -73,7 +73,8 @@ def python_hotspots(root: pathlib.Path = REPO) -> dict[tuple[str, str], int]:
     out: dict[tuple[str, str], int] = {}
     sources = list(root.glob("spec/**/*.py")) + list(root.glob("implementations/**/*.py"))
     for p in sources:
-        if _skipped(p, root) or p.name.startswith("test_") or "tests" in p.parts:
+        under_root = p.relative_to(root).parts
+        if _skipped(p, root) or p.name.startswith("test_") or "tests" in under_root:
             continue
         try:
             blocks = radon_cc.cc_visit(p.read_text(encoding="utf-8", errors="replace"))
