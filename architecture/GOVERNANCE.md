@@ -38,8 +38,8 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 | K02-2 | Adrian Balaban | lane Maven suites (copy-artefacts sha) + `tests/test_structure.py` C4 | local | local |
 | K02-3, K03-8 | Adrian Balaban | `spec-test`: `test_fixture_is_the_pinned_one` — the pinned `ACCOUNT.src` | PR | CI |
 | K02-4 | Adrian Balaban | C14 (`CHECKS-PLAN.md`) — shared churn per month | weekly | scheduled |
-| K04-1, K04-2, K04-3 | Adrian Balaban | C9 — `radon`/Lizard complexity under `MAX_CC` (report mode first) | PR | proposed |
-| K04-4, K14-5 | Adrian Balaban | C10 — A/I/D distance from the main sequence | PR | proposed |
+| K04-1, K04-2, K04-3 | Adrian Balaban | `tests/test_complexity.py` — the `radon`/Lizard ratchet (30 hotspots pinned, growth fails) | PR | CI |
+| K04-4, K14-5 | Adrian Balaban | `tests/test_main_sequence.py` — the A/I/D ratchet per Maven module | PR | CI |
 | K04-5 | Adrian Balaban | `spec-test` comparator suite + `tests/test_damage_cases.py` | PR | CI |
 | K05-1 | Adrian Balaban | the mapping loader's strict/permissive parsing, exercised by the lanes | local | local |
 | K05-2 | Adrian Balaban | `TargetSchemaValidator` in the beam lane suite | local | local |
