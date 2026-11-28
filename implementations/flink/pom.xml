@@ -32,7 +32,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Core stack — versions verified to exist together on Maven Central. -->
-    <flink.version>2.2.1</flink.version>
+    <flink.version>2.3.0</flink.version>
     <flink-connector-kafka.version>5.1.0-2.3</flink-connector-kafka.version>
     <flink-connector-jdbc.version>4.1.0-2.2</flink-connector-jdbc.version>
     <postgresql.version>42.7.15</postgresql.version>
@@ -211,7 +211,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.4.1</version>
+          <version>3.5.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

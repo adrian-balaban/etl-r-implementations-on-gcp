@@ -36,7 +36,7 @@
     <maven.compiler.release>25</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.23.0</jackson.version>
-    <commons-compress.version>1.27.1</commons-compress.version>
+    <commons-compress.version>1.28.0</commons-compress.version>
     <!--
       4.2.1, not 3.7.x: kafka-clients 3.7's OAuthBearerSaslClientCallbackHandler calls
       Subject.getSubject(AccessControlContext), which JDK 24+ answers with
@@ -115,7 +115,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
+          <version>3.16.0</version>
           <configuration>
             <compilerArgs>
               <arg>-Xlint:all</arg>
