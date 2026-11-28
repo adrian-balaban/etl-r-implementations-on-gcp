@@ -11,7 +11,8 @@
 # Nothing here touches GCP.
 
 # Pinned on purpose: an unpinned `--with pytest` floats the harness under CI (G2, CHECKS-PLAN).
-PYTEST ?= uv run --no-project --with pytest==9.2.0 python -m pytest
+# radon and lizard back C9/C10; they are pinned for the same reason.
+PYTEST ?= uv run --no-project --with pytest==9.2.0 --with radon==6.0.1 --with lizard==1.17.10 python -m pytest
 
 .PHONY: spec-test adl-test conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
 
