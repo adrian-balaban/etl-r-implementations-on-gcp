@@ -59,15 +59,21 @@ def _rel(p: pathlib.Path, root: pathlib.Path) -> str:
     return p.relative_to(root).as_posix()
 
 
-def _skipped(p: pathlib.Path) -> bool:
-    return any(part in SKIP for part in p.parts)
+def _skipped(p: pathlib.Path, root: pathlib.Path) -> bool:
+    """Match on the repo-relative path: CI checks out under /home/runner/work/..., and a
+    parts-based match on the absolute path skips everything there."""
+    try:
+        parts = p.relative_to(root).parts
+    except ValueError:
+        parts = p.parts
+    return any(part in SKIP for part in parts)
 
 
 def python_hotspots(root: pathlib.Path = REPO) -> dict[tuple[str, str], int]:
     out: dict[tuple[str, str], int] = {}
     sources = list(root.glob("spec/**/*.py")) + list(root.glob("implementations/**/*.py"))
     for p in sources:
-        if _skipped(p) or p.name.startswith("test_") or "tests" in p.parts:
+        if _skipped(p, root) or p.name.startswith("test_") or "tests" in p.parts:
             continue
         try:
             blocks = radon_cc.cc_visit(p.read_text(encoding="utf-8", errors="replace"))
@@ -82,7 +88,7 @@ def python_hotspots(root: pathlib.Path = REPO) -> dict[tuple[str, str], int]:
 def java_hotspots(root: pathlib.Path = REPO) -> dict[tuple[str, str], int]:
     out: dict[tuple[str, str], int] = {}
     for p in root.glob("implementations/**/src/main/java/**/*.java"):
-        if _skipped(p):
+        if _skipped(p, root):
             continue
         try:
             analysis = lizard.analyze_file(str(p))
@@ -130,4 +136,15 @@ def test_ratchet_fires_when_a_pinned_function_grows():
 
 def test_ratchet_fires_when_a_pin_disappears():
     assert ratchet_problems({}, {("x.py", "f"): 12}) == ["x.py: pinned f (12) is gone — update the baseline"]
+
+
+def test_scanner_survives_a_workspace_path_containing_work(tmp_path):
+    """The GitHub runner checks out under /home/runner/work/... — a parts-based skip on the
+    absolute path once skipped the whole repo and turned every pin into a false 'gone'."""
+    root = tmp_path / "work" / "etl-r"
+    lane = root / "implementations" / "x"
+    lane.mkdir(parents=True)
+    body = "".join(f"    if a == {i}:\n        return {i}\n" for i in range(12))
+    (lane / "y.py").write_text(f"def wide(a):\n{body}    return -1\n", encoding="utf-8")
+    assert ("implementations/x/y.py", "wide") in python_hotspots(root)
 

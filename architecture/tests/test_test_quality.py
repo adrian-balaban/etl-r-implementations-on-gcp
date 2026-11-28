@@ -91,8 +91,14 @@ def java_test_problems(path: Path) -> list[str]:
 
 
 def _walk(root: Path, pattern: str):
+    """Repo-relative filtering: CI checks out under /home/runner/work/..., which a
+    parts-based match on the absolute path would skip wholesale."""
     for p in root.rglob(pattern):
-        if not any(part in SKIP for part in p.parts):
+        try:
+            parts = p.relative_to(root).parts
+        except ValueError:
+            parts = p.parts
+        if not any(part in SKIP for part in parts):
             yield p
 
 
@@ -146,3 +152,13 @@ def test_junit_detector_fires(tmp_path):
     problems = java_test_problems(p)
     assert len(problems) == 1, problems
     assert "doesNothing" in problems[0] and "no assert/verify/fail" in problems[0]
+
+
+def test_walk_survives_a_workspace_path_containing_work(tmp_path):
+    """CI checks out under /home/runner/work/...; the walk must still see the files."""
+    root = tmp_path / "work" / "etl-r"
+    (root / "impl").mkdir(parents=True)
+    (root / "impl" / "test_ok.py").write_text("def test_ok():\n    assert 1 + 1 == 2\n", encoding="utf-8")
+    (root / "impl" / "test_empty.py").write_text("def test_empty():\n    pass\n", encoding="utf-8")
+    problems = [p for f in _walk(root, "test_*.py") for p in python_test_problems(f)]
+    assert any("test_empty" in p for p in problems), problems
