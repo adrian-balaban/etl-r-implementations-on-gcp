@@ -50,9 +50,9 @@ Each defect was verified on the baseline. Defective rules make defective checks.
 |---|---|---|---|
 | ✅ D1 | `data-governance.adl`, `system.adl` | `[K11-2]` tags two different assertions | retag one; C1 lints uniqueness |
 | ✅ D2 | `data-governance.adl` | [K07-3] names Customer and Ticketing Database | restate on `account_target` and confirmations |
-| D3 | `data-governance.adl`, `static-coupling.adl` | source-DB accessors disagree across three places | align with each lane's real reader |
-| D4 | `static-coupling.adl` | one `account_source_db` name in two quanta | bind per lane, or declare the sharing |
-| D5 | `static-coupling.adl` | `etlr_source AS source tables` binds to prose | bind to a real schema name |
+| ✅ D3 | `data-governance.adl`, `static-coupling.adl` | source-DB accessors disagree across three places | align with each lane's real reader |
+| ✅ D4 | `static-coupling.adl` | one `account_source_db` name in two quanta | bind per lane, or declare the sharing |
+| ✅ D5 | `static-coupling.adl` | `etlr_source AS source tables` binds to prose | bind to a real schema name |
 | D6 | `architecture-style.adl` | `TargetSchema` path lacks `spec/contracts/` | fix the path; C1 lints bindings |
 | D7 | `system.adl`, `workflows.adl` | the three edges are declared twice | keep them in `system.adl` only |
 | D8 | `capabilities.adl` | redefines `MAX_CC`, `MAX_DISTANCE`; [K14-5] repeats [K04-4] | keep thresholds in `code-quality.adl` |
@@ -177,4 +177,7 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 
 - **D1** — 2026-11-28 — `[K11-2]` tags one assertion: the RUNTIME_200K copy left `system.adl` (K11-2 stays on the shared-database channel; the runtime lives at `[K09-5]`)
 - **D2** — 2026-11-28 — `[K07-3]` restated on `account_target` and the confirmations topic
+- **D3** — 2026-11-28 — `account_source_db`'s `WITHIN` now matches its accessors (Flink + FlinkJdbc); Beam reads the extract, owns no source DB
+- **D4** — 2026-11-28 — the source DB is bound per lane (`mig-flink-pg` / `mig-flink-jdbc-src`); jdbc's target DB is declared (`mig-flink-jdbc-lane`)
+- **D5** — 2026-11-28 — the prose binding replaced by `DEFINE SCHEMA SourceSchema AS etlr_source` (`sql/source-init.sql`)
 <!-- progress-end -->
