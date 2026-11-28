@@ -80,3 +80,22 @@ def test_header_lint_fires_on_damage():
 def test_tag_lint_fires_on_an_unknown_kata():
     unknown, _ = tag_problems("# [K13-1]", {1, 2})
     assert unknown == ["K13-1"]
+
+
+def missing_register_rows(tags: set[str], register: str) -> list[str]:
+    return sorted(t for t in tags if t not in register)
+
+
+def test_every_tag_has_a_register_row():
+    tags: set[str] = set()
+    for p in adl_files():
+        for line in p.read_text(encoding="utf-8").splitlines():
+            if not line.lstrip().startswith("#"):
+                tags.update(TAG_RE.findall(line))
+    register = (ARCH / "GOVERNANCE.md").read_text(encoding="utf-8")
+    missing = missing_register_rows(tags, register)
+    assert missing == [], f"no register row: {missing}"
+
+
+def test_register_lint_fires_on_a_missing_row():
+    assert missing_register_rows({"K03-1", "K11-9"}, "| K03-1 |") == ["K11-9"]
