@@ -41,13 +41,22 @@ def database_names(text: str) -> dict[str, set[str]]:
     return out
 
 
+def _skipped(p: Path, root: Path) -> bool:
+    """Match the repo-relative path: CI checks out under /home/runner/work/..."""
+    try:
+        parts = p.relative_to(root).parts
+    except ValueError:
+        parts = p.parts
+    return any(part in SKIP for part in parts)
+
+
 def jdbc_url_dbs(root: Path, lane: str) -> set[str]:
     base = root / "implementations" / lane
     found: set[str] = set()
     if not base.exists():
         return found
     for p in base.rglob("*"):
-        if p.suffix not in SCAN_EXTS or any(part in SKIP for part in p.parts):
+        if p.suffix not in SCAN_EXTS or _skipped(p, root):
             continue
         found.update(URL_RE.findall(p.read_text(encoding="utf-8", errors="replace")))
     return found
@@ -59,7 +68,7 @@ def admin_grants(root: Path) -> list[tuple[str, str]]:
     if not impls.exists():
         return out
     for p in impls.rglob("*.tf"):
-        if any(part in SKIP for part in p.parts):
+        if _skipped(p, root):
             continue
         for role in sorted(set(ADMIN_RE.findall(p.read_text(encoding="utf-8", errors="replace")))):
             module = p.relative_to(impls).parent.as_posix()
