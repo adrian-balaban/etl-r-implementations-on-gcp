@@ -33,6 +33,8 @@ DEFINE PERSON Adrian Balaban AS 50263077+adrian-balaban@users.noreply.github.com
      ROLE: grammarian of the whole lane set — spec first, implementations second
 DEFINE AGENT Cline AS the coding agent
      SCOPE: one quantum per task; spec/ and spec/conformance/ stay read-only
+DEFINE AGENT dependabot[bot] AS the dependency-update bot
+     SCOPE: manifests and workflow pins only — pom.xml, requirements.txt, .github/workflows/
 DEFINE TEAM Platform AS the spec and conformance owner
      ASSIGN DOMAIN spec/ spec/conformance/
 DEFINE TEAM Flink Lanes AS stream-aligned

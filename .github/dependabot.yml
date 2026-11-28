@@ -9,23 +9,38 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      all-updates:
+        patterns: [\"*\"]
 
   # Maven: all three lanes carry a pom.xml
   - package-ecosystem: maven
     directory: "/implementations/flink"
     schedule:
       interval: weekly
+    groups:
+      all-updates:
+        patterns: [\"*\"]
   - package-ecosystem: maven
     directory: "/implementations/flink-jdbc"
     schedule:
       interval: weekly
+    groups:
+      all-updates:
+        patterns: [\"*\"]
   - package-ecosystem: maven
     directory: "/implementations/beam-dataflow"
     schedule:
       interval: weekly
+    groups:
+      all-updates:
+        patterns: [\"*\"]
 
   # pip: the Beam lane's requirements, and the harness's spec tooling if it ever grows one
   - package-ecosystem: pip
     directory: "/implementations/beam-dataflow"
     schedule:
       interval: weekly
+    groups:
+      all-updates:
+        patterns: [\"*\"]
