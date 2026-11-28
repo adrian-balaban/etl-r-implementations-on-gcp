@@ -1,0 +1,46 @@
+name: conformance
+
+# E2 — try the local conformance run on a podman runner, and MEASURE it before gating.
+# Manual dispatch only: a billable-length job must never surprise a PR. The runtime lands in
+# the job summary and as an artifact; once measured, a schedule can take over [K06-1].
+# Note: beam-dataflow also needs `make -C implementations/beam-dataflow bootstrap` and Node+GnuPG.
+
+on:
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: "The lane to run against the oracle"
+        type: choice
+        default: flink
+        options: [flink, flink-jdbc, beam-dataflow]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conformance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
+      - name: podman and podman-compose
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq podman podman-compose
+          podman info >/dev/null
+      - name: Conformance, timed
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          make conformance-${{ inputs.lane }}
+          took=$(( $(date +%s) - start ))
+          echo "conformance-${{ inputs.lane }} took ${took}s" | tee runtime.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: conformance-runtime
+          path: runtime.txt

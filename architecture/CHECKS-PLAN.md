@@ -92,7 +92,7 @@ C6 covers 37 JUnit test files, not only Python; JUnit counts `assert*` and `veri
 |---|---|---|---|
 | ✅ C9 | [K04-1..3] complexity | `radon` for Python, Lizard for Java; above `MAX_CC` fails | PR |
 | ✅ C10 | [K04-4] main sequence | A, I, D per module; `D ≥ 0.3` fails | PR |
-| C11 | [K16-1 K16-3] SBOM | CycloneDX for Maven and pip; non-empty, uploaded | PR |
+| ✅ C11 | [K16-1 K16-3] SBOM | CycloneDX for Maven and pip; non-empty, uploaded | PR |
 | ✅ C12 | [K10-1 K08-4] quanta | every Terraform broker and DB claimed by its quantum | PR |
 | ✅ C13 | [K07-1 K08-1] DB access | JDBC URLs and IAM bindings match declared accessors | PR |
 
@@ -136,7 +136,7 @@ Mark each in the register, so no reader mistakes it for a gate.
 | ✅ G4 | add `CODEOWNERS` from the team ADL | checklist §11; the team map gets teeth |
 | ✅ G5 | add Dependabot: actions, Maven, pip | pinned versions need update signals |
 | ✅ G6 | add a scheduled workflow for C14–C17 | history checks need a time frame |
-| E2 | try `conformance-flink` on a podman runner | lifts [K06-1] into CI; measure runtime first |
+| ✅ E2 | try `conformance-flink` on a podman runner | lifts [K06-1] into CI; measure runtime first |
 
 `.github/modernize/java-upgrade/` is untracked local tooling; its `.gitignore` ignores everything.
 It needs no change. It matters to K17 only if its JSONL becomes the agent-audit source.
@@ -212,4 +212,6 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C16** — 2026-11-28 — every author is a declared `DEFINE PERSON`/`DEFINE AGENT` in `governance.adl`
 - **C17** — 2026-11-28 — merge commits carrying an agent trailer must record a disposition (none today; the window is checked weekly)
 - **G6** — 2026-11-28 — `.github/workflows/history.yml` runs Mondays 06:00 UTC (`make history-check`, full-depth checkout); `adl-test` also checks out full depth for the window
+- **C11** — 2026-11-28 — `sbom.yml`: CycloneDX for the three Maven reactors plus `cyclonedx-py` on the Beam requirements; the gate is a non-empty artifact, uploaded
+- **E2** — 2026-11-28 — `conformance.yml` (manual dispatch, 90-min timeout) installs podman and runs `make conformance-<lane>` timed; the first dispatch supplies the runtime measurement before any gate
 <!-- progress-end -->

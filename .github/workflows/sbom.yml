@@ -1,0 +1,49 @@
+name: sbom
+
+# [K16-1 K16-3] The stacks from build files, at build time — an SBOM per lane, not an ADL inventory.
+# The gate is a non-empty artifact: a failed plugin run cannot pass as an empty file.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sbom:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
+      - name: Maven lanes — one aggregate CycloneDX BOM per reactor
+        run: |
+          set -euo pipefail
+          for lane in flink flink-jdbc beam-dataflow; do
+            pom="implementations/$lane/pom.xml"
+            [ -f "$pom" ] || continue
+            echo "::group::$lane"
+            mvn -B -q -f "$pom" org.cyclonedx:cyclonedx-maven-plugin:2.8.0:makeAggregateBom \
+              -DoutputFormat=json -DoutputName="sbom-$lane"
+            test -s "implementations/$lane/target/sbom-$lane.json" || { echo "empty SBOM for $lane"; exit 1; }
+            echo "::endgroup::"
+          done
+      - name: Python — CycloneDX from the Beam requirements
+        run: |
+          set -euo pipefail
+          uvx --from cyclonedx-bom==4.1.3 cyclonedx-py requirements \
+            -i implementations/beam-dataflow/requirements.txt -o sbom-python.json
+          test -s sbom-python.json || { echo "empty Python SBOM"; exit 1; }
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: sbom
+          path: |
+            implementations/*/target/sbom-*.json
+            sbom-python.json
+          if-no-files-found: error
