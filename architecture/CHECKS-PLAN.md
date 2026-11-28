@@ -93,8 +93,8 @@ C6 covers 37 JUnit test files, not only Python; JUnit counts `assert*` and `veri
 | C9 | [K04-1..3] complexity | `radon` for Python, Lizard for Java; above `MAX_CC` fails | PR |
 | C10 | [K04-4] main sequence | A, I, D per module; `D ≥ 0.3` fails | PR |
 | C11 | [K16-1 K16-3] SBOM | CycloneDX for Maven and pip; non-empty, uploaded | PR |
-| C12 | [K10-1 K08-4] quanta | every Terraform broker and DB claimed by its quantum | PR |
-| C13 | [K07-1 K08-1] DB access | JDBC URLs and IAM bindings match declared accessors | PR |
+| ✅ C12 | [K10-1 K08-4] quanta | every Terraform broker and DB claimed by its quantum | PR |
+| ✅ C13 | [K07-1 K08-1] DB access | JDBC URLs and IAM bindings match declared accessors | PR |
 
 `MAX_CC` is 10, and 5 for agent-generated code.
 Run C9 and C10 in report mode for a week, then set the gate.
@@ -203,4 +203,6 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **R2** — 2026-11-28 — `EXEMPTIONS.md` carries owner, rationale, scope and expiry; the one live row is C6's delegated JUnit guard
 - **R3** — 2026-11-28 — `tests/test_exemptions.py` fails `adl-test` on an expired row, with its own failing case
 - **R4** — 2026-11-28 — `REVIEW.md` is a review record: verdicts with evidence, owner, action and due per checklist section, plus the ten release-gate essentials (4 pass, 5 partial, 1 fail — C13)
+- **C12** — 2026-11-28 — `test_quanta.py`: every Cloud SQL instance, Kafka cluster and BigQuery dataset in a lane's Terraform is claimed by its quantum
+- **C13** — 2026-11-28 — `test_db_access.py`: non-test JDBC URLs must name a declared database (`DATABASE NAME` bindings added), and a project-wide `roles/cloudsql.admin|editor` needs an EXEMPTIONS row (the TTL sweeper has one)
 <!-- progress-end -->
