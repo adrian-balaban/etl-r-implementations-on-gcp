@@ -32,7 +32,7 @@ variable "secret_values" {
 variable "extra_secret_names" {
   type        = list(string)
   default     = []
-  description = "Secrets beyond the three every lane has (implementations/flink-jdbc adds etlr-source-db and etlr-source-admin)."
+  description = "Secrets beyond the three every lane has (the JDBC lane adds etlr-source-db and etlr-source-admin)."
 }
 
 locals {

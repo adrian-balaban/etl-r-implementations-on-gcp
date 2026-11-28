@@ -25,7 +25,6 @@ SCANNED_EXTS = {".java", ".py", ".sh", ".tf", ".tfvars", ".yaml", ".yml", ".json
 
 # The deliberate sharing inside the flink family, pinned: file (relative to implementations/) -> {allowed siblings}
 SHARED_WITH = {
-    "flink/terraform/modules/secrets/main.tf": {"flink-jdbc"},
     "flink-jdbc/pom.xml": {"flink"},
     "flink-jdbc/Makefile": {"flink"},
     "flink-jdbc/gcp/orchestrator/run.sh": {"flink"},

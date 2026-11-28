@@ -1,6 +1,6 @@
 # Governance register — the ETL-R katas and their ADL
 
-**Owner:** the masterclass participant · **Baseline:** `main` @ `bfe7563` (2026-11-27)
+**Owner:** the masterclass participant · **Baseline:** `main` @ `7ec2db6` (2026-11-27)
 **Structure model:** `total-recall/plugins/total-recall/architecture` (adl/ + diagrams/ + GOVERNANCE.md + REVIEW.md).
 
 ## 1. What lives here
