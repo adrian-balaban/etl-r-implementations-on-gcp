@@ -22,4 +22,5 @@ verdicts. The verdicts belong to the team round and to the register in `GOVERNAN
 | 11. Teams and enterprise alignment | K16, K18 | the real `git log`; K18's team ADL |
 | 12. The minimum release gate | all | a synthesis of the above, for the team discussion |
 
-Next pass: at the end of the kata series, or at any major architecture change.
+Next pass: at the end of the kata series, or at any major architecture change. The build order
+for the missing checks lives in [CHECKS-PLAN.md](CHECKS-PLAN.md).
