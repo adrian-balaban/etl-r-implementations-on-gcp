@@ -3,8 +3,9 @@ CATEGORY Data
 NAMESPACE EtlRDataGovernanceNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      DEFINE DATABASE account_source_db AS account_source
-          WITHIN Flink Quantum OR FlinkJdbc Quantum OR Beam Quantum
-          # tables: etlr_source.account, etlr_source.extract_control
+          WITHIN Flink Quantum OR FlinkJdbc Quantum
+          # flink: mig-flink-pg / db mig (schemas etlr_*); flink-jdbc: mig-flink-jdbc-src / db source (schema etlr_source).
+          # Beam reads the encrypted extract, not a database, so it owns no source DB (static-coupling.adl).
      DEFINE DATABASE account_curated_db AS account_curated
           WITHIN Flink Quantum
           # the parse → map → schema doors

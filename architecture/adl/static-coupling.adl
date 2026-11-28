@@ -4,12 +4,16 @@ NAMESPACE EtlRStaticCouplingNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      # counted static coupling points: Flink ~7, Flink-jdbc ~9, Beam ~5
      DEFINE QUANTUM Flink Quantum
-          DEFINE DATABASE account_source_db AS account_source
-          DEFINE DATABASE account_target_db AS account_target
+          # one instance (mig-flink-pg), one database (mig); the etlr_* schemas live inside it
+          DEFINE DATABASE account_source_db AS mig-flink-pg
+          DEFINE DATABASE account_target_db AS mig-flink-pg
           DEFINE BROKER Kafka Broker AS kafka-broker
      DEFINE QUANTUM FlinkJdbc Quantum
-          DEFINE DATABASE account_source_db AS account_source
-          DEFINE DATABASE etlr_source AS source tables
+          # its own source instance (mig-flink-jdbc-src) and lane instance (mig-flink-jdbc-lane)
+          DEFINE DATABASE account_source_db AS mig-flink-jdbc-src
+          DEFINE DATABASE account_target_db AS mig-flink-jdbc-lane
+          # the reader's schema, created by sql/source-init.sql
+          DEFINE SCHEMA SourceSchema AS etlr_source
           DEFINE BROKER Kafka Broker AS kafka-broker
      DEFINE QUANTUM Beam Quantum
           DEFINE DATABASE account_target_db AS account_target
