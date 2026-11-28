@@ -133,8 +133,8 @@ Mark each in the register, so no reader mistakes it for a gate.
 | ✅ G1 | pin actions to commit SHAs | `checkout@v4` and `setup-uv@v5` are mutable tags |
 | ✅ G2 | pin pytest in the root `Makefile` | `--with pytest` floats; CI is not reproducible |
 | ✅ G3 | add a `concurrency` group per ref | cancel stale runs on new pushes |
-| G4 | add `CODEOWNERS` from the team ADL | checklist §11; the team map gets teeth |
-| G5 | add Dependabot: actions, Maven, pip | pinned versions need update signals |
+| ✅ G4 | add `CODEOWNERS` from the team ADL | checklist §11; the team map gets teeth |
+| ✅ G5 | add Dependabot: actions, Maven, pip | pinned versions need update signals |
 | G6 | add a scheduled workflow for C14–C17 | history checks need a time frame |
 | E2 | try `conformance-flink` on a podman runner | lifts [K06-1] into CI; measure runtime first |
 
@@ -198,4 +198,6 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **G1** — 2026-11-28 — both workflows pin `actions/checkout` v4.4.0 and `astral-sh/setup-uv` v5.4.2 by commit SHA
 - **G3** — 2026-11-28 — a per-ref `concurrency` group cancels stale runs in both workflows
 - **G2** — 2026-11-28 — the root `Makefile` pins `pytest==9.2.0`; Dependabot (G5) keeps it fresh
+- **G4** — 2026-11-28 — `.github/CODEOWNERS` mirrors the `governance.adl` team map (platform, the two Flink lanes, the Beam lane, the mock)
+- **G5** — 2026-11-28 — `.github/dependabot.yml` watches actions, the three Maven lanes and the Beam pip requirements; the Makefile pytest pin stays manual
 <!-- progress-end -->

@@ -1,0 +1,22 @@
+# Ownership mirrors architecture/adl/governance.adl (DEFINE TEAM ... ASSIGN DOMAIN) — G4.
+# One maintainer wears every hat today; the paths are what matter, so the file keeps
+# working when the teams grow. Add an agent as a member only with a commit-trailer
+# convention (C16/C17 in architecture/CHECKS-PLAN.md).
+
+*                                                      @adrian-balaban
+
+# Platform — the spec and conformance owner
+/spec/                                                 @adrian-balaban
+/architecture/                                         @adrian-balaban
+/.github/                                              @adrian-balaban
+
+# Flink lanes (stream-aligned)
+/implementations/flink/                                @adrian-balaban
+/implementations/flink-jdbc/                           @adrian-balaban
+
+# Beam lane (stream-aligned)
+/implementations/beam-dataflow/                        @adrian-balaban
+
+# Target System Mock (stream-aligned; both lanes)
+/implementations/flink/target-system-mock/             @adrian-balaban
+/implementations/beam-dataflow/apps/target-system-mock/ @adrian-balaban
