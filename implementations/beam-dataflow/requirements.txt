@@ -13,7 +13,7 @@ confluent-kafka>=2.5.0
 # Contract layer: TDS parsing, YAML mappings, TARGET JSON Schema validation.
 # TDS paths are resolved by a small dotted-path resolver in pipelines/common/tds.py
 # rather than a general JSONPath engine — it runs per field per record on the hot path.
-PyYAML>=6.0
+PyYAML>=6.0.4
 jsonschema>=4.26.0
 
 # Extraction lane
