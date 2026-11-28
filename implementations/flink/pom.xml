@@ -41,7 +41,7 @@
     <snakeyaml.version>2.2</snakeyaml.version>
     <kafka-clients.version>3.8.1</kafka-clients.version>
     <commons-compress.version>1.28.0</commons-compress.version>
-    <bouncycastle.version>1.78.1</bouncycastle.version>
+    <bouncycastle.version>1.87</bouncycastle.version>
     <slf4j.version>2.0.20</slf4j.version>
     <junit.version>5.10.3</junit.version>
     <assertj.version>3.27.7</assertj.version>
