@@ -76,6 +76,9 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 2. **Revise** — the rule was wrong: the ADL and its test change in the same commit.
 3. **Exemption** — an explicit owner and expiry; once expired, a Fail at the next pass.
 
+The live list is [`EXEMPTIONS.md`](EXEMPTIONS.md); an expired row fails `adl-test`
+(`tests/test_exemptions.py`).
+
 ## 5. Agents (K17)
 
 Agents are contributors, scoped to one quantum. Deterministic checks — conformance, the
