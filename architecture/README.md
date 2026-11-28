@@ -12,6 +12,7 @@ The ADL from the answers is consolidated by family in `adl/`; the register lives
 - `adl/` — the ADL consolidated by family, with full headers and `[Kxx-n]`-tagged assertions
 - `GOVERNANCE.md` — the fitness-function register, the tag scheme, the failure dispositions
 - `REVIEW.md` — the katas against the Architecture as Code checklist sections
+- `CHECKS-PLAN.md` — the checks the checklist demands but the repo does not run yet, and the build order
 - `diagrams/` — an index into `docs/diagrams/`
 - `tests/` + `make adl-test` — the CI harness: register lint, contract derivation [K02-1], lane boundaries [K03-1..3]
 
