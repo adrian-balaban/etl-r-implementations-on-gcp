@@ -7,7 +7,7 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      DEFINE SERVICE flink-jdbc AS implementations/flink-jdbc
      DEFINE SERVICE beam-dataflow AS implementations/beam-dataflow
      DEFINE MAPPING ProjectMapping AS spec/contracts/mappings/
-     DEFINE SCHEMA TargetSchema AS schemas/target-account.schema.json
+     DEFINE SCHEMA TargetSchema AS spec/contracts/schemas/target-account.schema.json
 
 # A new transform (e.g. mask_emails) enters through mapping-YAML, not through branch/toggle/new code
 ASSERT(mapping.yaml strict where protocol required, permissive otherwise) # [K05-1]

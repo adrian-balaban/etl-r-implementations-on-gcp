@@ -5,11 +5,9 @@ DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      # one run = the eight stages of spec/PIPELINE.md:
      # extract gate intake curate enrich produce load recon
      DEFINE SAGA Migration Run Saga AS
-          # the runner launches and watches every stage job, in order
-          DEFINE COMMUNICATION Orchestrator TO Stage Jobs AS synchronous
-          # flink lanes: the gcp/orchestrator/run.sh Cloud Run job; beam: the Composer DAG
-          DEFINE COMMUNICATION Load TO Target System Mock AS asynchronous VIA Kafka topic target-system-target
-          DEFINE COMMUNICATION Target System Mock TO Recon AS asynchronous VIA Kafka topic target-system-confirmations
+          # the three edges are declared once, in system.adl [K11-1]: orchestrator -> stages
+          # synchronous; load -> mock and mock -> recon asynchronous via their topics. The saga
+          # references them instead of restating them.
           DEFINE COORDINATION Orchestrated
           DEFINE CONSISTENCY Eventual
      # strict on the document schema, never on the wire protocol; idempotent on the account key

@@ -3,8 +3,7 @@ CATEGORY Engineering Practices
 NAMESPACE EtlRCapabilitiesNS
 DEFINE SYSTEM ETL-R AS etl-r-implementations-on-gcp
      DEFINE CONST MAX_RESOURCES AS 100
-     DEFINE CONST MAX_CC AS 10
-     DEFINE CONST MAX_DISTANCE AS 0.3
+     # MAX_CC and MAX_DISTANCE live once, in code-quality.adl: one home per threshold
 
      # one measured run per implementation: docs/evidence/, cost-estimate.md
      DEFINE CONST COST_FLINK AS 0.90
@@ -30,7 +29,6 @@ FOREACH component : comp IN system
      ASSERT(capability Deployability met FOR comp) # [K14-2]
      ASSERT(capability Scalability met FOR comp) # [K14-3]
      ASSERT(capability Cost met FOR comp) # [K14-4]
-     ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K14-5]
 ENDFOREACH
 ASSERT(resources per component < MAX_RESOURCES) # [K14-6]
 

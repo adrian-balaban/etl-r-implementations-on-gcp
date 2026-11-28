@@ -20,7 +20,7 @@ FOREACH component : comp IN system
         END
     END
     ASSERT(average cyclomatic complexity of cls < MAX_CC) # [K04-3]
-    ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K04-4]
+    ASSERT(normalized distance from the main sequence for comp < MAX_DISTANCE) # [K04-4 K14-5]
 ENDFOREACH
 # this repo's own bar, straight from the Makefile: "it must fail on damage, not just pass"
 ASSERT(the comparator's suite ships a passing fixture AND a damaged one per failure class) # [K04-5]
