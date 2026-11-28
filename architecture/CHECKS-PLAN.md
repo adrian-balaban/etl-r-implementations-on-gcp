@@ -79,7 +79,7 @@ Today it makes flink and flink-jdbc point at each other, a cycle on paper.
 | ✅ C5 | [K06-4] `.FLG` outside the bundle | `bundle.py` output: flag present, not encrypted | PR |
 | ✅ C6 | [K05-4 K05-5] no empty tests | each Python and JUnit test asserts something non-constant | PR |
 | ✅ C7 | [K16-2] no inventory in ADL | forbid version numbers and stray `USING` | PR |
-| C8 | [K04-5] damage cases exist | each comparator failure class has a damaged fixture | PR |
+| ✅ C8 | [K04-5] damage cases exist | each comparator failure class has a damaged fixture | PR |
 
 C2 fails until D11 lands. Land D11 first, then C2.
 C3 starts with the lane-root files `[K01-1]` already names: `Makefile`, `pom.xml`, `Dockerfile.*`.
@@ -193,4 +193,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C5** — 2026-11-28 — `test_bundle.py`: a real `bundle.py` run puts `ACCOUNT.FLG` beside the archive, never inside; `--no-flg` makes the check fire
 - **C6** — 2026-11-28 — `test_test_quality.py`: Python AST (no empty/tautological asserts; `pytest.raises` counts) and JUnit (`@Test` body needs assert/verify/fail/check); one delegated guard named with its reason
 - **C7** — 2026-11-28 — `test_adl_inventory.py`: no technology+version pairs and no unreasoned `USING` in `adl/`
+- **C8** — 2026-11-28 — `test_damage_cases.py`: the nine comparator failure classes are pinned; each must still exist and drive the `dump` fixture
 <!-- progress-end -->
