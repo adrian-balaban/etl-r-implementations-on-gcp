@@ -115,3 +115,78 @@ def test_cycle_detector_fires_on_a_lane_reference(tmp_path):
     graph = lane_graph(root)
     assert graph == {"aa": {"bb"}, "bb": {"aa"}}
     assert find_cycle(graph) == ["aa", "bb", "aa"]
+
+
+# --- C3: every lane-root entry has an architectural home [K01-1] --------------------
+
+SERVICE_RE = re.compile(r"^\s*DEFINE SERVICE \S+ AS implementations/(\S+)\s*$")
+COMPONENT_RE = re.compile(r"^\s*DEFINE COMPONENT \S+ AS (\S+)\s*$")
+
+SHARED_ALLOW = {
+    "Makefile", "pom.xml", "CLAUDE.md", "work", "contracts", "fixtures", "harness",
+    "terraform", "gcp", "sql", "local", "local-development-podman", "requirements.txt",
+}
+# Entries that are the lane's own, beyond its declared components; each needs a reason.
+LANE_ALLOW = {
+    # the Target System mock app — governance.adl assigns it its own team
+    "beam-dataflow": {"apps"},
+    # alternative job variants of the one service (docs/diagrams/08-stage-mapping.svg)
+    "flink": {"variant-flink-datastream-batch-job", "variant-flink-sql-batch-job"},
+    "flink-jdbc": set(),
+}
+
+
+def declared_components(text: str) -> dict[str, set[str]]:
+    out: dict[str, set[str]] = {}
+    current: str | None = None
+    for line in text.splitlines():
+        m = SERVICE_RE.match(line)
+        if m:
+            current = m.group(1)
+            out.setdefault(current, set())
+            continue
+        if re.match(r"^\s*DEFINE (DOMAIN|SYSTEM|LIBRARY)\b", line):
+            current = None
+            continue
+        c = COMPONENT_RE.match(line) if current else None
+        if c:
+            out[current].add(c.group(1).strip().rstrip("/"))
+    return out
+
+
+def stray_root_entries(root: Path = REPO) -> list[str]:
+    adl = root / "architecture" / "adl" / "structure.adl"
+    declared = declared_components(adl.read_text(encoding="utf-8")) if adl.exists() else {}
+    out = []
+    for impl in impl_names(root):
+        comps, allow = declared.get(impl, set()), SHARED_ALLOW | LANE_ALLOW.get(impl, set())
+        for entry in sorted((root / "implementations" / impl).iterdir()):
+            name = entry.name
+            if name.startswith("."):
+                continue
+            if (name in comps or name in allow or name.startswith("Dockerfile")
+                    or name.endswith(".dockerignore")):
+                continue
+            out.append(f"{impl}/{name}")
+    return out
+
+
+def test_every_lane_root_entry_has_a_home():
+    assert stray_root_entries() == [], f"no architectural home: {stray_root_entries()}"
+
+
+def test_stray_entry_detector_fires(tmp_path):
+    root = tmp_path / "r"
+    (root / "architecture" / "adl").mkdir(parents=True)
+    (root / "architecture" / "adl" / "structure.adl").write_text(
+        "DEFINE SYSTEM X AS x\n"
+        "     DEFINE SERVICE aa AS implementations/aa\n"
+        "          DEFINE COMPONENT Gate AS gate\n",
+        encoding="utf-8",
+    )
+    lane = root / "implementations" / "aa"
+    (lane / "gate").mkdir(parents=True)
+    (lane / "Makefile").write_text("", encoding="utf-8")
+    (lane / "stray").mkdir()
+    assert stray_root_entries(root) == ["aa/stray"]
+
