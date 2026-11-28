@@ -1,46 +1,74 @@
-# Update signals for the pinned versions — G5.
-# The `pytest==9.2.0` pin in the root Makefile is not a manifest, so Dependabot cannot
-# bump it; raising it stays a manual, reviewed change next to this file.
+# Dependabot — modelled on total-recall/.github/dependabot.yml: one PR per group, not per dependency.
+#
+# Grouping is per (ecosystem, directory set): Dependabot cannot bundle different ecosystems into
+# one PR, so the units here are github-actions, maven (all three lanes in ONE entry) and pip —
+# at most one grouped PR per unit per week, plus any major that has to be reviewed alone.
+#
+# The `pytest==9.2.0` pin in the root Makefile is not a manifest, so Dependabot cannot bump it;
+# raising it stays a manual, reviewed change next to this file.
 version: 2
 
 updates:
   # The action SHAs pinned by G1
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
     groups:
-      all-updates:
-        patterns: [\"*\"]
+      # A vulnerability fix travels together, whatever the version jump.
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      # One weekly PR for all minor/patch bumps instead of one PR per dependency.
+      # Majors are not grouped: they get their own PR so a breaking change is reviewed alone.
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
 
-  # Maven: all three lanes carry a pom.xml
+  # Maven: the three lanes in ONE entry, so a shared bump (mig.common, the Java deps) lands in
+  # one PR, not three. A per-directory split would also split the groups.
   - package-ecosystem: maven
-    directory: "/implementations/flink"
+    directories:
+      - /implementations/flink
+      - /implementations/flink-jdbc
+      - /implementations/beam-dataflow
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
     groups:
-      all-updates:
-        patterns: [\"*\"]
-  - package-ecosystem: maven
-    directory: "/implementations/flink-jdbc"
-    schedule:
-      interval: weekly
-    groups:
-      all-updates:
-        patterns: [\"*\"]
-  - package-ecosystem: maven
-    directory: "/implementations/beam-dataflow"
-    schedule:
-      interval: weekly
-    groups:
-      all-updates:
-        patterns: [\"*\"]
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
 
-  # pip: the Beam lane's requirements, and the harness's spec tooling if it ever grows one
+  # pip: the Beam lane's requirements
   - package-ecosystem: pip
-    directory: "/implementations/beam-dataflow"
+    directory: /implementations/beam-dataflow
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
     groups:
-      all-updates:
-        patterns: [\"*\"]
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
