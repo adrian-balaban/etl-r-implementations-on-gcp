@@ -75,7 +75,7 @@ Today it makes flink and flink-jdbc point at each other, a cycle on paper.
 | ✅ C1 | ADL hygiene | unique tags; `AS path` resolves; constants defined once | PR |
 | ✅ C2 | [K03-4] no cycles | lane graph from paths and imports is acyclic | PR |
 | ✅ C3 | [K01-1] every file has a home | files outside components need an allowlist entry | PR |
-| C4 | [K02-2] one contract copy | lane `contracts`/`fixtures` are symlinks into `spec/` | PR |
+| ✅ C4 | [K02-2] one contract copy | lane `contracts`/`fixtures` are symlinks into `spec/` | PR |
 | C5 | [K06-4] `.FLG` outside the bundle | `bundle.py` output: flag present, not encrypted | PR |
 | C6 | [K05-4 K05-5] no empty tests | each Python and JUnit test asserts something non-constant | PR |
 | C7 | [K16-2] no inventory in ADL | forbid version numbers and stray `USING` | PR |
@@ -189,4 +189,5 @@ Append-only log, one line per landed point; the ✅ marks the tables above.
 - **C1** — 2026-11-28 — `test_adl_hygiene.py`: tags unique, `AS` bindings resolve, constants have one home (three passing and three failing cases)
 - **C2** — 2026-11-28 — `test_structure.py`: the lane graph (path and reactor references) is acyclic; the detector fires on a two-lane cycle
 - **C3** — 2026-11-28 — `test_structure.py`: every lane-root entry is a declared component or a reasoned allowlist entry (`apps`, the two flink variants, shared infra dirs)
+- **C4** — 2026-11-28 — `test_structure.py`: each lane's `contracts`/`fixtures` is a symlink into `spec/`; a real directory fails
 <!-- progress-end -->

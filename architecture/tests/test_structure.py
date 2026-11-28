@@ -190,3 +190,38 @@ def test_stray_entry_detector_fires(tmp_path):
     (lane / "stray").mkdir()
     assert stray_root_entries(root) == ["aa/stray"]
 
+
+# --- C4: one contract copy — lane contracts/fixtures are symlinks into spec/ [K02-2] --
+
+def copied_contracts(root: Path = REPO) -> list[str]:
+    out = []
+    spec = root / "spec"
+    for impl in impl_names(root):
+        base = root / "implementations" / impl
+        for name in ("contracts", "fixtures"):
+            p = base / name
+            if not (p.is_symlink() or p.exists()):
+                continue
+            if not p.is_symlink():
+                out.append(f"{impl}/{name}: a real directory, not a symlink into spec/")
+                continue
+            if not p.resolve().is_relative_to(spec):
+                out.append(f"{impl}/{name} -> {p.resolve()} (outside spec/)")
+    return out
+
+
+def test_lane_contracts_are_symlinks_into_spec():
+    assert copied_contracts() == [], f"contract copies: {copied_contracts()}"
+
+
+def test_copy_detector_fires(tmp_path):
+    root = tmp_path / "r"
+    (root / "spec" / "fixtures").mkdir(parents=True)
+    (root / "spec" / "contracts").mkdir()
+    (root / "implementations" / "aa" / "contracts").mkdir(parents=True)
+    bb = root / "implementations" / "bb"
+    bb.mkdir(parents=True)
+    (bb / "fixtures").symlink_to(root / "spec" / "fixtures")
+    assert copied_contracts(root) == ["aa/contracts: a real directory, not a symlink into spec/"]
+
+
