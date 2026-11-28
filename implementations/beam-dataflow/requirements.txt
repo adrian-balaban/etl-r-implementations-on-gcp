@@ -8,7 +8,7 @@ google-cloud-storage>=2.18.0
 google-cloud-bigquery>=3.47.0
 
 # Kafka sink. confluent-kafka ships manylinux wheels, so no librdkafka build step.
-confluent-kafka>=2.5.0
+confluent-kafka>=2.16.2
 
 # Contract layer: TDS parsing, YAML mappings, TARGET JSON Schema validation.
 # TDS paths are resolved by a small dotted-path resolver in pipelines/common/tds.py
