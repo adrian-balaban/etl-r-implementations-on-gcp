@@ -1,0 +1,31 @@
+# Update signals for the pinned versions — G5.
+# The `pytest==9.2.0` pin in the root Makefile is not a manifest, so Dependabot cannot
+# bump it; raising it stays a manual, reviewed change next to this file.
+version: 2
+
+updates:
+  # The action SHAs pinned by G1
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  # Maven: all three lanes carry a pom.xml
+  - package-ecosystem: maven
+    directory: "/implementations/flink"
+    schedule:
+      interval: weekly
+  - package-ecosystem: maven
+    directory: "/implementations/flink-jdbc"
+    schedule:
+      interval: weekly
+  - package-ecosystem: maven
+    directory: "/implementations/beam-dataflow"
+    schedule:
+      interval: weekly
+
+  # pip: the Beam lane's requirements, and the harness's spec tooling if it ever grows one
+  - package-ecosystem: pip
+    directory: "/implementations/beam-dataflow"
+    schedule:
+      interval: weekly
