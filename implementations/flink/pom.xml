@@ -187,7 +187,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.5</version>
+          <version>3.6.1</version>
           <configuration>
             <!--
               Surefire's own default include glob is **/*Test.java (etc.) — it does NOT
