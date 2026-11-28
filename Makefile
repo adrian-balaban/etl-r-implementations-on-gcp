@@ -14,7 +14,7 @@
 # radon and lizard back C9/C10; they are pinned for the same reason.
 PYTEST ?= uv run --no-project --with pytest==9.2.0 --with radon==6.0.1 --with lizard==1.17.10 python -m pytest
 
-.PHONY: spec-test adl-test conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
+.PHONY: spec-test adl-test history-check conformance-flink conformance-flink-jdbc conformance-beam conformance-all down-all
 
 spec-test:
 	$(PYTEST) spec -q -p no:cacheprovider
@@ -23,6 +23,10 @@ spec-test:
 # implementation boundaries. Pure Python, no GCP, no podman.
 adl-test:
 	$(PYTEST) architecture/tests -q -p no:cacheprovider
+
+# The history window on its own: churn, mapping scope, commit authority, agent conflicts (G6).
+history-check:
+	$(PYTEST) architecture/tests/test_history.py -q -p no:cacheprovider
 
 conformance-flink:
 	$(MAKE) -C implementations/flink conformance

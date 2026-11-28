@@ -37,7 +37,7 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 | K02-1 | Adrian Balaban | `tests/test_contracts.py` — names derive from `artefacts.json` | PR | CI |
 | K02-2 | Adrian Balaban | lane Maven suites (copy-artefacts sha) + `tests/test_structure.py` C4 | local | local |
 | K02-3, K03-8 | Adrian Balaban | `spec-test`: `test_fixture_is_the_pinned_one` — the pinned `ACCOUNT.src` | PR | CI |
-| K02-4 | Adrian Balaban | C14 (`CHECKS-PLAN.md`) — shared churn per month | weekly | scheduled |
+| K02-4 | Adrian Balaban | `tests/test_history.py` — shared churn per month | weekly | scheduled |
 | K04-1, K04-2, K04-3 | Adrian Balaban | `tests/test_complexity.py` — the `radon`/Lizard ratchet (30 hotspots pinned, growth fails) | PR | CI |
 | K04-4, K14-5 | Adrian Balaban | `tests/test_main_sequence.py` — the A/I/D ratchet per Maven module | PR | CI |
 | K04-5 | Adrian Balaban | `spec-test` comparator suite + `tests/test_damage_cases.py` | PR | CI |
@@ -66,9 +66,9 @@ The lint in `tests/test_adl_lint.py` proves every tag in `adl/` has a row.
 | K16-1, K16-3 | Adrian Balaban | C11 — CycloneDX SBOM at build time | PR | proposed |
 | K16-2 | Adrian Balaban | `tests/test_adl_inventory.py` — no technology inventory | PR | CI |
 | K17-1, K17-2, K17-3 | Adrian Balaban | agent scope: `CLAUDE.md` + the boundaries; C16/C17 read the trailers | weekly | proposed |
-| K18-1 | Adrian Balaban | this register's team ADL; C16 reads the member list | weekly | scheduled |
-| K18-2, K18-3, K18-4 | Adrian Balaban | C16 — authors in the team ADL, files inside their domain | weekly | scheduled |
-| K18-5 | Adrian Balaban | C17 — agent-trailer merges with conflicts | monthly | scheduled |
+| K18-1 | Adrian Balaban | `tests/test_history.py` — the member list as declared | weekly | scheduled |
+| K18-2, K18-3, K18-4 | Adrian Balaban | `tests/test_history.py` — authority (authors in the ADL; domain scope waits for more members) | weekly | scheduled |
+| K18-5 | Adrian Balaban | `tests/test_history.py` — agent-trailer merges need a disposition | weekly | scheduled |
 
 ## 4. Dispositions for a failed assertion (K06)
 
