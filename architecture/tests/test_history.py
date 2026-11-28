@@ -67,6 +67,20 @@ def authority_violations(commits: list[tuple[str, str, str]],
     return out
 
 
+BOT_NAME = "dependabot[bot]"
+BOT_SCOPE_RE = re.compile(r"(^|/)(pom\.xml|requirements[\w.-]*\.txt)$|^\.github/workflows/[^/]+\.ya?ml$")
+
+
+def bot_scope_violations(changes: dict[str, list[str]], authors: dict[str, str]) -> list[str]:
+    out = []
+    for sha, files in changes.items():
+        if authors.get(sha) == BOT_NAME:
+            outside = [f for f in files if not BOT_SCOPE_RE.search(f)]
+            if outside:
+                out.append(f"{sha[:8]}: {BOT_NAME} touches {outside}")
+    return out
+
+
 def agent_conflict_problems(merges: list[tuple[str, str, str]]) -> list[str]:
     out = []
     for sha, author, body in merges:
@@ -107,6 +121,13 @@ def test_commits_come_from_declared_people_and_agents():
     assert problems == [], "\n".join(problems)
 
 
+def test_the_bot_stays_inside_its_scope():
+    window = commits_in_window()
+    changes = {sha: change_set(sha) for sha, _, _ in window}
+    problems = bot_scope_violations(changes, {sha: name for sha, name, _ in window})
+    assert problems == [], "\n".join(problems)
+
+
 def test_agent_merges_have_a_disposition():
     problems = agent_conflict_problems(merges_in_window())
     assert problems == [], "\n".join(problems)
@@ -128,3 +149,14 @@ def test_authority_detector_fires_on_an_undeclared_author():
 def test_churn_detector_fires_above_budget():
     changes = {f"sha{i}": ["spec/contracts/artefacts.json"] for i in range(3)}
     assert churn_violations(changes) == ["3 commits touched spec/contracts/ in the window (budget 2)"]
+
+
+
+def test_bot_scope_detector_fires_outside_manifests_and_passes_inside():
+    ok = {"a1": ["implementations/flink/pom.xml", ".github/workflows/sbom.yml"]}
+    bad = {"b2": ["implementations/flink/pom.xml", "spec/contracts/artefacts.json"]}
+    assert bot_scope_violations(ok, {"a1": BOT_NAME}) == []
+    assert bot_scope_violations(bad, {"b2": BOT_NAME}) == [
+        "b2: dependabot[bot] touches ['spec/contracts/artefacts.json']"
+    ]
+    assert bot_scope_violations(bad, {"b2": "Cline"}) == []
